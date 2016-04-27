@@ -44,7 +44,7 @@ var busStation = (function() {
 							if (i >= 20) {
 								break;
 							}
-							lv.innerHTML += "<li id=" + i + ">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+							lv.innerHTML += "<li><div class='ui-marquee ui-marquee-gradient' id=" + i + ">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</div></li>";
 						}
 						tau.changePage("#surroundingBusStation");						
 					}
@@ -72,6 +72,7 @@ var busStation = (function() {
 
 	function findSurroundingStationsByGps() {
 		if (navigator.geolocation) {
+			toastPopup.openPopup("toastPopup", "GPS를 받아오는 중입니다.");
 			navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
 				maximumAge : 60000
 			});
