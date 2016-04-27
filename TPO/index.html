@@ -9,7 +9,8 @@
 	<link rel="stylesheet" media="all and (-tizen-geometric-shape: circle)"
 		href="lib/tau/wearable/theme/default/tau.circle.min.css">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="js/rest.js"></script>
+	<script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
+	<script type="text/javascript" src="js/rest.js"></script>
 </head>
 
 <body>
@@ -20,15 +21,64 @@
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview">
-				<li>버스</a></li>
+				<li><a href="#bus-main">버스</a></li>
 				<li>지하철</li>
 				<li>길 찾기 안내</li>
 				<li>환경 설정</li>
 			</ul>
 		</div>
 	</div>
-	<script type="text/javascript" src="lib/tau/wearable/js/tau.js"></script>
-	<script type="text/javascript" src="js/circle-helper.js"></script>
-	<script src="js/main.js"></script>
+	
+	<!-- Bus Main Page -->
+	<div class="ui-page" id="bus-main">
+		<header class="ui-header">
+			<h2 class="ui-title">버스</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview">
+				<li><a href="#search-bus-station">정류장 검색</a></li>
+				<li>노선 번호 검색</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- Bus Station Search Page -->
+	<div class="ui-page" id="search-bus-station">
+		<header class="ui-header">
+			<h2 class="ui-title">버스 정류장 검색</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview expand-list">
+				<li class="li-has-multiline" id="searchSurrounding">
+					<div class="ui-marquee">주변 정류장 찾기</div>
+					<div class="ui-li-sub-text li-text-sub">1km 반경, 20개 이내</div>
+				</li>
+				<li>노선 번호 검색</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="ui-page" id="surroundingBusStation">
+		<header class="ui-header">
+			<h2 class="ui-title">주변 정류장</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview marquee-list" id="lvBusStation">
+				
+			</ul>
+		</div>
+	</div>
+	
+	<div class = "ui-popup ui-popup-toast" id="toastPopup">
+		<div class="ui-popup-content" id="popupContent">
+		</div>
+	</div>
+	
+	
+	<script type="text/javascript" src="js/list.js"></script>
+	<script type="text/javascript" src="js/marqueeList.js"></script>
+	<script type="text/javascript" src="js/toastPopup.js"></script>
+	<script type="text/javascript" src="js/bus.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
