@@ -8,7 +8,7 @@
 </Reference>
 <Reference URI="css%2Fstyle.css">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>hubrEDc8fb80IEiA4elul4L6cgbFZ6Dr1841dR5tHu8=</DigestValue>
+<DigestValue>wBrGzZ8KK4nnOmpCshXqUHNh3tBJ/Ll0M2yw1jdlAWs=</DigestValue>
 </Reference>
 <Reference URI="icon.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -16,19 +16,23 @@
 </Reference>
 <Reference URI="index.html">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>SahC04sBOlyyLNZ4hmI+80QbLm4N9QICYa5ifZ204NY=</DigestValue>
+<DigestValue>sta/uwjwsWqKBiR0zZVXfEP0YZiqUo2gHHDtqGnstcg=</DigestValue>
 </Reference>
 <Reference URI="js%2Fbus.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>tw8qe4Tb60eLvKnFlsj1ESRJVQQZOxjTL7v0+7qCeQA=</DigestValue>
+<DigestValue>Zdk+HUn304Wue82bN5PEa42FNdYw3UhU6fAQqp0Yw3c=</DigestValue>
 </Reference>
-<Reference URI="js%2Fcircle-helper.js">
+<Reference URI="js%2Flist.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>6Budq9qz/68h7fM9k4JmSZ9myrvGsoXR4zy618jpdsk=</DigestValue>
+<DigestValue>1rZFX2H9GDVN2QfIytoKj7ASpKdGSI/OAfOyP9TdA84=</DigestValue>
 </Reference>
 <Reference URI="js%2Fmain.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>4k9c58JWtToz0eJeoGlEYMVFrcjKFmxF33XPMjDdVkE=</DigestValue>
+<DigestValue>mB0dEKh9GgnEdYEb7bx3N/HYkiEsqaUIOWjOhcyfXCU=</DigestValue>
+</Reference>
+<Reference URI="js%2FmarqueeList.js">
+<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
+<DigestValue>58MZSqABbVo0qSOmoH9rgNdFYrUPp9DPoMxk8Q0jQTA=</DigestValue>
 </Reference>
 <Reference URI="js%2Frest.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -52,7 +56,7 @@
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Fjs%2Ftau.min.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>bOVudO+HUoIGvsC9ZKPgIB3X60kDXUQyOTqjfech5Kg=</DigestValue>
+<DigestValue>V1Je6FzinpLhPsv06bYDIhJ3/+H98pipjj8bUePO2iM=</DigestValue>
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Ftheme%2Fblue%2Fimages%2FActionbar%2Fb_more_option.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -1007,11 +1011,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-Fb11GKrdVzvwlj06x8/C8tBR+fOgDg3RMgHOeOZ+2x45+0vkv25Ty0jAt1bEzjONLL10HFVGxOF6
-BPg/70byzez5dQb4iO6PohDIvy/bWcKvOMJ/45SEJhoNuNSgcvaNre7vamIrjg6uAlsrSMRRab1z
-rA/l3poamUcN0Y3q+DHimwIDbvTaQvBbX+Dp0nz+VBte3zECcSArNjIoHgV07vVIv2rgPVF6R30D
-EmYoQj1UK34tpUtb2apRXJfzEgz6yesneUrZwUEL6xaULAzI+iil3gD2hq1n/wtUoPZOwaZul1Mh
-KmXbwKR3sIxLRCvVX55cVqyK6diRVCfF+HzUKA==
+Z2c+nodDUXob1TISzKUJyNYMWd5c1g3YuL4g5lD0Py/S2aivaPlwmiWxuQuAtdFIBIbQW2VyZYL9
+QY2q7kFqRTOWimMp+u9WZs4tkS8HC0HbPJXafQaou2WBtn8vNsF80/LE539GSff6ILnQSOTr0Ets
+i/im4w8C7flzorj6Phtlf6j3VFjQL7GzTuVxJ+FqOXzsDUoGqGiBWgTTOov6b/KJ3reN2L8CkWG8
+8e3kR5BPjRGCg5OIzX2UGkHe1uZ+notoxFHfTU5LYeZKawdfFJCjptbv+mLYxFnNTTYttnrWm0sV
+AerL0dCKeMRnIP6AI9RRHiueoSjhyJTp2BzSww==
 </SignatureValue>
 <KeyInfo>
 <X509Data>

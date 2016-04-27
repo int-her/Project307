@@ -14,6 +14,13 @@ function keyEventHandler(event) {
 }
 
 function init() {
+	/** Set marquee List */
+	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
+		marqueeList.pageBeforeShowHandler('surroundingBusStation');
+	});
+	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
+	
+	/** When click list element, find bus stations around */ 
 	document.getElementById('searchSurrounding').addEventListener('click', busStation.findSurroundingStationsByGps);
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
