@@ -98,8 +98,6 @@ REST.prototype.get = function(url, header, data, fSuccess, fError) {
         if(xhr.readyState == 4) {
             var type = xhr.getResponseHeader("Content-type");
             var data = "";
-            alert(xhr.responseText);
-            alert(xhr.status);
             
             if(type.indexOf('application/json') == 0) {
                 data = JSON.parse(xhr.responseText);

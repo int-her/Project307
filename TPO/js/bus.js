@@ -2,6 +2,8 @@ var busStation = (function() {
 	busStation = {};
 
 	function successCallback(position) {
+		toastPopup.openPopup("toastPopup", "GPS로 주변 정류소를 조회하는 중입니다. 잠시만 기다려주세요.");
+		
 		/**
 		 *  좌표 기반 근접 정류소 목록 조회(getStationByPos)
 		 *  [Request Parameter]
@@ -24,25 +26,40 @@ var busStation = (function() {
 				null,
 				{
 					"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
-					"tmX" : position.coords.latitude,
-					"tmY" : position.coords.longitude,
+					"tmX" : position.coords.longitude,
+					"tmY" : position.coords.latitude,
 					"radius" : "1000",
 					"numOfRows" : "999",
 					"pageNo" : "1"
 				}, 
 				function(data, xhr) {
 					var lv = document.getElementById('lvBusStation');
+					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;
+					if (msg === "4") {
+						toastPopup.openPopup("toastPopup", "주변 정류소를 조회한 결과가 없습니다.");
+					} else if (msg === "0"){
+						lv.innerHTML = "";
+						var x = data.getElementsByTagName("itemList");
+						for (var i = 0; i < x.length; ++i) {
+							if (i >= 20) {
+								break;
+							}
+							lv.innerHTML += "<li id=" + i + ">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+						}
+						tau.changePage("#surroundingBusStation");						
+					}
 				}, function(data, xhr) {
+					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
 				});
 	}
 
 	function errorCallback(error) {
 		switch (error.code) {
 		case error.PERMISSION_DENIED:
-			toastPopup.openPopup("toastPopup", "연결된 디바이스의 GPS를 켜주세요.");
+			toastPopup.openPopup("toastPopup", "GPS 권한이 거부되었습니다.");
 			break;
 		case error.POSITION_UNAVAILABLE:
-			toastPopup.openPopup("toastPopup", "사용 불가능한 위치 정보입니다.");
+			toastPopup.openPopup("toastPopup", "연결된 디바이스의 GPS를 켜주세요.");
 			break;
 		case error.TIMEOUT:
 			toastPopup.openPopup("toastPopup", "GPS 요청 시간이 초과되었습니다.");
