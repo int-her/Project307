@@ -7,9 +7,10 @@
 	if (tau.support.shape.circle) {
 		document.addEventListener("pagebeforeshow", function(e) {
 			page = e.target;
+			
 			elScroller = page.querySelector(".ui-scroller");
 			if (elScroller) {
-				list = elScroller.querySelectorAll(".ui-listview");
+				list = elScroller.querySelectorAll(".ui-listview:not(.marquee-list)");
 				if (list) {
 					len = list.length;
 					for (i = 0; i < len; ++i) {
