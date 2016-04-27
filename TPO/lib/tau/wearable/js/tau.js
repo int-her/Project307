@@ -22205,6 +22205,7 @@ ns.version = '0.10.29-14';
 						selector: "li:not(.ui-listview-divider)",
 						animate: "none",
 						scale: {
+							from: 0.5,
 							to: 1
 						},
 						opacity: {
