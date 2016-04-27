@@ -49,13 +49,21 @@
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview">
-				<li id="searchSurrounding">주변 정류장 찾기</li>
+				<li class="li-has-multiline" id="searchSurrounding">
+				<a>
+					주변 정류장 찾기
+					<span class="ui-li-sub-text li-text-sub">1km 반경, 20개 이내</span>
+				</a>
+				</li>
 				<li>노선 번호 검색</li>
 			</ul>
 		</div>
 	</div>
 	
 	<div class="ui-page" id="surroundingBusStation">
+		<header class="ui-header">
+			<h2 class="ui-title">주변 정류장</h2>
+		</header>
 		<div class="ui-content">
 			<ul class="ui-listview" id="lvBusStation">
 				
@@ -68,10 +76,10 @@
 		</div>
 	</div>
 	
-	<script type="text/javascript" src="js/circle-helper.js"></script>
-	<script src="js/rest.js"></script>
-	<script src="js/toastPopup.js"></script>
-	<script src="js/bus.js"></script>
-	<script src="js/main.js"></script>
+	<script type="text/javascript" src="js/list.js"></script>
+	<script type="text/javascript" src="js/rest.js"></script>
+	<script type="text/javascript" src="js/toastPopup.js"></script>
+	<script type="text/javascript" src="js/bus.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

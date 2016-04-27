@@ -14,3 +14,10 @@
 	-webkit-text-fill-color: white;
 	overflow: hidden;
 }
+
+.ui-listview li .li-text-sub {
+	display: block;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	line-height: 32px;
+}
