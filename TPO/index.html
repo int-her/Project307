@@ -22,7 +22,7 @@
 		<div class="ui-content">
 			<ul class="ui-listview">
 				<li><a href="#bus-main">버스</a></li>
-				<li>지하철</li>
+				<li><a href="#subway-main">지하철</a></li>
 				<li>길 찾기 안내</li>
 				<li>환경 설정</li>
 			</ul>
@@ -73,7 +73,34 @@
 		<div class="ui-popup-content" id="popupContent">
 		</div>
 	</div>
+
+
+	<!--  Subway Page : Main Menu -->
+	<div class="ui-page" id="subway-main">
+		<header class="ui-header">
+			<h2 class="ui-title">지하철</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview">
+				<li><a href="#inputStation">역 정보</a></li>
+				<li><a href="#viewMap">노선 보기</a></li>
+				<li>경로 찾기</li>
+			</ul>
+		</div>
+	</div>
 	
+	<!-- Subway Page : Station Information -->
+	<div id="inputStation" class="ui-page">
+		<div class="ui-content" style="overflow: hidden">
+			<input type="text" id="inputCircle" placeholder="역 이름 입력" autofocus
+				class="input-area"></input>
+		</div>
+	</div>
+	
+	<!-- Subway Page : View Subway Route Map -->
+	<div id="viewMap" class="ui-page">
+         <img src="images/subway_width_3.984.jpg">
+	</div>
 	
 	<script type="text/javascript" src="js/list.js"></script>
 	<script type="text/javascript" src="js/marqueeList.js"></script>
