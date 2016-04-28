@@ -44,7 +44,11 @@ var busStation = (function() {
 							if (i >= 20) {
 								break;
 							}
-							lv.innerHTML += "<li><div class='ui-marquee ui-marquee-gradient' id=" + i + ">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</div></li>";
+							lv.innerHTML += "<li class='li-has-multiline'><div class='ui-marquee ui-marquee-gradient' id=" + i + ">" + 
+											x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
+											"</div><div class='ui-li-sub-text li-text-sub'>거리 : " + 
+											x[i].getElementsByTagName("dist")[0].childNodes[0].nodeValue + 
+											"m</div></li>";
 						}
 						tau.changePage("#surroundingBusStation");						
 					}
