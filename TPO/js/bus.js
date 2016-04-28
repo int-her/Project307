@@ -1,7 +1,148 @@
 var busStation = (function() {
-	busStation = {};
+	var busStation = {};
+	
+	function createBusArrivalTimeList(data) {
+		var lv = document.getElementById('lvBusArrivalTime');
+		lv.innerHTML = "";
+		var x = data.getElementsByTagName("itemList");
+		for (var i = 0; i < x.length; ++i) {
+			if (i >= 20) {
+				break;
+			}
+			lv.innerHTML += "<li class='li-has-multiline li-bus-station' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+							"><div class='ui-marquee ui-marquee-gradient'>" + 
+							x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+							"</div><div class='ui-li-sub-text li-text-sub'>" + 
+							x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
+							"</div></li>";
+		}
+	}
+	
+	busStation.showBusArrivalTime = function(arsId) {
+		/**
+		 *  고유번호별 정류소 항목 조회(getStationByUid)
+		 *  [Request Parameter]
+		 *  arsId - 정류소 고유번호
+		 *  
+		 *  [Response Element]
+		 *  stId - 정류소 ID
+		 *  stNm - 정류소명
+		 *  arsId - 정류소 고유번호
+		 *  busRouteId - 노선ID
+		 *  rtNm - 노선명
+		 *  gpsX - 정류소 좌표X (WGS84)
+		 *  gpsY - 정류소 좌표Y (WGS84)
+		 *  stationTp - 정류소타입 (0:공용, 1:일반형 시내/농어촌버스, 2:좌석형 시내/농어촌버스, 3:직행좌석형 시내/농어촌버스, 4:일반형 시외버스, 5:좌석형 시외버스, 6:고속형 시외버스, 7:마을버스)
+		 *  firstTm - 첫차시간
+		 *  lastTm - 막차시간
+		 *  term - 배차간격 (분)
+		 *  routeType - 노선유형 (1:공항, 3:간선, 4:지선, 5:순환, 6:광역, 7:인천, 8:경기, 9:폐지, 0:공용)
+		 *  nextBus - 막차운행여부 (N:막차아님, Y:막차)
+		 *  staOrd - 요청정류소순번
+		 *  vehId1 - 첫번째도착예정버스ID
+		 *  plainNo1 - 첫번째도착예정차량번호
+		 *  sectOrd1 - 첫번째도착예정버스의 현재구간 순번
+		 *  stationNm1 - 첫번째도착예정버스의 최종 정류소명
+		 *  traTime1 - 첫번째도착예정버스의 여행시간
+		 *  traSpd1 - 첫번째도착예정버스의 여행속도 (Km/h)
+		 *  isArrive1 - 첫번째도착예정버스의 최종 정류소 도착출발여부 (0:운행중, 1:도착)
+		 *  isLast1 - 첫번째도착예정버스의 막차여부 (0:막차아님, 1:막차)
+		 *  busType1 - 첫번째도착예정버스의 차량유형 (0:일반버스, 1:저상버스, 2:굴절버스)
+		 *  vehId2 - 두번째도착예정버스ID
+		 *  plainNo2 - 두번째도착예정차량번호
+		 *  sectOrd2 - 두번째도착예정버스의 현재구간 순번
+		 *  stationNm2 - 두번째도착예정버스의 최종 정류소명
+		 *  traTime2 - 두번째도착예정버스의 여행시간
+		 *  traSpd2 - 두번째도착예정버스의 여행속도
+		 *  isArrive2 - 두번째도착예정버스의 최종 정류소 도착출발여부 (0:운행중, 1:도착)
+		 *  isLast2 - 두번째도착예정버스의 막차여부 (0:막차아님, 1:막차)
+		 *  busType2 - 두번째도착예정버스의 차량유형 (0:일반버스, 1:저상버스, 2:굴절버스)
+		 *  adirection - 방향
+		 *  arrmsg1 - 첫번째도착예정버스의 도착정보메시지
+		 *  arrmsg2 - 두번째도착예정버스의 도착정보메시지
+		 *  arrmsgSec1 - 첫번째도착예정버스의 도착정보메시지
+		 *  arrmsgSec2 - 두번째도착예정버스의 도착정보메시지
+		 *  isFullFlag1 - 첫번째도착예정버스의 만차여부 (0 : 만차아님. 1 : 만차)
+		 *  isFullFlag2 - 두번째도착예정버스의 만차여부 (0 : 만차아님. 1 : 만차)
+		 *  nxtStn - 다음정류장순번
+		 *  posX - 정류소 좌표X (GRS80)
+		 *  posY - 정류소 좌표Y (GRS80)
+		 *  rerdieDiv1 - 첫번째도착예정버스의 재차구분
+		 *  rerdieDiv2 - 두번째도착예정버스의 재차구분
+		 *  rerideNum1 - 첫번째도착예정버스의 재차인원
+		 *  rerideNum2 - 두번째도착예정버스의 재차인원
+		 *  sectNm - 구간명
+		 */
+		rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid',
+				null,
+				{
+					"ServiceKey" : "DELETED",
+					"arsId" : arsId
+				}, 
+				function(data, xhr) {
+					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
+					if (msg === "4") {
+						/** No result */
+						tau.changePage("#searchBusStation");
+						toastPopup.openPopup("toastGraphicPopup", "정류소 ID를 찾지 못하였습니다.");
+					} else if (msg === "0"){
+						/** Success */
+						createBusArrivalTimeList(data);
+						tau.changePage("#busArrivalTime");						
+					}
+				}, function(data, xhr) {
+					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
+				});
+	};
+	
+	/**
+	 *  When click station list item, show bus arrival time list by station id.
+	 */
+	function clickList(event)
+	{
+		var target = event.target;
+		alert(target.classList);
+		if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a')) {
+			busStation.showBusArrivalTime(target.id);
+		}
+	}
+	
+	/**
+	 * When list item class contains li-bus-station, add list click event.
+	 */
+	function addListEvent() {
+		var stationList = document.getElementsByClassName("li-bus-station"),
+		i;
 
-	function successCallback(position) {
+		for (i = 0; i < stationList.length; i++) {
+			stationList[i].addEventListener("click", clickList);
+		}
+	}
+	
+	/**
+	 * Create bus station list and show distance by current location, station name and id.
+	 */
+	function createStationList(data) {
+		var lv = document.getElementById('lvBusStation');
+		lv.innerHTML = "";
+		var x = data.getElementsByTagName("itemList");
+		for (var i = 0; i < x.length; ++i) {
+			if (i >= 20) {
+				break;
+			}
+			lv.innerHTML += "<li class='li-has-multiline li-bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
+							"><div class='ui-marquee ui-marquee-gradient'><a class='li-bus-station-a' id=" + 
+							x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
+							">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
+							"</a></div><div class='ui-li-sub-text li-text-sub'>" + 
+							x[i].getElementsByTagName("dist")[0].childNodes[0].nodeValue + "m" +
+							"(" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + ")" +
+							"</div></li>";
+		}
+		addListEvent();
+	}
+	
+	function succeedtoGetGPS(position) {
 		/**
 		 *  좌표 기반 근접 정류소 목록 조회(getStationByPos)
 		 *  [Request Parameter]
@@ -31,23 +172,13 @@ var busStation = (function() {
 					"pageNo" : "1"
 				}, 
 				function(data, xhr) {
-					var lv = document.getElementById('lvBusStation');
-					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;
+					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
 					if (msg === "4") {
+						/** No result */
 						toastPopup.openPopup("toastPopup", "주변 정류소를 조회한 결과가 없습니다.");
 					} else if (msg === "0"){
-						lv.innerHTML = "";
-						var x = data.getElementsByTagName("itemList");
-						for (var i = 0; i < x.length; ++i) {
-							if (i >= 20) {
-								break;
-							}
-							lv.innerHTML += "<li class='li-has-multiline'><div class='ui-marquee ui-marquee-gradient' id=" + i + ">" + 
-											x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-											"</div><div class='ui-li-sub-text li-text-sub'>거리 : " + 
-											x[i].getElementsByTagName("dist")[0].childNodes[0].nodeValue + 
-											"m</div></li>";
-						}
+						/** Success */
+						createStationList(data);
 						tau.changePage("#surroundingBusStation");						
 					}
 				}, function(data, xhr) {
@@ -55,7 +186,7 @@ var busStation = (function() {
 				});
 	}
 
-	function errorCallback(error) {
+	function failtoGetGPS(error) {
 		switch (error.code) {
 		case error.PERMISSION_DENIED:
 			toastPopup.openPopup("toastPopup", "GPS 권한이 거부되었습니다.");
@@ -72,17 +203,16 @@ var busStation = (function() {
 		}
 	}
 
-	function findSurroundingStationsByGps() {
+	busStation.showSurroundingStationsByGps = function () {
 		if (navigator.geolocation) {
 			toastPopup.openPopup("toastPopup", "GPS로 주변 정류소를 조회하는 중입니다. 잠시만 기다려주세요.");
-			navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
-				timeout : 60000
+			navigator.geolocation.getCurrentPosition(succeedtoGetGPS, failtoGetGPS, {
+				maximumAge : 10000, timeout : 60000
 			});
 		} else {
 			toastPopup.openPopup("toastPopup", "GPS를 지원하지 않는 기기입니다.");
 		}
-	}
-	busStation.findSurroundingStationsByGps = findSurroundingStationsByGps;
+	};
 	
 	return busStation;
 }());

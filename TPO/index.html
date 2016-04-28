@@ -36,14 +36,14 @@
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview">
-				<li><a href="#search-bus-station">정류장 검색</a></li>
+				<li><a href="#searchBusStation">정류장 검색</a></li>
 				<li>노선 번호 검색</li>
 			</ul>
 		</div>
 	</div>
 	
 	<!-- Bus Station Search Page -->
-	<div class="ui-page" id="search-bus-station">
+	<div class="ui-page" id="searchBusStation">
 		<header class="ui-header">
 			<h2 class="ui-title">버스 정류장 검색</h2>
 		</header>
@@ -53,11 +53,18 @@
 					<div>주변 정류장 찾기</div>
 					<div class="ui-li-sub-text li-text-sub">1km 반경, 20개 이내</div>
 				</li>
-				<li>정류소 ID 검색</li>
+				<li><a href="#inputBusID">정류소 ID 검색</a></li>
 			</ul>
 		</div>
 	</div>
 	
+	<div class="ui-page" id="inputBusID">
+		<div class="ui-content">
+			<input type="number" autofocus placeholder="ID 입력" class="input-number" id="txtBusID" align="center">
+		</div>
+	</div>
+	
+	<!-- Surrounding Bus Station List Page -->
 	<div class="ui-page" id="surroundingBusStation">
 		<header class="ui-header">
 			<h2 class="ui-title">정류소 목록</h2>
@@ -69,11 +76,28 @@
 		</div>
 	</div>
 	
-	<div class = "ui-popup ui-popup-toast" id="toastPopup">
-		<div class="ui-popup-content" id="popupContent">
+	<!-- Bus Arrival Time List Page -->
+	<div class="ui-page" id="busArrivalTime">
+		<header class="ui-header">
+			<h2 class="ui-title" id="stationName">이름</h2>
+			<h4 class="ui-title" id="stationId">()</h1>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview marquee-list expand-list" id="lvBusArrivalTime">
+				
+			</ul>
 		</div>
 	</div>
 	
+	<div class = "ui-popup ui-popup-toast" id="toastPopup">
+		<div class="ui-popup-content">
+		</div>
+	</div>
+	
+	<div class = "ui-popup ui-popup-toast ui-popup-toast-graphic" id="toastGraphicPopup">
+		<div class="ui-popup-content">
+		</div>
+	</div>
 	
 	<script type="text/javascript" src="js/list.js"></script>
 	<script type="text/javascript" src="js/marqueeList.js"></script>
