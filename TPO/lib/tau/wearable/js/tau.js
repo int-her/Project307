@@ -22205,7 +22205,7 @@ ns.version = '0.10.29-14';
 						selector: "li:not(.ui-listview-divider)",
 						animate: "none",
 						scale: {
-							from: 0.77,
+							from: 0.5,
 							to: 1
 						},
 						opacity: {
@@ -25159,7 +25159,7 @@ ns.version = '0.10.29-14';
 
 				self.bindEvents();
 				// create SnapListStyle helper
-				self._snapListStyleHelper = tau.helper.SnapListStyle.create(listDomElement);
+				self._snapListStyleHelper = tau.helper.SnapListStyle.create(listDomElement, {animate:"scale"});
 			};
 
 			prototype.bindEvents = function() {
