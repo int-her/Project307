@@ -4,15 +4,15 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="author-signature.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>8vRNOi4t8sTv8tbfgWNoiCk1zRulucP80oTpeHxm2gQ=</DigestValue>
+<DigestValue>eaVjpGH0ILac2IFaEGjSE9/os1FEP9APdggsQ4Vftcc=</DigestValue>
 </Reference>
 <Reference URI="config.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>2CQ88uiNqtbNse1xtOGRe0yugu5H1ugFOIufRw6GBhE=</DigestValue>
+<DigestValue>Gn4G/5veafnW5pHFa52tznvQNhrL5kxxdStkNwHn+Vw=</DigestValue>
 </Reference>
 <Reference URI="css%2Fstyle.css">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>wBrGzZ8KK4nnOmpCshXqUHNh3tBJ/Ll0M2yw1jdlAWs=</DigestValue>
+<DigestValue>T+/2xMoVGVK9cIvIM3bvieFcX11j3QKOCPuzA4qUJsk=</DigestValue>
 </Reference>
 <Reference URI="icon.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -20,7 +20,7 @@
 </Reference>
 <Reference URI="index.html">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>sta/uwjwsWqKBiR0zZVXfEP0YZiqUo2gHHDtqGnstcg=</DigestValue>
+<DigestValue>rH5X+nXPnXWW45jMp+b4whxI/YWo49Dk0GVOeBBd4BI=</DigestValue>
 </Reference>
 <Reference URI="js%2Fbus.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -36,7 +36,7 @@
 </Reference>
 <Reference URI="js%2FmarqueeList.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>58MZSqABbVo0qSOmoH9rgNdFYrUPp9DPoMxk8Q0jQTA=</DigestValue>
+<DigestValue>8HpK8K0j7etAiouQXEAwuhmKVsAaWwbIClGi9eGWPts=</DigestValue>
 </Reference>
 <Reference URI="js%2Frest.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -56,11 +56,11 @@
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Fjs%2Ftau.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>5GAdm+NLB8LJC3sp2ypMZKCwXBRV4HBJmPzqWurKKfA=</DigestValue>
+<DigestValue>tR4mAq5eiDJEv61iYkJUP2FQ9EvpzguBpIsQ6ek2ZRs=</DigestValue>
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Fjs%2Ftau.min.js">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>V1Je6FzinpLhPsv06bYDIhJ3/+H98pipjj8bUePO2iM=</DigestValue>
+<DigestValue>IlcVKOo16B+ChBj4oB8U7LZX8ZrYSU3f1mJav2ukrpc=</DigestValue>
 </Reference>
 <Reference URI="lib%2Ftau%2Fwearable%2Ftheme%2Fblue%2Fimages%2FActionbar%2Fb_more_option.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -1015,11 +1015,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-QakKLSG0SFAfCoTtbrko0Ts69mT+A3XLGjJnqMByAaCyA5kCdDtQG1nos4sPcGH1DAQw9hS+fzDN
-E6XhW6Ij51JYTHy5/bmusbtHRdPAAtP3Dx/G6AT7vb1SK3ryXMDKBJEd9zhARWxpWA23FV3Wj0bm
-Heurf6GBEwcq21rF+lPlyWUu23HS2JiwoOd5L50v9agjvESxAADLp3F1uvEIUz0JE5cUyfGWg0ug
-l31PGo5VhlhS6U8WCM+rK+Sfg8yHZ6h8THCxvlgxeM6tdhBpOKC4s4F7l+nxkTUhM5r+f9kfGI0k
-Vu7jFI4xqymxB7WPqw6awC8o24RT83w2XkbMVw==
+bVZIeQG0dDMCcf7nMhYRjCuPx/dnjC1ashl66fb3Vvu3ZpYzpjQy445Z1HFaGMZAg7pS6LX57dUS
+R9zf+9daZomoAquRda85bPpUiDVDkTi3oedlRS09ATn/lXV6adIZX9n0M7gKLl3GV8KXV1gecmoF
+p6hWgM83YNovC/+vkych2YVweZMEPJzzjbOjxRveRthVGwDPY/jf/MMf6d7fQUuHsmmux2vKUpJT
+Iq200NPV/P8d36JdAHWPKJZkX29Mw5cQzq8+tvggFh7R/LuTmf7wK6rlV2Zpy6y41Qj3zqVPe+g7
+SGQHzO/UhgdBmGDjYjirnHPFBNxfTZiU5/6weQ==
 </SignatureValue>
 <KeyInfo>
 <X509Data>
