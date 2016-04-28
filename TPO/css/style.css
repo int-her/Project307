@@ -24,8 +24,8 @@
 }
 
 .ui-listview li.li-has-multiline {
-	margin-top: -15px;
-	margin-bottom: -20px;
+	margin-top: -10px;
+	margin-bottom: -15px;
 }
 
 .ui-listview.expand-list li.li-has-multiline .ui-li-sub-text{
