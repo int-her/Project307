@@ -2,8 +2,6 @@ var busStation = (function() {
 	busStation = {};
 
 	function successCallback(position) {
-		toastPopup.openPopup("toastPopup", "GPS로 주변 정류소를 조회하는 중입니다. 잠시만 기다려주세요.");
-		
 		/**
 		 *  좌표 기반 근접 정류소 목록 조회(getStationByPos)
 		 *  [Request Parameter]
@@ -76,9 +74,9 @@ var busStation = (function() {
 
 	function findSurroundingStationsByGps() {
 		if (navigator.geolocation) {
-			toastPopup.openPopup("toastPopup", "GPS를 받아오는 중입니다.");
+			toastPopup.openPopup("toastPopup", "GPS로 주변 정류소를 조회하는 중입니다. 잠시만 기다려주세요.");
 			navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
-				maximumAge : 60000
+				timeout : 60000
 			});
 		} else {
 			toastPopup.openPopup("toastPopup", "GPS를 지원하지 않는 기기입니다.");
