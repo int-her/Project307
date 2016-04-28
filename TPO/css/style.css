@@ -29,8 +29,11 @@
 }
 
 .ui-listview.expand-list li.li-has-multiline .ui-li-sub-text{
+	-webkit-transform: translate(0, -10px);
 	opacity: 0;
 }
 .ui-listview.expand-list li.li-has-multiline.ui-snap-listview-selected .ui-li-sub-text{
+	-webkit-transform: translate3d(0, 0, 0);
 	opacity: 1;
+	-webkit-transition: all ease 1s;
 }
