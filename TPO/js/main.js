@@ -14,6 +14,14 @@ function keyEventHandler(event) {
 }
 
 function init() {
+	/** Enter bus number */
+	document.getElementById('txtBusID').addEventListener('keypress', function(event) {
+		if (event.keyCode == 13) {
+			/** Press the enter */
+			busStation.showBusArriveTime(document.getElementById('txtBusID').value);
+		}
+	});
+	
 	/** Set marquee List */
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
 		marqueeList.pageBeforeShowHandler('surroundingBusStation');
@@ -21,7 +29,7 @@ function init() {
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
 	
 	/** When click list element, find bus stations around */ 
-	document.getElementById('searchSurrounding').addEventListener('click', busStation.findSurroundingStationsByGps);
+	document.getElementById('searchSurrounding').addEventListener('click', busStation.showSurroundingStationsByGps);
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }
