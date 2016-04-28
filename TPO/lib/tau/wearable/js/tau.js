@@ -25159,7 +25159,7 @@ ns.version = '0.10.29-14';
 
 				self.bindEvents();
 				// create SnapListStyle helper
-				self._snapListStyleHelper = tau.helper.SnapListStyle.create(listDomElement);
+				self._snapListStyleHelper = tau.helper.SnapListStyle.create(listDomElement, {animate:"scale"});
 			};
 
 			prototype.bindEvents = function() {
