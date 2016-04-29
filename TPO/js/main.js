@@ -29,6 +29,19 @@ function init() {
 		}
 	});
 	
+	
+	document.getElementById('inputStationID').addEventListener('pagebeforeshow', function() {
+		document.getElementById('txtStationID').value = "";
+	});
+	
+	/** Enter station number */
+	document.getElementById('txtStationID').addEventListener('keypress', function(event) {
+		if (event.keyCode === 13) {
+			/** Press the enter */
+			busStation.showBusArrivalTime(document.getElementById('txtStationID').value);
+		}
+	});
+	
 	/** Progress */
 	document.getElementById('processing').addEventListener("pageshow", function(event) {
 		var page = event.target,
