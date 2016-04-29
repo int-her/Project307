@@ -23,7 +23,7 @@ function init() {
 	/** When click list element, find bus stations around */ 
 	document.getElementById('searchSurrounding').addEventListener('click', busStation.findSurroundingStationsByGps);
 	
-	/** Test */
+	/* Test */
 	document.getElementById('naksungdae').addEventListener('click', stationInfo.realtimeStationArrival);
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
