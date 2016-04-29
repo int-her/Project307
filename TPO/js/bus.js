@@ -1,4 +1,75 @@
 /*global tau, toastPopup, rest */
+var busNumber = (function() {
+	var busNumber = {};
+	
+	function createBusStationId(data){
+		var id = document.getElementById("lvBusNumber");
+		id.innerHTML = "";
+		var x = data.getElementByTagName("itemList");
+		for (var i = 0; i < x.length; ++i) {
+			if (i >= 20) {
+				break;
+			}
+			id.innerHTML += "<li id=" + x[i].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue + 
+							">" + x[i].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue + "</li>";
+		}
+		
+	};
+	
+	busNumber.showStationList = function(busRouteId){
+		tau.changePage("#processing");
+		/**
+		 *  요청변수(Request Parameter)
+			busRouteId - 노선ID
+			numOfRows - 검색건수
+			pageNo - 페이지 번호
+			
+			출력결과(Response Element)
+			busRouteId - 노선 ID
+			busRouteNm- 노선명
+			seq- 순번
+			section - 구간 ID
+			station - 정류소 ID
+			stationNm - 정류소 이름
+			gpsX - X좌표 (WGS 84)
+			gpsY - Y좌표 (WGS 84)
+			direction - 진행방향
+			fullSectDist - 정류소간 거리
+			stationNo - 정류소 고유번호
+			routeType - 노선 유형
+			beginTm	- 첫차 시간
+			lastTm - 막차 시간
+			trnstnid - 회차지 정류소ID
+			numOfRows - 검색건수
+			pageNo - 페이지 번호
+		 */
+		rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute',
+				null,
+				{
+					"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
+					"busRouteId" : busRouteId,
+					"numOfRows" : "999",
+					"pageNo" : "1"
+				}, 
+				function(data, xhr) {
+					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
+					if (msg === "4") {
+						/** No result */
+						window.history.go(-2);
+						toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
+					} else if (msg === "0"){
+						/** Success */
+						createBusStationId(data);
+						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue; 
+						tau.changePage("#busNumberStationList");						
+					}
+				}, function(data, xhr) {
+					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
+				});
+	};
+})
+
+
 var busStation = (function() {
 	var busStation = {};
 	
