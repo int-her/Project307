@@ -8,6 +8,8 @@ function keyEventHandler(event) {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
+		} else if (pageid === "busArrivalTime") {
+			window.history.go(-3);
 		} else {
 			window.history.back();
 		}
@@ -15,7 +17,7 @@ function keyEventHandler(event) {
 }
 
 function init() {
-	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
+	document.getElementById('inputBusID').addEventListener('pagebeforeshow', function() {
 		document.getElementById('txtBusID').value = "";
 	});
 	
@@ -25,6 +27,18 @@ function init() {
 			/** Press the enter */
 			busStation.showBusArrivalTime(document.getElementById('txtBusID').value);
 		}
+	});
+	
+	/** Progress */
+	document.getElementById('processing').addEventListener("pageshow", function(event) {
+		var page = event.target,
+		processing = page.querySelector(".ui-processing");
+		processing.style.visibility = "";
+	});
+	document.getElementById('processing').addEventListener("pagebeforehide", function(event) {
+		var page = event.target,
+		processing = page.querySelector(".ui-processing");
+		processing.style.visibility = "hidden";
 	});
 	
 	/** Set marquee List */

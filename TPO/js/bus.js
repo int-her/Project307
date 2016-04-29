@@ -19,6 +19,7 @@ var busStation = (function() {
 	}
 	
 	busStation.showBusArrivalTime = function(arsId) {
+		tau.changePage("#processing");
 		/**
 		 *  고유번호별 정류소 항목 조회(getStationByUid)
 		 *  [Request Parameter]
@@ -83,7 +84,7 @@ var busStation = (function() {
 					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
 					if (msg === "4") {
 						/** No result */
-						window.history.back();
+						window.history.go(-2);
 						toastPopup.openPopup("toastGraphicPopup", "정류소 ID를 찾지 못하였습니다.");
 					} else if (msg === "0"){
 						/** Success */
