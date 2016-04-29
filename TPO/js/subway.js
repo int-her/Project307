@@ -1,34 +1,31 @@
 var stationInfo = (function(){
+	stationInfo = {};
 	
 	function realtimeStationArrival() {
-		rest.get('http://swopenAPI.seoul.go.kr/api/subway',
+		rest.get('http://swopenAPI.seoul.go.kr/api/subway/sample/xml/realtimeStationArrival/0/5/낙성대',
 				null,
-				{
-					"KEY" : "6879744c6379736d38304b416a6264",
-					"TYPE" : "xml",
-					"SERVICE" : "realtimeStationArrival",
-					"START_INDEX" : 0,
-					"END_INDEX" : 5,
-					"statnNm" : "낙성대"
-				},
+				null,
 				function(data, xhr) {
-					var code = data.getElementsByTagName("RESULT")[0].childNodes[0].nodeValue;
+					var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
 					if (code != "INFO-000") {
-						toastPopup.openPopup("toastPopup", "도착 예정 열차가 없습니다.");
+						toastPopup.openPopup("toastPopup", "Fail to load API. Error Code : " + code);
 					} else if (code === "INFO-000") {
 						var rt = document.getElementById('rtSubwayStation');
-						rt.innerHTML = "<div class='ui-content'><ul class='ui-listview'>";
-						var list = data.getElementByTagName("row");
-						for (var i=0; i<x.length; ++i) {
-							rt.innerHTML += "<li>" + list[i].getElementsByTagName("arvlMsg2")[0].nodeValue + "</li>";
+						rt.innerHTML = "";
+						var list = data.getElementsByTagName("row");
+						for (var i=0; i<list.length; ++i) {
+							rt.innerHTML += "<li>" + list[i].getElementsByTagName("arvlMsg2")[0].childNodes[0].nodeValue + "</li>";
 						}
-						rt.innerHTML += "</ul></div>";
+						tau.changePage("#testAPI");
 					}
+					
 				},
 				function(data, xhr) {
-					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
+					toastPopup.openPopup("toastPopup", "API 로드에 실패했습니다.");
 				}
 		)
 	}
+	stationInfo.realtimeStationArrival = realtimeStationArrival;
 	
-});
+	return stationInfo;
+}());
