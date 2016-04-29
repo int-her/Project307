@@ -21,23 +21,11 @@ function init() {
 		document.getElementById('txtBusID').value = "";
 	});
 	
-	/** Enter bus Station number */
+	/** Enter bus number */
 	document.getElementById('txtBusID').addEventListener('keypress', function(event) {
 		if (event.keyCode === 13) {
 			/** Press the enter */
 			busStation.showBusArrivalTime(document.getElementById('txtBusID').value);
-		}
-	});
-	
-	document.getElementById('inputStationID').addEventListener('pagebeforeshow', function() {
-		document.getElementById('txtStationID').value = "";
-	});
-	
-	/** Enter bus Station number */
-	document.getElementById('txtStationID').addEventListener('keypress', function(event) {
-		if (event.keyCode === 13) {
-			/** Press the enter */
-			busStation.showBusArrivalTime(document.getElementById('txtStationID').value);
 		}
 	});
 	
