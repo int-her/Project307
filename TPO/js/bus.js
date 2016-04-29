@@ -1,3 +1,4 @@
+/*global tau, toastPopup, rest */
 var busStation = (function() {
 	var busStation = {};
 	
@@ -9,12 +10,11 @@ var busStation = (function() {
 			if (i >= 20) {
 				break;
 			}
-			lv.innerHTML += "<li class='li-has-multiline li-bus-station' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
-							"><div class='ui-marquee ui-marquee-gradient'>" + 
-							x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
-							"</div><div class='ui-li-sub-text li-text-sub'>" + 
+			lv.innerHTML += "<li class='li-has-multiline' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+							">" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+							"<span class='ui-li-sub-text li-text-sub'>" + 
 							x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
-							"</div></li>";
+							"</span></li>";
 		}
 	}
 	
@@ -83,11 +83,12 @@ var busStation = (function() {
 					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
 					if (msg === "4") {
 						/** No result */
-						tau.changePage("#searchBusStation");
+						window.history.back();
 						toastPopup.openPopup("toastGraphicPopup", "정류소 ID를 찾지 못하였습니다.");
 					} else if (msg === "0"){
 						/** Success */
 						createBusArrivalTimeList(data);
+						document.getElementById('stationName').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue; 
 						tau.changePage("#busArrivalTime");						
 					}
 				}, function(data, xhr) {
@@ -207,7 +208,7 @@ var busStation = (function() {
 		if (navigator.geolocation) {
 			toastPopup.openPopup("toastPopup", "GPS로 주변 정류소를 조회하는 중입니다. 잠시만 기다려주세요.");
 			navigator.geolocation.getCurrentPosition(succeedtoGetGPS, failtoGetGPS, {
-				maximumAge : 10000, timeout : 60000
+				maximumAge : 10000, timeout : 20000
 			});
 		} else {
 			toastPopup.openPopup("toastPopup", "GPS를 지원하지 않는 기기입니다.");
