@@ -1,3 +1,4 @@
+/*global busStation, marqueeList */
 function keyEventHandler(event) {
 	if( event.keyName === "back" ) {
 		var page = document.getElementsByClassName('ui-page-active')[0],
@@ -14,11 +15,15 @@ function keyEventHandler(event) {
 }
 
 function init() {
+	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
+		document.getElementById('txtBusID').value = "";
+	});
+	
 	/** Enter bus number */
 	document.getElementById('txtBusID').addEventListener('keypress', function(event) {
-		if (event.keyCode == 13) {
+		if (event.keyCode === 13) {
 			/** Press the enter */
-			busStation.showBusArriveTime(document.getElementById('txtBusID').value);
+			busStation.showBusArrivalTime(document.getElementById('txtBusID').value);
 		}
 	});
 	
