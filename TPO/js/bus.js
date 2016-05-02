@@ -5,7 +5,7 @@ var busNumber = (function() {
 	function createBusStationId(data){
 		var id = document.getElementById("lvBusNumber");
 		id.innerHTML = "";
-		var x = data.getElementByTagName("items");
+		var x = data.getElementsByTagName("itemList");
 		for (var i = 0; i < x.length; ++i) {
 			if (i >= 20) {
 				break;
@@ -16,40 +16,58 @@ var busNumber = (function() {
 		
 	};
 	
-	busNumber.busId = function(busRouteId){
+	busNumber.getStationList = function(busRouteId){
 		tau.changePage("#processing");
-		/**
-		 *  요청변수(Request Parameter)
-			busRouteId - 노선ID
-			numOfRows - 검색건수
-			pageNo - 페이지 번호
-			
-			출력결과(Response Element)
-			busRouteId - 노선 ID
-			busRouteNm- 노선명
-			seq- 순번
-			section - 구간 ID
-			station - 정류소 ID
-			stationNm - 정류소 이름
-			gpsX - X좌표 (WGS 84)
-			gpsY - Y좌표 (WGS 84)
-			direction - 진행방향
-			fullSectDist - 정류소간 거리
-			stationNo - 정류소 고유번호
-			routeType - 노선 유형
-			beginTm	- 첫차 시간
-			lastTm - 막차 시간
-			trnstnid - 회차지 정류소ID
-			numOfRows - 검색건수
-			pageNo - 페이지 번호
-		 */
+		
 		rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute',
 				null,
 				{
 					"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
-					"busRouteId" : busRouteId,
-					"numOfRows" : "999",
-					"pageNo" : "1"
+					"strSrch" : busRouteId
+				},
+				function(data, xhr) {
+					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
+					if (msg === "4") {
+						/** No result */
+						window.history.go(-2);
+						toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
+					} else if (msg === "0"){
+						/** Success */
+						createBusStationId(data);
+						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue; 
+						tau.changePage("#busNumberStationList");						
+					}
+				}, function(data, xhr) {
+					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
+				});			
+	};
+	
+	busNumber.busId = function(strSch){
+		tau.changePage("#processing");
+		/**
+		 *  요청변수(Request Parameter)
+			strSrch - 검색할 노선번호
+			
+			출력결과(Response Element)
+			busRouteId	string - 노선 ID
+      		busRouteNm string - 노선명
+      		length string - 노선 길이 (Km)
+      		routeType string - 노선 유형 (1:공항, 3:간선, 4:지선, 5:순환, 6:광역, 7:인천, 8:경기, 9:폐지, 0:공용)
+      		stStationNm string - 기점
+      		edStationNm string - 종점
+      		term string - 배차간격 (분)
+      		lastBusYn string - 막차운행여부
+      		firstBusTm string - 금일첫차시간
+      		lastBusTm string - 금일막차시간
+      		firstLowTm string - 금일저상첫차시간
+      		lastLowTm string - 금일저상막차시간
+      		corpNm string - 운수사명
+		 */
+		rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getBusRouteList',
+				null,
+				{
+					"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
+					"strSrch" : strSch
 				}, 
 				function(data, xhr) {
 					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
@@ -60,13 +78,15 @@ var busNumber = (function() {
 					} else if (msg === "0"){
 						/** Success */
 						createBusStationId(data);
-						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("items")[0].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue; 
+						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue; 
 						tau.changePage("#busNumberStationList");						
 					}
 				}, function(data, xhr) {
 					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
 				});
 	};
+	
+	
 	
 	return busNumber;
 }());
