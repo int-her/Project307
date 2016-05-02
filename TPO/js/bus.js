@@ -2,7 +2,7 @@
 var busNumber = (function() {
 	var busNumber = {};
 	
-	function createBusStationId(data){
+	function createBusStationList(data){
 		var id = document.getElementById("lvBusNumber");
 		id.innerHTML = "";
 		var x = data.getElementsByTagName("itemList");
@@ -10,20 +10,20 @@ var busNumber = (function() {
 			if (i >= 20) {
 				break;
 			}
-			id.innerHTML += "<li id=" + x[i].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue + 
-							">" + x[i].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue + "</li>";
+			id.innerHTML += "<li id=" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
+							">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
 		}
 		
 	};
 	
-	busNumber.getStationList = function(busRouteId){
+	function busIdToStation(busRouteId){
 		tau.changePage("#processing");
 		
 		rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute',
 				null,
 				{
 					"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
-					"strSrch" : busRouteId
+					"busRouteId" : busRouteId
 				},
 				function(data, xhr) {
 					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
@@ -33,9 +33,8 @@ var busNumber = (function() {
 						toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
 					} else if (msg === "0"){
 						/** Success */
-						createBusStationId(data);
-						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue; 
-						tau.changePage("#busNumberStationList");						
+						createBusStationList(data);
+						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue; 						
 					}
 				}, function(data, xhr) {
 					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
@@ -77,8 +76,7 @@ var busNumber = (function() {
 						toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
 					} else if (msg === "0"){
 						/** Success */
-						createBusStationId(data);
-						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue; 
+						busIdToStation(data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue); 
 						tau.changePage("#busNumberStationList");						
 					}
 				}, function(data, xhr) {
