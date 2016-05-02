@@ -5,7 +5,7 @@ var busNumber = (function() {
 	function createBusStationId(data){
 		var id = document.getElementById("lvBusNumber");
 		id.innerHTML = "";
-		var x = data.getElementByTagName("itemList");
+		var x = data.getElementByTagName("items");
 		for (var i = 0; i < x.length; ++i) {
 			if (i >= 20) {
 				break;
@@ -16,7 +16,7 @@ var busNumber = (function() {
 		
 	};
 	
-	busNumber.showStationList = function(busRouteId){
+	busNumber.busId = function(busRouteId){
 		tau.changePage("#processing");
 		/**
 		 *  요청변수(Request Parameter)
@@ -60,14 +60,16 @@ var busNumber = (function() {
 					} else if (msg === "0"){
 						/** Success */
 						createBusStationId(data);
-						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue; 
+						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("items")[0].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue; 
 						tau.changePage("#busNumberStationList");						
 					}
 				}, function(data, xhr) {
 					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
 				});
 	};
-})
+	
+	return busNumber;
+}());
 
 
 var busStation = (function() {
@@ -76,7 +78,7 @@ var busStation = (function() {
 	function createBusArrivalTimeList(data) {
 		var lv = document.getElementById('lvBusArrivalTime');
 		lv.innerHTML = "";
-		var x = data.getElementsByTagName("itemList");
+		var x = data.getElementsByTagName("items");
 		for (var i = 0; i < x.length; ++i) {
 			if (i >= 20) {
 				break;
@@ -160,7 +162,7 @@ var busStation = (function() {
 					} else if (msg === "0"){
 						/** Success */
 						createBusArrivalTimeList(data);
-						document.getElementById('stationName').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue; 
+						document.getElementById('stationName').innerHTML = data.getElementsByTagName("items")[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue; 
 						tau.changePage("#busArrivalTime");						
 					}
 				}, function(data, xhr) {

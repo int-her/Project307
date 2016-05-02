@@ -25,7 +25,7 @@ function init() {
 	document.getElementById('txtBusID').addEventListener('keypress', function(event) {
 		if (event.keyCode === 13) {
 			/** Press the enter */
-			busNumber.showStationList(document.getElementById('txtBusID').value);
+			busNumber.busId(document.getElementById('txtBusID').value);
 		}
 	});
 	
