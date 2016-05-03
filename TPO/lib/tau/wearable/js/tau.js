@@ -25016,6 +25016,19 @@ ns.version = '0.10.29-14';
 				}
 			}
 
+			/**
+			 * 자이로 센서를 이용하여 리스트를 스크롤한다.
+			 */
+			function acceleratorHandler(e) {
+				var snapListviewWidget = this._snapListviewWidget,
+					selectedIndex = snapListviewWidget.getSelectedIndex(),
+					speed = e.acceleration.y;
+				
+				if (Math.round(speed) >= 1) {
+					snapListviewWidget.scrollToPosition(++selectedIndex);
+				}		
+			}
+			
 			prototype.init = function(listDomElement, options) {
 				var self = this;
 
@@ -25026,21 +25039,27 @@ ns.version = '0.10.29-14';
 
 			prototype.bindEvents = function() {
 				var self = this,
-					rotaryDetentCallback;
+					rotaryDetentCallback,
+					acceleratorCallback;
 
 				rotaryDetentCallback = rotaryDetentHandler.bind(self);
-
+				acceleratorCallback = acceleratorHandler.bind(self);
+				
 				self._callbacks.rotarydetent = rotaryDetentCallback;
-
+				self._callbacks.accelerator = acceleratorCallback;
+				
 				window.addEventListener("rotarydetent", rotaryDetentCallback);
+				window.addEventListener("devicemotion", acceleratorCallback);
 			};
 
 			prototype.unbindEvents = function() {
 				var self = this;
 
 				window.removeEventListener("rotarydetent", self._callbacks.rotarydetent);
+				window.removeEventListener("devicemotion", self._callbacks.accelerator);
 
 				self._callbacks.rotarydetent = null;
+				self._callbacks.accelerator = null;
 			};
 
 			prototype.destroy = function() {
