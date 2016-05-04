@@ -82,7 +82,7 @@
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview">
-				<li><a href="#inputStation">역 정보</a></li>
+				<li><a href="#stationInfo">지하철 도착 정보</a></li>
 				<li><a href="#viewMap">노선 보기</a></li>
 				<li><a href="#testView">테스트</a></li>
 				<li>경로 찾기</li>
@@ -91,7 +91,35 @@
 	</div>
 	
 	<!-- Subway Page : Station Information -->
-	<div id="inputStation" class="ui-page">
+	<div class="ui-page" id="stationInfo">
+		<header class="ui-header">
+			<h2 class="ui-title">지하철 정류장 검색</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview">
+				<li class="li-has-multiline" id="searchSurroundingSubway">
+					<div>주변 정류장 찾기</div>
+					<div class="ui-li-sub-text li-text-sub">10개 이내</div>
+				</li>
+				<li><a href="#listStation">리스트에서 찾기</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="ui-page" id="surroundingSubwayStation">
+		<header class="ui-header">
+			<h2 class="ui-title">정류소 목록</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview marquee-list expand-list" id="lvSubwayStation">
+				
+			</ul>
+		</div>
+	</div>
+	
+	
+	<!-- Subway Page : Station Information -->
+	<div id="listStation" class="ui-page">
 		<div class="ui-header">
 			<h3 class="ui-title">노선 번호</h3>
 		</div>
