@@ -24,10 +24,17 @@ function init() {
 	document.getElementById('searchSurrounding').addEventListener('click', busStation.findSurroundingStationsByGps);
 	
 	/** When click list element, find subway stations around */ 
-	document.getElementById('searchSurroundingSubway').addEventListener('click', subwayStation.findSurroundingStationsByGps);
+	document.getElementById('searchSurroundingSubway').addEventListener('click', subway.findSurroundingStationsByGps);
 	
-	/** Test - subway's realtime position */
-	document.getElementById('naksungdae').addEventListener('click', subwayStation.realtimeStationArrival);
+	/** Test - image zoom in & out */
+	document.getElementById('viewMap').addEventListener('pagebeforshow', function() {
+		window.addEventListener('rotarydetent', zoom.rotaryEventHandler);
+	});
+	
+	document.getElementById('viewMap').addEventListener('pagebeforhide', function() {
+		window.removeEventListener('rotarydetent', zoom.rotaryEventHandler);
+	});
+	
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }

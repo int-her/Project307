@@ -1,13 +1,12 @@
-var subwayStation = (function(){
-	subwayStation = {};
+var subway = (function(){
+	subway = {};
 	
 	function realtimeStationArrival(stationName) {
-		rest.get('http://swopenAPI.seoul.go.kr/api/subway/sample/xml/realtimeStationArrival/0/5/' + stationName,
-				null,
-				null,
+		var url = 'http://swopenAPI.seoul.go.kr/api/subway/sample/xml/realtimeStationArrival/0/5/' + stationName; 
+		rest.get(url, null,	null,
 				function(data, xhr) {
 					var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
-					if (code != "INFO-000") {
+					if (code !== "INFO-000") {
 						toastPopup.openPopup("toastPopup", "Fail to load API. Error Code : " + code);
 					} else if (code === "INFO-000") {
 						var rt = document.getElementById('rtSubwayStation');
@@ -22,20 +21,18 @@ var subwayStation = (function(){
 				},
 				function(data, xhr) {
 					toastPopup.openPopup("toastPopup", "API 로드에 실패했습니다.");
-				}
-		)
+				});
 	}
 	
 	function successCallback(position) {
 		/**
 		 *  서울시 좌표기반 근접 지하철역 정보(nearBy)
 		 */
-		rest.get('http://swopenapi.seoul.go.kr/api/subway/DELETED/xml/nearBy/0/9' + position.coords.longitude + position.coords.latitude,
-				null,
-				null, 
+		var url = 'http://swopenapi.seoul.go.kr/api/subway/DELETED/xml/nearBy/0/9' + position.coords.longitude + position.coords.latitude; 
+		rest.get(url, null, null, 
 				function(data, xhr) {
 					var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
-					if (code != "INFO-000") {
+					if (code !== "INFO-000") {
 						toastPopup.openPopup("toastPopup", "Fail to load API. Error Code : " + code);
 					} else if (code === "INFO-000"){
 						var lv = document.getElementById('lvSubwayStation');
@@ -53,7 +50,8 @@ var subwayStation = (function(){
 						}
 						tau.changePage("#surroundingSubwayStation");						
 					}
-				}, function(data, xhr) {
+				},
+				function(data, xhr) {
 					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
 				});
 	}
@@ -86,8 +84,8 @@ var subwayStation = (function(){
 		}
 	}
 	
-	subwayStation.realtimeStationArrival = realtimeStationArrival;
-	subwayStation.findSurroundingStationsByGps = findSurroundingStationsByGps;
+	subway.realtimeStationArrival = realtimeStationArrival;
+	subway.findSurroundingStationsByGps = findSurroundingStationsByGps;
 	
-	return subwayStation;
+	return subway;
 }());
