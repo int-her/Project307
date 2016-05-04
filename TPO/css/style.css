@@ -1,4 +1,4 @@
-.input-area {
+.input-number {
 	top: 0px;
 	left: 70px;
 	position: absolute;
@@ -29,11 +29,15 @@
 }
 
 .ui-listview.expand-list li.li-has-multiline .ui-li-sub-text{
-	-webkit-transform: translate(0, -10px);
 	opacity: 0;
 }
 .ui-listview.expand-list li.li-has-multiline.ui-snap-listview-selected .ui-li-sub-text{
-	-webkit-transform: translate3d(0, 0, 0);
 	opacity: 1;
-	-webkit-transition: all ease 1s;
+}
+
+.small-processing-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate3d(-50%, -50%, 0);
 }
