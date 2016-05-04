@@ -22,9 +22,9 @@
 		<div class="ui-content">
 			<ul class="ui-listview">
 				<li><a href="#bus-main">버스</a></li>
-				<li><a href="#subway-main">지하철</a></li>
-				<li>길 찾기 안내</li>
-				<li>환경 설정</li>
+				<li><a href="#subway-main">지?�철</a></li>
+				<li>�? 찾기 ?�내</li>
+				<li>?�경 ?�정</li>
 			</ul>
 		</div>
 	</div>
@@ -36,8 +36,27 @@
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview">
-				<li><a href="#searchBusStation">정류장 검색</a></li>
-				<li>노선 번호 검색</li>
+				<li><a href="#searchBusStation">?�류?? 검??</a></li>
+				<li><a href="#inputBusID">?�선 번호 검??</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- Bus Number Search Page -->
+	<div class="ui-page" id="inputBusID">
+		<div class="ui-content">
+			<input type="number" autofocus placeholder="버스 번호 ?�력" class="input-number" id="txtBusID">
+		</div>
+	</div>
+	
+	<!-- Bus Number Station List Page -->
+	<div class="ui-page" id="busNumberStationList">
+		<header class="ui-header">
+			<h2 class="ui-title" id="busNumber">?�선번호</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview" id="lvBusNumber">
+				
 			</ul>
 		</div>
 	</div>
@@ -45,23 +64,23 @@
 	<!-- Search Bus Station Page -->
 	<div class="ui-page" id="searchBusStation">
 		<header class="ui-header">
-			<h2 class="ui-title">버스 정류장 검색</h2>
+			<h2 class="ui-title">버스 ?�류?? 검??</h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview expand-list">
 				<li class="li-has-multiline" id="searchSurrounding">
-					<div>주변 정류장 찾기</div>
-					<div class="ui-li-sub-text li-text-sub">1km 반경, 20개 이내</div>
+					<div>주�? ?�류?? 찾기</div>
+					<div class="ui-li-sub-text li-text-sub">1km 반경, 20�? ?�내</div>
 				</li>
-				<li><a href="#inputBusID">정류소 ID 검색</a></li>
+				<li><a href="#inputStationID">?�류?? ID 검??</a></li>
 			</ul>
 		</div>
 	</div>
 	
 	<!--  Input Bus Station ID Page -->
-	<div class="ui-page" id="inputBusID">
+	<div class="ui-page" id="inputStationID">
 		<div class="ui-content">
-			<input type="number" autofocus placeholder="ID 입력" class="input-number" id="txtBusID">
+			<input type="number" autofocus placeholder="ID ?�력" class="input-number" id="txtStationID">
 		</div>
 	</div>
 	
@@ -77,7 +96,7 @@
 	<!-- Surrounding Bus Station List Page -->
 	<div class="ui-page" id="surroundingBusStation">
 		<header class="ui-header">
-			<h2 class="ui-title">정류소 목록</h2>
+			<h2 class="ui-title">?�류?? 목록</h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview marquee-list expand-list" id="lvBusStation">
@@ -89,7 +108,7 @@
 	<!-- Bus Arrival Time List Page -->
 	<div class="ui-page" id="busArrivalTime">
 		<header class="ui-header">
-			<h2 class="ui-title" id="stationName">이름</h2>
+			<h2 class="ui-title" id="stationName">?�름</h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview" id="lvBusArrivalTime">
@@ -108,13 +127,13 @@
 	<!--  Subway Page : Main Menu -->
 	<div class="ui-page" id="subway-main">
 		<header class="ui-header">
-			<h2 class="ui-title">지하철</h2>
+			<h2 class="ui-title">지?�철</h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview">
-				<li><a href="#inputStation">역 정보</a></li>
-				<li><a href="#viewMap">노선 보기</a></li>
-				<li><a href="#testView">테스트</a></li>
+				<li><a href="#inputStation">?? ?�보</a></li>
+				<li><a href="#viewMap">?�선 보기</a></li>
+				<li><a href="#testView">?�스??</a></li>
 				<li>경로 찾기</li>
 			</ul>
 		</div>
@@ -123,7 +142,7 @@
 	<!-- Subway Page : Station Information -->
 	<div id="inputStation" class="ui-page">
 		<div class="ui-header">
-			<h3 class="ui-title">노선 번호</h3>
+			<h3 class="ui-title">?�선 번호</h3>
 		</div>
 		<div class="ui-content">
 			<ul class="ui-listview">
@@ -139,9 +158,9 @@
 		<div class="ui-content">
 			<ul class="ui-listview">
 				<li>봉천</li>
-				<li>서울대입구</li>
-				<li>사당</li>
-				<li>낙성대</li>
+				<li>?�울?�?�구</li>
+				<li>?�당</li>
+				<li>?�성?�</li>
 			</ul>
 		</div>
 	</div>

@@ -9,7 +9,7 @@ function keyEventHandler(event) {
 			} catch (ignore) {
 			}
 		} else if (pageid === "busArrivalTime") {
-			// 버스 예상 도착 시간 페이지
+			// 버스 ?�상 ?�착 ?�간 ?�이지
 			window.history.go(-3);
 		} else {
 			window.history.back();
@@ -18,18 +18,30 @@ function keyEventHandler(event) {
 }
 
 function init() {
-	// 버스 정류장 ID 입력
+	// 버스 ?�류?? ID ?�력
 	document.getElementById('inputBusID').addEventListener('pagebeforeshow', function() {
 		document.getElementById('txtBusID').value = "";
 	});
 	document.getElementById('txtBusID').addEventListener('keypress', function(event) {
 		if (event.keyCode === 13) {
-			// enter key
-			bus.showBusArrivalTime(document.getElementById('txtBusID').value);
+			// enter
+			bus.busId(document.getElementById('txtBusID').value);
 		}
 	});
 	
-	// 로딩 페이지
+	
+	document.getElementById('inputStationID').addEventListener('pagebeforeshow', function() {
+		document.getElementById('txtStationID').value = "";
+	});
+	// Enter station number
+	document.getElementById('txtStationID').addEventListener('keypress', function(event) {
+		if (event.keyCode === 13) {
+			// enter
+			busStation.showBusArrivalTime(document.getElementById('txtStationID').value);
+		}
+	});
+	
+	// 로딩 ?�이지
 	document.getElementById('processing').addEventListener("pageshow", function(event) {
 		var page = event.target,
 		processing = page.querySelector(".ui-processing");
@@ -41,13 +53,13 @@ function init() {
 		processing.style.visibility = "hidden";
 	});
 	
-	// 주변 정류장 페이지의 Marquee list 설정
+	// 주�? ?�류?? ?�이지?? Marquee list ?�정
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
 		marqueeList.pageBeforeShowHandler('surroundingBusStation');
 	});
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
 	 
-	// 주변 정류장 검색 클릭 이벤트 추가
+	// 주�? ?�류?? 검?? ?�릭 ?�벤?? 추�?
 	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
 	
 	var handler = page.querySelector(".ui-more"),
@@ -79,7 +91,7 @@ function init() {
 		}
 	});
 
-	// tizen hardware 키에 대한 이벤트 추가
+	// tizen hardware ?�에 ?�?? ?�벤?? 추�?
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }
 
