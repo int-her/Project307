@@ -9,6 +9,7 @@ function keyEventHandler(event) {
 			} catch (ignore) {
 			}
 		} else if (pageid === "busArrivalTime") {
+			// 버스 예상 도착 시간 페이지
 			window.history.go(-3);
 		} else {
 			window.history.back();
@@ -17,19 +18,18 @@ function keyEventHandler(event) {
 }
 
 function init() {
+	// 버스 정류장 ID 입력
 	document.getElementById('inputBusID').addEventListener('pagebeforeshow', function() {
 		document.getElementById('txtBusID').value = "";
 	});
-	
-	/** Enter bus number */
 	document.getElementById('txtBusID').addEventListener('keypress', function(event) {
 		if (event.keyCode === 13) {
-			/** Press the enter */
-			busStation.showBusArrivalTime(document.getElementById('txtBusID').value);
+			// enter key
+			bus.showBusArrivalTime(document.getElementById('txtBusID').value);
 		}
 	});
 	
-	/** Progress */
+	// 로딩 페이지
 	document.getElementById('processing').addEventListener("pageshow", function(event) {
 		var page = event.target,
 		processing = page.querySelector(".ui-processing");
@@ -41,15 +41,45 @@ function init() {
 		processing.style.visibility = "hidden";
 	});
 	
-	/** Set marquee List */
+	// 주변 정류장 페이지의 Marquee list 설정
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
 		marqueeList.pageBeforeShowHandler('surroundingBusStation');
 	});
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
+	 
+	// 주변 정류장 검색 클릭 이벤트 추가
+	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
 	
-	/** When click list element, find bus stations around */ 
-	document.getElementById('searchSurrounding').addEventListener('click', busStation.showSurroundingStationsByGps);
-	
+	var handler = page.querySelector(".ui-more"),
+	popupCircle = page.querySelector("#moreoptionsPopupCircle"),
+	elSelector = page.querySelector("#selector"),
+	selector,
+	clickHandlerBound;
+
+	function clickHandler(event) {
+		tau.openPopup(popupCircle);
+	}
+
+	document.getElementById("busArrivalTime").addEventListener( "pagebeforeshow", function() {
+		var radius = window.innerHeight / 2 * 0.8;
+
+		clickHandlerBound = clickHandler.bind(null);
+		handler.addEventListener("click", clickHandlerBound);
+		selector = tau.widget.Selector(elSelector, {itemRadius: radius});
+	});
+	document.getElementById("busArrivalTime").addEventListener( "pagebeforehide", function() {
+		handler.removeEventListener("click", clickHandlerBound);
+		selector.destroy();
+	});
+	elSelector.addEventListener("click", function(event) {
+		var target = event.target;
+		// 'ui-selector-indicator' is default indicator class name of Selector component
+		if (target.classList.contains("ui-selector-indicator")) {
+			tau.closePopup(popupCircle);
+		}
+	});
+
+	// tizen hardware 키에 대한 이벤트 추가
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }
 

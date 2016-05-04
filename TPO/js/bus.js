@@ -1,7 +1,11 @@
 /*global tau, toastPopup, rest */
-var busStation = (function() {
-	var busStation = {};
+var bus = (function() {
+	var bus = {};
 	
+	/**
+	 * API 에서 받아온 data를 파싱하여 도착 예상 시간을 보여주는 리스트를 만든다.
+	 * @param {String} API 에서 받아온 XML String
+	 */
 	function createBusArrivalTimeList(data) {
 		var lv = document.getElementById('lvBusArrivalTime');
 		lv.innerHTML = "";
@@ -18,7 +22,11 @@ var busStation = (function() {
 		}
 	}
 	
-	busStation.showBusArrivalTime = function(arsId) {
+	/**
+	 * arsID 에 해당하는 정류장에 대한 버스 도착 예상시간을 보여준다.
+	 * @param {number} arsID 정류장 고유 번호
+	 */
+	bus.showBusArrivalTime = function(arsId) {
 		tau.changePage("#processing");
 		/**
 		 *  고유번호별 정류소 항목 조회(getStationByUid)
@@ -98,19 +106,18 @@ var busStation = (function() {
 	};
 	
 	/**
-	 *  When click station list item, show bus arrival time list by station id.
+	 *  버스 정류장 리스트에서 클릭 시 showBusArrivalTime 함수를 불러와 그 정류장에서의 버스 도착 예정 시간을 보여준다.
 	 */
 	function clickList(event)
 	{
 		var target = event.target;
-		alert(target.classList);
 		if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a')) {
-			busStation.showBusArrivalTime(target.id);
+			bus.showBusArrivalTime(target.id);
 		}
 	}
 	
 	/**
-	 * When list item class contains li-bus-station, add list click event.
+	 * li-bus-station 클래스를 가진 list item 에 대해 클릭 이벤트를 추가한다.
 	 */
 	function addListEvent() {
 		var stationList = document.getElementsByClassName("li-bus-station"),
@@ -122,7 +129,7 @@ var busStation = (function() {
 	}
 	
 	/**
-	 * Create bus station list and show distance by current location, station name and id.
+	 * 버스 정류장 리스트를 만든다. 현재 위치에 대한 거리, 정류장 고유번호를 부가적으로 표시해준다.
 	 */
 	function createStationList(data) {
 		var lv = document.getElementById('lvBusStation');
@@ -144,6 +151,9 @@ var busStation = (function() {
 		addListEvent();
 	}
 	
+	/**
+	 * GPS 받아오기에 성공했을 시 1km 반경 내의 주변 정류소를 API를 통하여 읽어오고 리스트를 만든다.
+	 */
 	function succeedtoGetGPS(position) {
 		/**
 		 *  좌표 기반 근접 정류소 목록 조회(getStationByPos)
@@ -188,6 +198,9 @@ var busStation = (function() {
 				});
 	}
 
+	/**
+	 * 
+	 */
 	function failtoGetGPS(error) {
 		switch (error.code) {
 		case error.PERMISSION_DENIED:
@@ -205,7 +218,10 @@ var busStation = (function() {
 		}
 	}
 
-	busStation.showSurroundingStationsByGps = function () {
+	/**
+	 * GPS를 이용하여 1km 반경 내의 주변 정류소를 조회한다.
+	 */
+	bus.showSurroundingStationsByGps = function () {
 		if (navigator.geolocation) {
 			toastPopup.openPopup("toastPopup", "GPS로 주변 정류소를 조회하는 중입니다. 잠시만 기다려주세요.");
 			navigator.geolocation.getCurrentPosition(succeedtoGetGPS, failtoGetGPS, {
@@ -216,5 +232,5 @@ var busStation = (function() {
 		}
 	};
 	
-	return busStation;
+	return bus;
 }());
