@@ -24997,6 +24997,7 @@ ns.version = '0.10.29-14';
 				SnapListStyle = function (listDomElement, options) {
 					var self = this;
 
+					self.accel = false;
 					self._snapListviewWidget = null;
 					self._callbacks = {};
 					self.init(listDomElement, options);
@@ -25024,9 +25025,15 @@ ns.version = '0.10.29-14';
 					selectedIndex = snapListviewWidget.getSelectedIndex(),
 					speed = e.acceleration.y;
 				
-				if (Math.round(speed) >= 1) {
+				if (!self.accel && speed >= 1) {
 					snapListviewWidget.scrollToPosition(++selectedIndex);
-				}		
+					self.accel = true;
+				} else if (self.accel && Math.abs(speed) < 1) {
+					self.accel = false;
+				} else if (!self.accel && speed <= -1) {
+					snapListviewWidget.scrollToPosition(--selectedIndex);
+					self.accel = true;
+				}
 			}
 			
 			prototype.init = function(listDomElement, options) {
