@@ -9,7 +9,6 @@ function keyEventHandler(event) {
 			} catch (ignore) {
 			}
 		} else if (pageid === "busArrivalTime") {
-			// 버스 ?�상 ?�착 ?�간 ?�이지
 			window.history.go(-3);
 		} else {
 			window.history.back();
@@ -18,7 +17,7 @@ function keyEventHandler(event) {
 }
 
 function init() {
-	// 버스 ?�류?? ID ?�력
+	// 버스 정류장 ID 입력
 	document.getElementById('inputBusID').addEventListener('pagebeforeshow', function() {
 		document.getElementById('txtBusID').value = "";
 	});
@@ -41,7 +40,7 @@ function init() {
 		}
 	});
 	
-	// 로딩 ?�이지
+	// 로딩 페이지
 	document.getElementById('processing').addEventListener("pageshow", function(event) {
 		var page = event.target,
 		processing = page.querySelector(".ui-processing");
@@ -53,13 +52,13 @@ function init() {
 		processing.style.visibility = "hidden";
 	});
 	
-	// 주�? ?�류?? ?�이지?? Marquee list ?�정
+	// Marquee list 초기화 
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
 		marqueeList.pageBeforeShowHandler('surroundingBusStation');
 	});
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
 	 
-	// 주�? ?�류?? 검?? ?�릭 ?�벤?? 추�?
+	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
 	
 	var handler = page.querySelector(".ui-more"),
@@ -91,7 +90,6 @@ function init() {
 		}
 	});
 
-	// tizen hardware ?�에 ?�?? ?�벤?? 추�?
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }
 
