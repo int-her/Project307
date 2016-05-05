@@ -1,4 +1,4 @@
-/*global busStation, marqueeList */
+/*global bus, marqueeList, moreoption */
 function keyEventHandler(event) {
 	if( event.keyName === "back" ) {
 		var page = document.getElementsByClassName('ui-page-active')[0],
@@ -8,7 +8,7 @@ function keyEventHandler(event) {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
-		} else if (pageid === "busArrivalTime") {
+		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-3);
 		} else {
 			window.history.back();
@@ -36,7 +36,7 @@ function init() {
 	document.getElementById('txtStationID').addEventListener('keypress', function(event) {
 		if (event.keyCode === 13) {
 			// enter
-			busStation.showBusArrivalTime(document.getElementById('txtStationID').value);
+			bus.showBusArrivalTime(document.getElementById('txtStationID').value);
 		}
 	});
 	
@@ -57,38 +57,15 @@ function init() {
 		marqueeList.pageBeforeShowHandler('surroundingBusStation');
 	});
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
-	 
+
+	// More option 초기화
+	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
+		moreoption.pageBeforeShowHandler('busArrivalTime');
+	});
+	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', moreoption.pageBeforeHideHandler);
+	
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
-	
-	var handler = page.querySelector(".ui-more"),
-	popupCircle = page.querySelector("#moreoptionsPopupCircle"),
-	elSelector = page.querySelector("#selector"),
-	selector,
-	clickHandlerBound;
-
-	function clickHandler(event) {
-		tau.openPopup(popupCircle);
-	}
-
-	document.getElementById("busArrivalTime").addEventListener( "pagebeforeshow", function() {
-		var radius = window.innerHeight / 2 * 0.8;
-
-		clickHandlerBound = clickHandler.bind(null);
-		handler.addEventListener("click", clickHandlerBound);
-		selector = tau.widget.Selector(elSelector, {itemRadius: radius});
-	});
-	document.getElementById("busArrivalTime").addEventListener( "pagebeforehide", function() {
-		handler.removeEventListener("click", clickHandlerBound);
-		selector.destroy();
-	});
-	elSelector.addEventListener("click", function(event) {
-		var target = event.target;
-		// 'ui-selector-indicator' is default indicator class name of Selector component
-		if (target.classList.contains("ui-selector-indicator")) {
-			tau.closePopup(popupCircle);
-		}
-	});
 
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }

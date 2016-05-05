@@ -5,9 +5,8 @@ var marqueeList = (function() {
 	list,
 	marqueeList = {};
 	
-	function pageBeforeShowHandler(pageId)
-	{
-		page = document.getElementById(pageId),
+	marqueeList.pageBeforeShowHandler = function(pageId) {
+		page = document.getElementById(pageId);
 		elScroller = page.querySelector(".ui-scroller");
 		if (elScroller) {
 			list = elScroller.querySelector(".ui-listview.marquee-list");
@@ -19,11 +18,9 @@ var marqueeList = (function() {
 			});
 			elScroller.setAttribute("tizen-circular-scrollbar", "");
 		}
-	}
-	marqueeList.pageBeforeShowHandler = pageBeforeShowHandler;
-
-	function pageBeforeHideHandler()
-	{
+	};
+	
+	marqueeList.pageBeforeHideHandler = function() {
 		if (listHelper) {
 			listHelper.destroy();
 			listHelper = null;
@@ -31,8 +28,7 @@ var marqueeList = (function() {
 				elScroller.removeAttribute("tizen-circular-scrollbar");
 			}
 		}
-	}
-	marqueeList.pageBeforeHideHandler = pageBeforeHideHandler;
-	
+	};
+
 	return marqueeList;
 }());

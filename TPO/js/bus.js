@@ -17,8 +17,6 @@ var bus = (function() {
 	};
 	
 	function routeIdtoStation(busRouteId){
-		tau.changePage("#processing");
-		
 		rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute',
 				null,
 				{
@@ -41,7 +39,7 @@ var bus = (function() {
 				});		
 	};
 	
-	busNumber.busId = function(strSch){
+	bus.busId = function(strSch){
 		tau.changePage("#processing");
 		/**
 		 *  요청변수(Request Parameter)
@@ -76,7 +74,7 @@ var bus = (function() {
 						toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
 					} else if (msg === "0"){
 						/** Success */
-						busIdToStation(data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue); 
+						routeIdtoStation(data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue); 
 						tau.changePage("#busNumberStationList");						
 					}
 				}, function(data, xhr) {
@@ -98,10 +96,10 @@ var bus = (function() {
 				break;
 			}
 			lv.innerHTML += "<li class='li-has-multiline' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
-							">" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
-							"<span class='ui-li-sub-text li-text-sub'>" + 
+							"><div>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+							"</div><div class='ui-li-sub-text li-text-sub'>" + 
 							x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
-							"</span></li>";
+							"</div></li>";
 		}
 	}
 	
