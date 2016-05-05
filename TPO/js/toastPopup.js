@@ -3,13 +3,12 @@ var toastPopup = (function() {
 	content,
 	toastPopup = {};
 	
-	function openPopup(popupId, text) {
-		popupPage = document.getElementById(popupId),
+	toastPopup.openPopup = function(popupId, text) {
+		popupPage = document.getElementById(popupId);
 		content = popupPage.querySelector(".ui-popup-content");
 		content.innerHTML = text;
 		tau.openPopup(popupId);
-	}
-	toastPopup.openPopup = openPopup;
+	};
 	
 	return toastPopup;
 }());

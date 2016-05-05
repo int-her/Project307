@@ -52,7 +52,7 @@
 	<!-- Bus Number Station List Page -->
 	<div class="ui-page" id="busNumberStationList">
 		<header class="ui-header">
-			<h2 class="ui-title" id="busNumber">?�선번호</h2>
+			<h2 class="ui-title" id="busNumber">노선 번호</h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview" id="lvBusNumber">
@@ -69,7 +69,7 @@
 		<div class="ui-content">
 			<ul class="ui-listview expand-list">
 				<li class="li-has-multiline" id="searchSurrounding">
-					<div>주변 정류장 찾기</div>
+					<div class="li-expand">주변 정류장 찾기</div>
 					<div class="ui-li-sub-text li-text-sub">1km 반경, 20개 이내</div>
 				</li>
 				<li><a href="#inputStationID">정류소 ID 검색</a></li>
@@ -107,13 +107,21 @@
 	
 	<!-- Bus Arrival Time List Page -->
 	<div class="ui-page" id="busArrivalTime">
-		<header class="ui-header">
+		<header class="ui-header ui-has-more">
 			<h2 class="ui-title" id="stationName"></h2>
+			<button type="button" class="ui-more ui-icon-overflow">More Options</button>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview" id="lvBusArrivalTime">
 			</ul>
-			<button type="button" class="ui-more ui-icon-overflow">More Options</button>
+		</div>
+		
+		<!-- More Options -->
+		<div id="busArrivalTime_MoreOptions" class="ui-popup">
+			<div id="selector" class="ui-selector">
+				<div class="ui-item check-icon" data-title="즐겨찾기 등록"></div>
+				<div class="ui-item check-icon" data-title="즐겨찾기 등록"></div>
+			</div>
 		</div>
 	</div>
 	
@@ -206,6 +214,7 @@
 	<script type="text/javascript" src="js/list.js"></script>
 	<script type="text/javascript" src="js/marqueeList.js"></script>
 	<script type="text/javascript" src="js/toastPopup.js"></script>
+	<script type="text/javascript" src="js/moreoption.js"></script>
 	<script type="text/javascript" src="js/bus.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
