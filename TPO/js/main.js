@@ -2,14 +2,22 @@
 function keyEventHandler(event) {
 	if( event.keyName === "back" ) {
 		var page = document.getElementsByClassName('ui-page-active')[0],
-			pageid = page ? page.id : "";
+			popup = document.getElementsByClassName('ui-popup-active')[0],
+			pageid = popup ? popup.id : (page ? page.id : "");
+		
 		if( pageid === "main" ) {
 			try {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
+		} else if (pageid === "surroundingBusStation") {
+			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-3);
+		} else if (pageid === "processing") {
+			// 아무것도 하지 않음
+		} else if (pageid === "busArrivalTime_MoreOptions") {
+			tau.closePopup(popup);
 		} else {
 			window.history.back();
 		}
