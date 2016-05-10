@@ -1,6 +1,7 @@
 /*global tau, toastPopup, rest */
 var bus = (function() {
-	var bus = {};
+	var bus = {},
+		isError = false;
 	
 	function createBusStationList(data){
 		var id = document.getElementById("lvBusNumber");
@@ -28,14 +29,18 @@ var bus = (function() {
 					if (msg === "4") {
 						/** No result */
 						window.history.go(-2);
-						toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
+						toastPopup.openCheckPopup("노선 번호를 찾지 못하였습니다.");
 					} else if (msg === "0"){
 						/** Success */
 						createBusStationList(data);
-						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue; 						
+						document.getElementById('busNumber').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue;
+						tau.changePage("#busNumberStationList");	
 					}
 				}, function(data, xhr) {
-					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
+					toastPopup.openPopup("API를 불러오는데 실패하였습니다.", function(e) {
+						tau.closePopup();
+						setTimeout(function(){window.history.go(-1);}, 100)
+					});
 				});		
 	};
 	
@@ -71,14 +76,16 @@ var bus = (function() {
 					if (msg === "4") {
 						/** No result */
 						window.history.go(-2);
-						toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
+						toastPopup.openCheckPopup("노선 번호를 찾지 못하였습니다.");
 					} else if (msg === "0"){
 						/** Success */
 						routeIdtoStation(data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue); 
-						tau.changePage("#busNumberStationList");						
 					}
 				}, function(data, xhr) {
-					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
+					toastPopup.openPopup("API를 불러오는데 실패하였습니다.", function(e) {
+						tau.closePopup();
+						setTimeout(function(){window.history.go(-1);}, 100)
+					});
 				});
 	};
 	
@@ -174,7 +181,7 @@ var bus = (function() {
 					if (msg === "4") {
 						// No result
 						window.history.go(-2);
-						toastPopup.openPopup("toastGraphicPopup", "정류소 ID를 찾지 못하였습니다.");
+						toastPopup.openCheckPopup("정류소 ID를 찾지 못하였습니다.");
 					} else if (msg === "0"){
 						// Success
 						createBusArrivalTimeList(data);
@@ -182,7 +189,10 @@ var bus = (function() {
 						tau.changePage("#busArrivalTime");						
 					}
 				}, function(data, xhr) {
-					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
+					toastPopup.openPopup("API를 불러오는데 실패하였습니다.", function(e) {
+						tau.closePopup();
+						setTimeout(function(){window.history.go(-1);}, 100)
+					});
 				});
 	};
 	
@@ -236,6 +246,7 @@ var bus = (function() {
 	 * GPS 받아오기에 성공했을 시 1km 반경 내의 주변 정류소를 API를 통하여 읽어오고 리스트를 만든다.
 	 */
 	function succeedtoGetGPS(position) {
+		
 		/**
 		 *  좌표 기반 근접 정류소 목록 조회(getStationByPos)
 		 *  [Request Parameter]
@@ -268,14 +279,20 @@ var bus = (function() {
 					var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
 					if (msg === "4") {
 						// No result
-						toastPopup.openPopup("toastPopup", "주변 정류소를 조회한 결과가 없습니다.");
+						toastPopup.openPopup("주변 정류소를 조회한 결과가 없습니다.", function(e) {
+							tau.closePopup();
+							setTimeout(function(){window.history.go(-1);}, 100)
+						});
 					} else if (msg === "0"){
 						// Success
 						createStationList(data);
 						tau.changePage("#surroundingBusStation");						
 					}
 				}, function(data, xhr) {
-					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
+					toastPopup.openPopup("API를 불러오는데 실패하였습니다.", function(e) {
+						tau.closePopup();
+						setTimeout(function(){window.history.go(-1);}, 100)
+					});;
 				});
 	}
 
@@ -285,16 +302,28 @@ var bus = (function() {
 	function failtoGetGPS(error) {
 		switch (error.code) {
 		case error.PERMISSION_DENIED:
-			toastPopup.openPopup("toastPopup", "GPS 권한이 거부되었습니다.");
+			toastPopup.openPopup("GPS 권한이 거부되었습니다.", function(e) {
+				tau.closePopup();
+				setTimeout(function(){window.history.go(-1);}, 100);
+			});
 			break;
 		case error.POSITION_UNAVAILABLE:
-			toastPopup.openPopup("toastPopup", "연결된 디바이스의 GPS를 켜주세요.");
+			toastPopup.openCheckPopup("연결된 디바이스의 GPS를 켜주세요.", function(e) {
+				tau.closePopup();
+				setTimeout(function(){window.history.go(-1);}, 100);
+			});
 			break;
 		case error.TIMEOUT:
-			toastPopup.openPopup("toastPopup", "GPS 요청 시간이 초과되었습니다.");
+			toastPopup.openPopup("GPS 요청 시간이 초과되었습니다.", function(e) {
+				tau.closePopup();
+				setTimeout(function(){window.history.go(-1);}, 100);
+			});
 			break;
 		case error.UNKNOWN_ERROR:
-			toastPopup.openPopup("toastPopup", "알 수없는 오류가 발생했습니다.");
+			toastPopup.openPopup("알 수없는 오류가 발생했습니다.", function(e) {
+				tau.closePopup();
+				setTimeout(function(){window.history.go(-1);}, 100);
+			});
 			break;
 		}
 	}
@@ -304,12 +333,12 @@ var bus = (function() {
 	 */
 	bus.showSurroundingStationsByGps = function () {
 		if (navigator.geolocation) {
-			toastPopup.openPopup("toastPopup", "GPS로 주변 정류소를 조회하는 중입니다. 잠시만 기다려주세요.");
+			tau.changePage("#processing");
 			navigator.geolocation.getCurrentPosition(succeedtoGetGPS, failtoGetGPS, {
 				maximumAge : 10000, timeout : 20000
 			});
 		} else {
-			toastPopup.openPopup("toastPopup", "GPS를 지원하지 않는 기기입니다.");
+			toastPopup.openPopup("GPS를 지원하지 않는 기기입니다.");
 		}
 	};
 	
