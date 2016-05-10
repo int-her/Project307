@@ -26044,7 +26044,7 @@ ns.version = '0.11.7';
 					window.cancelAnimationFrame(animationTimer);
 					animationTimer = null;
 				}
-				scrollAnimation(scrollableParent.element, scrollableParent.element.scrollTop, dest, 450);
+				scrollAnimation(scrollableParent.element, scrollableParent.element.scrollTop, dest, 200);
 			};
 
 			function cubicBezier (x1, y1, x2, y2) {
