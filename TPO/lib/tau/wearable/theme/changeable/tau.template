@@ -56,6 +56,9 @@
                    View Switcher
 ***************************************************************************/
 /***************************************************************************
+                   Slider
+***************************************************************************/
+/***************************************************************************
                    Selector
 ***************************************************************************/
 /************************
@@ -148,12 +151,14 @@ audio:not([controls]) {
 html {
   font-size: 100%;
   /* 1 */
+
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -o-text-size-adjust: 100%;
   text-size-adjust: 100%;
   /* 2 */
+
 }
 /*
  * Addresses `font-family` inconsistency between `textarea` and other form
@@ -339,8 +344,10 @@ nav ol {
 img {
   border: 0;
   /* 1 */
+
   -ms-interpolation-mode: bicubic;
   /* 2 */
+
 }
 /*
  * Corrects overflow displayed oddly in IE 9.
@@ -382,11 +389,14 @@ fieldset {
 legend {
   border: 0;
   /* 1 */
+
   padding: 0;
   white-space: normal;
   /* 2 */
+
   *margin-left: -7px;
   /* 3 */
+
 }
 /*
  * 1. Corrects font size not being inherited in all browsers.
@@ -400,12 +410,16 @@ select,
 textarea {
   font-size: 100%;
   /* 1 */
+
   margin: 0;
   /* 2 */
+
   vertical-align: baseline;
   /* 3 */
+
   *vertical-align: middle;
   /* 3 */
+
 }
 /*
  * Addresses Firefox 3+ setting `line-height` on `input` using `!important` in
@@ -468,8 +482,10 @@ input::-moz-focus-inner {
 textarea {
   overflow: auto;
   /* 1 */
+
   vertical-align: top;
   /* 2 */
+
 }
 /* ==========================================================================
    Tables
@@ -646,11 +662,11 @@ body {
 }
 .ui-header .ui-more.ui-icon-detail {
   background-color: B052L1;
-  -webkit-mask-image: url("images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
-  -moz-mask-image: url("images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
-  -ms-mask-image: url("images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
-  -o-mask-image: url("images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
-  mask-image: url("images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
+  -webkit-mask-image: url("./images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
+  -moz-mask-image: url("./images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
+  -ms-mask-image: url("./images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
+  -o-mask-image: url("./images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
+  mask-image: url("./images/Actionbar/tw_ic_menu_detail_normal_holo_dark.png");
   -webkit-mask-size: 3.25rem 3.75rem;
   -moz-mask-size: 3.25rem 3.75rem;
   -ms-mask-size: 3.25rem 3.75rem;
@@ -671,11 +687,11 @@ body {
   cursor: default;
   background-color: transparent;
   background-color: B052L1D;
-  -webkit-mask-image: url("images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
-  -moz-mask-image: url("images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
-  -ms-mask-image: url("images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
-  -o-mask-image: url("images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
-  mask-image: url("images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
+  -webkit-mask-image: url("./images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
+  -moz-mask-image: url("./images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
+  -ms-mask-image: url("./images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
+  -o-mask-image: url("./images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
+  mask-image: url("./images/Actionbar/tw_ic_menu_detail_disable_holo_dark.png");
   -webkit-mask-size: 3.25rem 3.75rem;
   -moz-mask-size: 3.25rem 3.75rem;
   -ms-mask-size: 3.25rem 3.75rem;
@@ -694,11 +710,11 @@ body {
 }
 .ui-header .ui-more.ui-icon-overflow {
   background-color: B052L1;
-  -webkit-mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
-  -moz-mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
-  -ms-mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
-  -o-mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
-  mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  -webkit-mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  -moz-mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  -ms-mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  -o-mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
   -webkit-mask-size: 3.25rem 3.75rem;
   -moz-mask-size: 3.25rem 3.75rem;
   -ms-mask-size: 3.25rem 3.75rem;
@@ -719,11 +735,11 @@ body {
   cursor: default;
   background-color: transparent;
   background-color: B052L1D;
-  -webkit-mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
-  -moz-mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
-  -ms-mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
-  -o-mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
-  mask-image: url("images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  -webkit-mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  -moz-mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  -ms-mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  -o-mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
+  mask-image: url("./images/Actionbar/tw_ic_menu_moreoverflow_holo_dark.png");
   -webkit-mask-size: 3.25rem 3.75rem;
   -moz-mask-size: 3.25rem 3.75rem;
   -ms-mask-size: 3.25rem 3.75rem;
@@ -742,11 +758,11 @@ body {
 }
 .ui-header .ui-more.ui-icon-selectall {
   background-color: B052L1;
-  -webkit-mask-image: url("images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
-  -moz-mask-image: url("images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
-  -ms-mask-image: url("images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
-  -o-mask-image: url("images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
-  mask-image: url("images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
+  -webkit-mask-image: url("./images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
+  -moz-mask-image: url("./images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
+  -ms-mask-image: url("./images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
+  -o-mask-image: url("./images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
+  mask-image: url("./images/Actionbar/tw_ic_menu_selectall_normal_holo_dark.png");
   -webkit-mask-size: 3.25rem 3.75rem;
   -moz-mask-size: 3.25rem 3.75rem;
   -ms-mask-size: 3.25rem 3.75rem;
@@ -767,11 +783,11 @@ body {
   cursor: default;
   background-color: transparent;
   background-color: B052L1D;
-  -webkit-mask-image: url("images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
-  -moz-mask-image: url("images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
-  -ms-mask-image: url("images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
-  -o-mask-image: url("images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
-  mask-image: url("images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
+  -webkit-mask-image: url("./images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
+  -moz-mask-image: url("./images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
+  -ms-mask-image: url("./images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
+  -o-mask-image: url("./images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
+  mask-image: url("./images/Actionbar/tw_ic_menu_selectall_disable_holo_dark.png");
   -webkit-mask-size: 3.25rem 3.75rem;
   -moz-mask-size: 3.25rem 3.75rem;
   -ms-mask-size: 3.25rem 3.75rem;
@@ -873,11 +889,11 @@ body {
  */
 @-webkit-keyframes indeterminate {
   0% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -886,11 +902,11 @@ body {
     background-color: B065L6;
   }
   25% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -899,11 +915,11 @@ body {
     background-color: B065L6;
   }
   50% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -912,11 +928,11 @@ body {
     background-color: B065L6;
   }
   75% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -925,11 +941,11 @@ body {
     background-color: B065L6;
   }
   100% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -940,11 +956,11 @@ body {
 }
 @-moz-keyframes indeterminate {
   0% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -953,11 +969,11 @@ body {
     background-color: B065L6;
   }
   25% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -966,11 +982,11 @@ body {
     background-color: B065L6;
   }
   50% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -979,11 +995,11 @@ body {
     background-color: B065L6;
   }
   75% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -992,11 +1008,11 @@ body {
     background-color: B065L6;
   }
   100% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1007,11 +1023,11 @@ body {
 }
 @-ms-keyframes indeterminate {
   0% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1020,11 +1036,11 @@ body {
     background-color: B065L6;
   }
   25% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1033,11 +1049,11 @@ body {
     background-color: B065L6;
   }
   50% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1046,11 +1062,11 @@ body {
     background-color: B065L6;
   }
   75% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1059,11 +1075,11 @@ body {
     background-color: B065L6;
   }
   100% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1074,11 +1090,11 @@ body {
 }
 @-o-keyframes indeterminate {
   0% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1087,11 +1103,11 @@ body {
     background-color: B065L6;
   }
   25% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1100,11 +1116,11 @@ body {
     background-color: B065L6;
   }
   50% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1113,11 +1129,11 @@ body {
     background-color: B065L6;
   }
   75% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1126,11 +1142,11 @@ body {
     background-color: B065L6;
   }
   100% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1141,11 +1157,11 @@ body {
 }
 @keyframes indeterminate {
   0% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate1_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1154,11 +1170,11 @@ body {
     background-color: B065L6;
   }
   25% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate2_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1167,11 +1183,11 @@ body {
     background-color: B065L6;
   }
   50% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate3_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1180,11 +1196,11 @@ body {
     background-color: B065L6;
   }
   75% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate4_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1193,11 +1209,11 @@ body {
     background-color: B065L6;
   }
   100% {
-    -webkit-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -moz-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -ms-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    -o-mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
-    mask-image: url('images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -webkit-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -moz-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -ms-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    -o-mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
+    mask-image: url('./images/Progress/tw_progressbar_indeterminate5_holo_dark.png');
     -webkit-mask-repeat: no-repeat;
     -moz-mask-repeat: no-repeat;
     -ms-mask-repeat: no-repeat;
@@ -1509,384 +1525,379 @@ Processing
 ***********************/
 @-webkit-keyframes fullprocess {
   0% {
-    -webkit-mask-position: 0 0;
+    -webkit-mask-position: 0vw 0vw;
   }
-  1.5% {
-    -webkit-mask-position: -100vw 0;
+  2% {
+    -webkit-mask-position: -100vw 0vw;
   }
   3% {
-    -webkit-mask-position: -200vw 0;
+    -webkit-mask-position: -200vw 0vw;
   }
-  4.5% {
-    -webkit-mask-position: -300vw 0;
+  5% {
+    -webkit-mask-position: -300vw 0vw;
   }
-  6% {
-    -webkit-mask-position: -400vw 0;
+  7% {
+    -webkit-mask-position: -400vw 0vw;
   }
-  7.5% {
-    -webkit-mask-position: -500vw 0;
+  8% {
+    -webkit-mask-position: -500vw 0vw;
   }
-  9% {
-    -webkit-mask-position: -600vw 0;
+  10% {
+    -webkit-mask-position: -600vw 0vw;
   }
   12% {
-    -webkit-mask-position: 0 -100vw;
+    -webkit-mask-position: 0vw -100vw;
   }
-  13.5% {
+  14% {
     -webkit-mask-position: -100vw -100vw;
   }
   15% {
     -webkit-mask-position: -200vw -100vw;
   }
-  16.5% {
+  17% {
     -webkit-mask-position: -300vw -100vw;
   }
-  18% {
+  19% {
     -webkit-mask-position: -400vw -100vw;
   }
-  19.5% {
+  20% {
     -webkit-mask-position: -500vw -100vw;
   }
-  21% {
+  22% {
     -webkit-mask-position: -600vw -100vw;
   }
   24% {
-    -webkit-mask-position: 0 -200vw;
+    -webkit-mask-position: 0vw -200vw;
   }
-  25.5% {
+  25% {
     -webkit-mask-position: -100vw -200vw;
   }
   27% {
     -webkit-mask-position: -200vw -200vw;
   }
-  28.5% {
+  29% {
     -webkit-mask-position: -300vw -200vw;
   }
-  30% {
+  31% {
     -webkit-mask-position: -400vw -200vw;
   }
-  31.5% {
+  32% {
     -webkit-mask-position: -500vw -200vw;
   }
-  33% {
+  34% {
     -webkit-mask-position: -600vw -200vw;
   }
   36% {
-    -webkit-mask-position: 0 -300vw;
+    -webkit-mask-position: 0vw -300vw;
   }
-  37.5% {
+  37% {
     -webkit-mask-position: -100vw -300vw;
   }
   39% {
     -webkit-mask-position: -200vw -300vw;
   }
-  40.5% {
+  41% {
     -webkit-mask-position: -300vw -300vw;
   }
   42% {
     -webkit-mask-position: -400vw -300vw;
   }
-  43.5% {
+  44% {
     -webkit-mask-position: -500vw -300vw;
   }
-  45% {
+  46% {
     -webkit-mask-position: -600vw -300vw;
   }
-  48% {
-    -webkit-mask-position: 0 -400vw;
+  47% {
+    -webkit-mask-position: 0vw -400vw;
   }
-  49.5% {
+  49% {
     -webkit-mask-position: -100vw -400vw;
   }
   51% {
     -webkit-mask-position: -200vw -400vw;
   }
-  52.5% {
+  53% {
     -webkit-mask-position: -300vw -400vw;
   }
   54% {
     -webkit-mask-position: -400vw -400vw;
   }
-  55.5% {
+  56% {
     -webkit-mask-position: -500vw -400vw;
   }
-  57% {
+  58% {
     -webkit-mask-position: -600vw -400vw;
   }
-  60% {
-    -webkit-mask-position: 0 -500vw;
+  59% {
+    -webkit-mask-position: 0vw -500vw;
   }
-  61.5% {
+  61% {
     -webkit-mask-position: -100vw -500vw;
   }
   63% {
     -webkit-mask-position: -200vw -500vw;
   }
-  64.5% {
+  64% {
     -webkit-mask-position: -300vw -500vw;
   }
   66% {
     -webkit-mask-position: -400vw -500vw;
   }
-  67.5% {
+  68% {
     -webkit-mask-position: -500vw -500vw;
   }
   69% {
     -webkit-mask-position: -600vw -500vw;
   }
-  72% {
-    -webkit-mask-position: 0 -600vw;
+  71% {
+    -webkit-mask-position: 0vw -600vw;
   }
-  73.5% {
+  73% {
     -webkit-mask-position: -100vw -600vw;
   }
   75% {
     -webkit-mask-position: -200vw -600vw;
   }
-  76.5% {
+  76% {
     -webkit-mask-position: -300vw -600vw;
   }
   78% {
     -webkit-mask-position: -400vw -600vw;
   }
-  79.5% {
+  80% {
     -webkit-mask-position: -500vw -600vw;
   }
   81% {
     -webkit-mask-position: -600vw -600vw;
   }
-  84% {
-    -webkit-mask-position: 0 -700vw;
+  83% {
+    -webkit-mask-position: 0vw -700vw;
   }
-  85.5% {
+  85% {
     -webkit-mask-position: -100vw -700vw;
   }
-  87% {
+  86% {
     -webkit-mask-position: -200vw -700vw;
   }
-  88.5% {
+  88% {
     -webkit-mask-position: -300vw -700vw;
   }
   90% {
     -webkit-mask-position: -400vw -700vw;
   }
-  91.5% {
+  92% {
     -webkit-mask-position: -500vw -700vw;
   }
   93% {
     -webkit-mask-position: -600vw -700vw;
   }
-  94.5% {
-    -webkit-mask-position: 0 -900vw;
+  95% {
+    -webkit-mask-position: 0vw -800vw;
   }
-  96% {
-    -webkit-mask-position: -100vw -900vw;
+  97% {
+    -webkit-mask-position: -100vw -800vw;
   }
-  97.5% {
-    -webkit-mask-position: -200vw -900vw;
-  }
-  99% {
-    -webkit-mask-position: -300vw -900vw;
+  98% {
+    -webkit-mask-position: -200vw -800vw;
   }
   100% {
-    -webkit-mask-position: -400vw -900vw;
+    -webkit-mask-position: -300vw -800vw;
   }
 }
 @-webkit-keyframes smallprocess {
   0% {
-    -webkit-mask-position: 0 0;
+    -webkit-mask-position: 0px 0px;
   }
-  1.5% {
-    -webkit-mask-position: 0 -86px;
+  2% {
+    -webkit-mask-position: -76px 0px;
   }
   3% {
-    -webkit-mask-position: 0 -172px;
+    -webkit-mask-position: -152px 0px;
   }
-  4.5% {
-    -webkit-mask-position: 0 -258px;
+  5% {
+    -webkit-mask-position: -228px 0px;
   }
-  6% {
-    -webkit-mask-position: 0 -344px;
+  7% {
+    -webkit-mask-position: -304px 0px;
   }
-  7.5% {
-    -webkit-mask-position: 0 -430px;
+  8% {
+    -webkit-mask-position: -380px 0px;
   }
-  9% {
-    -webkit-mask-position: 0 -516px;
-  }
-  10.5% {
-    -webkit-mask-position: 0 -602px;
+  10% {
+    -webkit-mask-position: -456px 0px;
   }
   12% {
-    -webkit-mask-position: 0 -688px;
+    -webkit-mask-position: 0px -76px;
   }
-  13.5% {
-    -webkit-mask-position: 0 -774px;
+  14% {
+    -webkit-mask-position: -76px -76px;
   }
   15% {
-    -webkit-mask-position: 0 -860px;
+    -webkit-mask-position: -152px -76px;
   }
-  16.5% {
-    -webkit-mask-position: 0 -946px;
+  17% {
+    -webkit-mask-position: -228px -76px;
   }
-  18% {
-    -webkit-mask-position: 0 -1032px;
+  19% {
+    -webkit-mask-position: -304px -76px;
   }
-  19.5% {
-    -webkit-mask-position: 0 -1118px;
+  20% {
+    -webkit-mask-position: -380px -76px;
   }
-  21% {
-    -webkit-mask-position: 0 -1204px;
-  }
-  22.5% {
-    -webkit-mask-position: 0 -1290px;
+  22% {
+    -webkit-mask-position: -456px -76px;
   }
   24% {
-    -webkit-mask-position: 0 -1376px;
+    -webkit-mask-position: 0px -152px;
   }
-  25.5% {
-    -webkit-mask-position: 0 -1462px;
+  25% {
+    -webkit-mask-position: -76px -152px;
   }
   27% {
-    -webkit-mask-position: 0 -1548px;
+    -webkit-mask-position: -152px -152px;
   }
-  28.5% {
-    -webkit-mask-position: 0 -1634px;
+  29% {
+    -webkit-mask-position: -228px -152px;
   }
-  30% {
-    -webkit-mask-position: 0 -1720px;
+  31% {
+    -webkit-mask-position: -304px -152px;
   }
-  31.5% {
-    -webkit-mask-position: 0 -1806px;
+  32% {
+    -webkit-mask-position: -380px -152px;
   }
-  33% {
-    -webkit-mask-position: 0 -1892px;
-  }
-  34.5% {
-    -webkit-mask-position: 0 -1978px;
+  34% {
+    -webkit-mask-position: -456px -152px;
   }
   36% {
-    -webkit-mask-position: 0 -2064px;
+    -webkit-mask-position: 0px -228px;
   }
-  37.5% {
-    -webkit-mask-position: 0 -2150px;
+  37% {
+    -webkit-mask-position: -76px -228px;
   }
   39% {
-    -webkit-mask-position: 0 -2236px;
+    -webkit-mask-position: -152px -228px;
   }
-  40.5% {
-    -webkit-mask-position: 0 -2322px;
+  41% {
+    -webkit-mask-position: -228px -228px;
   }
   42% {
-    -webkit-mask-position: 0 -2408px;
+    -webkit-mask-position: -304px -228px;
   }
-  43.5% {
-    -webkit-mask-position: 0 -2494px;
+  44% {
+    -webkit-mask-position: -380px -228px;
   }
-  45% {
-    -webkit-mask-position: 0 -2580px;
+  46% {
+    -webkit-mask-position: -456px -228px;
   }
-  46.5% {
-    -webkit-mask-position: 0 -2666px;
+  47% {
+    -webkit-mask-position: 0px -304px;
   }
-  48% {
-    -webkit-mask-position: 0 -2752px;
-  }
-  49.5% {
-    -webkit-mask-position: 0 -2838px;
+  49% {
+    -webkit-mask-position: -76px -304px;
   }
   51% {
-    -webkit-mask-position: 0 -2924px;
+    -webkit-mask-position: -152px -304px;
   }
-  52.5% {
-    -webkit-mask-position: 0 -3010px;
+  53% {
+    -webkit-mask-position: -228px -304px;
   }
   54% {
-    -webkit-mask-position: 0 -3096px;
+    -webkit-mask-position: -304px -304px;
   }
-  55.5% {
-    -webkit-mask-position: 0 -3182px;
+  56% {
+    -webkit-mask-position: -380px -304px;
   }
-  57% {
-    -webkit-mask-position: 0 -3268px;
+  58% {
+    -webkit-mask-position: -456px -304px;
   }
-  58.5% {
-    -webkit-mask-position: 0 -3354px;
+  59% {
+    -webkit-mask-position: 0px -380px;
   }
-  60% {
-    -webkit-mask-position: 0 -3440px;
-  }
-  61.5% {
-    -webkit-mask-position: 0 -3526px;
+  61% {
+    -webkit-mask-position: -76px -380px;
   }
   63% {
-    -webkit-mask-position: 0 -3612px;
+    -webkit-mask-position: -152px -380px;
   }
-  64.5% {
-    -webkit-mask-position: 0 -3698px;
+  64% {
+    -webkit-mask-position: -228px -380px;
   }
   66% {
-    -webkit-mask-position: 0 -3784px;
+    -webkit-mask-position: -304px -380px;
   }
-  67.5% {
-    -webkit-mask-position: 0 -3870px;
+  68% {
+    -webkit-mask-position: -380px -380px;
   }
   69% {
-    -webkit-mask-position: 0 -3956px;
+    -webkit-mask-position: -456px -380px;
   }
-  70.5% {
-    -webkit-mask-position: 0 -4042px;
+  71% {
+    -webkit-mask-position: 0px -456px;
   }
-  72% {
-    -webkit-mask-position: 0 -4128px;
-  }
-  73.5% {
-    -webkit-mask-position: 0 -4214px;
+  73% {
+    -webkit-mask-position: -76px -456px;
   }
   75% {
-    -webkit-mask-position: 0 -4300px;
+    -webkit-mask-position: -152px -456px;
   }
-  76.5% {
-    -webkit-mask-position: 0 -4386px;
+  76% {
+    -webkit-mask-position: -228px -456px;
   }
   78% {
-    -webkit-mask-position: 0 -4472px;
+    -webkit-mask-position: -304px -456px;
   }
-  79.5% {
-    -webkit-mask-position: 0 -4558px;
+  80% {
+    -webkit-mask-position: -380px -456px;
   }
   81% {
-    -webkit-mask-position: 0 -4644px;
+    -webkit-mask-position: -456px -456px;
   }
-  84% {
-    -webkit-mask-position: 0 -4730px;
+  83% {
+    -webkit-mask-position: 0px -532px;
+  }
+  85% {
+    -webkit-mask-position: -76px -532px;
+  }
+  86% {
+    -webkit-mask-position: -152px -532px;
   }
   88% {
-    -webkit-mask-position: 0 -4816px;
+    -webkit-mask-position: -228px -532px;
+  }
+  90% {
+    -webkit-mask-position: -304px -532px;
   }
   92% {
-    -webkit-mask-position: 0 -4902px;
+    -webkit-mask-position: -380px -532px;
   }
-  96% {
-    -webkit-mask-position: 0 -4988px;
+  93% {
+    -webkit-mask-position: -456px -532px;
+  }
+  95% {
+    -webkit-mask-position: 0px -608px;
+  }
+  97% {
+    -webkit-mask-position: -76px -608px;
+  }
+  98% {
+    -webkit-mask-position: -152px -608px;
   }
   100% {
-    -webkit-mask-position: 0 -5074px;
+    -webkit-mask-position: -228px -608px;
   }
 }
 .ui-processing {
   background-color: B065L6;
-  -webkit-mask-image: url("images/Processing/processingsmall.png");
+  -webkit-mask-image: url("./images/Processing/processingsmall.png");
   -webkit-mask-repeat: no-repeat;
   -webkit-animation-duration: 1s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: step-start;
   -webkit-animation-name: smallprocess;
-  width: 5.375rem;
-  height: 5.375rem;
+  width: 4.75rem;
+  height: 4.75rem;
   margin: 0 auto;
-  margin-top: 2.125rem;
-  margin-bottom: 0.875rem;
 }
 .ui-processing-text {
   margin: 0 auto;
@@ -1896,35 +1907,20 @@ Processing
   color: T097;
 }
 .ui-processing.ui-processing-full-size {
-  background-color: transparent;
-  -webkit-mask-image: none;
-  -webkit-animation: none;
-  pointer-events: none;
-  position: fixed;
-  width: 100vw;
-  height: 100vw;
-  top: 50%;
-  left: 0;
-  -webkit-transform: translate3d(0, -50%, 0);
-  -moz-transform: translate3d(0, -50%, 0);
-  -ms-transform: translate3d(0, -50%, 0);
-  -o-transform: translate3d(0, -50%, 0);
-  transform: translate3d(0, -50%, 0);
-  margin: 0;
-}
-.ui-processing.ui-processing-full-size::after {
-  content: "";
   background-color: B065L6;
-  -webkit-mask-image: url("images/Processing/processingfull.png");
-  -webkit-mask-size: 700vw 900vw;
+  -webkit-mask-image: url("./images/Processing/processingfull.png");
   -webkit-mask-repeat: no-repeat;
   -webkit-animation-duration: 1s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: step-start;
   -webkit-animation-name: fullprocess;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+  pointer-events: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vw;
+  top: 0;
+  left: 0;
+  margin: 0;
 }
 .ui-btn {
   display: block;
@@ -2780,11 +2776,11 @@ Popup Overlay Transition
 }
 .ui-popup-overlay.slideup.out,
 .ui-popup-overlay.pop.out {
-  -webkit-animation: fadeout 250ms;
-  -moz-animation: fadeout 250ms;
-  -ms-animation: fadeout 250ms;
-  -o-animation: fadeout 250ms;
-  animation: fadeout 250ms;
+  -webkit-animation: fadeout 250ms forwards;
+  -moz-animation: fadeout 250ms forwards;
+  -ms-animation: fadeout 250ms forwards;
+  -o-animation: fadeout 250ms forwards;
+  animation: fadeout 250ms forwards;
 }
 /****************************************
 Option Popup Transition
@@ -3108,15 +3104,15 @@ Listview
   margin: 0;
 }
 .ui-listview .ui-li-has-action-icon .ui-action-delete {
-  -webkit-mask-image: url(images/listview/tw_list_delete_holo_dark.png);
+  -webkit-mask-image: url(./images/listview/tw_list_delete_holo_dark.png);
   background-color: F022L1i;
 }
 .ui-listview .ui-li-has-action-icon .ui-action-setting {
-  -webkit-mask-image: url(images/listview/tw_list_setting_holo_dark.png);
+  -webkit-mask-image: url(./images/listview/tw_list_setting_holo_dark.png);
   background-color: F022L1i;
 }
 .ui-listview .ui-li-has-action-icon .ui-action-add {
-  -webkit-mask-image: url(images/listview/tw_list_add_holo_dark.png);
+  -webkit-mask-image: url(./images/listview/tw_list_add_holo_dark.png);
   background-color: F022L1i;
 }
 .ui-listview .ui-li-has-action-icon.ui-li-active {
@@ -3183,7 +3179,7 @@ Listview
   height: 100%;
   float: left;
   width: 18px;
-  background: transparent url('images/Datetimepicker/tw_timepicker_num_dot.png');
+  background: transparent url('./images/Datetimepicker/tw_timepicker_num_dot.png');
 }
 .ui-datefield > .ui-btn:enabled:focus {
   background-color: rgba(255, 255, 255, 0.15);
@@ -3253,32 +3249,32 @@ Listview
 }
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-plus {
   float: right;
-  background: transparent url('images/Datetimepicker/tw_timepicker_dialbtn_plus_normal.png') center center no-repeat;
+  background: transparent url('./images/Datetimepicker/tw_timepicker_dialbtn_plus_normal.png') center center no-repeat;
 }
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-plus:active:hover,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-plus:enabled:active,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-plus:enabled:active:hover {
-  background: transparent url('images/Datetimepicker/tw_timepicker_dialbtn_plus_pressed.png') center center no-repeat;
+  background: transparent url('./images/Datetimepicker/tw_timepicker_dialbtn_plus_pressed.png') center center no-repeat;
 }
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-plus:disabled,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-plus:disabled:active:hover,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-plus.ui-state-disabled,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-plus.ui-state-disabled:active:hover {
-  background: transparent url('images/Datetimepicker/tw_timepicker_dialbtn_plus_dim.png') center center no-repeat;
+  background: transparent url('./images/Datetimepicker/tw_timepicker_dialbtn_plus_dim.png') center center no-repeat;
 }
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-minus {
-  background: transparent url('images/Datetimepicker/tw_timepicker_dialbtn_minus_normal.png') center center no-repeat;
+  background: transparent url('./images/Datetimepicker/tw_timepicker_dialbtn_minus_normal.png') center center no-repeat;
 }
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-minus:active:hover,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-minus:enabled:active,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-minus:enabled:active:hover {
-  background: transparent url('images/Datetimepicker/tw_timepicker_dialbtn_minus_pressed.png') center center no-repeat;
+  background: transparent url('./images/Datetimepicker/tw_timepicker_dialbtn_minus_pressed.png') center center no-repeat;
 }
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-minus:disabled,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-minus:disabled:active:hover,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-minus.ui-state-disabled,
 .ui-datetime-wheel .ui-btn.ui-datetime-wheel-minus.ui-state-disabled:active:hover {
-  background: transparent url('images/Datetimepicker/tw_timepicker_dialbtn_minus_dim.png') center center no-repeat;
+  background: transparent url('./images/Datetimepicker/tw_timepicker_dialbtn_minus_dim.png') center center no-repeat;
 }
 .ui-datetime-wheel .ui-wheel {
   display: block;
@@ -3286,7 +3282,7 @@ Listview
   margin-right: 68px;
   height: 68px;
   padding: 10px 0;
-  background: url('images/Datetimepicker/tw_timepicker_wheel_01.png') center center no-repeat;
+  background: url('./images/Datetimepicker/tw_timepicker_wheel_01.png') center center no-repeat;
 }
 .ui-datetime-btns {
   position: absolute;
@@ -3318,12 +3314,12 @@ Listview
 .ui-datetime-btns .ui-btn-left {
   width: 160px;
   float: left;
-  background: url('images/Datetimepicker/tw_timepicker_left_softbtn.png') center center no-repeat;
+  background: url('./images/Datetimepicker/tw_timepicker_left_softbtn.png') center center no-repeat;
 }
 .ui-datetime-btns .ui-btn-right {
   width: 159px;
   float: right;
-  background: url('images/Datetimepicker/tw_timepicker_right_softbtn.png') center center no-repeat;
+  background: url('./images/Datetimepicker/tw_timepicker_right_softbtn.png') center center no-repeat;
 }
 .ui-datetime-btns .ui-btn:disabled,
 .ui-datetime-btns .ui-btn.ui-state-disabled {
@@ -3356,7 +3352,7 @@ Listview
 .ui-datetime-periods .ui-btn.ui-state-active:enabled:active {
   color: inherit;
   text-decoration: none;
-  background: url('images/Datetimepicker/tw_timepicker_time_bg.png') center center no-repeat;
+  background: url('./images/Datetimepicker/tw_timepicker_time_bg.png') center center no-repeat;
 }
 .ui-datetime-periods .ui-btn.ui-selected:enabled,
 .ui-datetime-periods .ui-btn.ui-state-active:enabled {
@@ -3365,7 +3361,7 @@ Listview
 }
 .ui-datetime-periods .ui-datetime-periods-separator {
   width: 24px;
-  background: url('images/Datetimepicker/tw_timepicker_num_dot_01.png') center center no-repeat;
+  background: url('./images/Datetimepicker/tw_timepicker_num_dot_01.png') center center no-repeat;
 }
 .ui-datetime-wheel.ui-hidden,
 .ui-datetime-periods.ui-hidden {
@@ -3841,7 +3837,7 @@ Listview
     transform: translateY(100%);
   }
 }
-.slideup.in:not(.ui-popup) {
+.slideup.in:not(.ui-popup):not(.ui-popup-overlay) {
   -webkit-transform: translateY(0);
   -moz-transform: translateY(0);
   -ms-transform: translateY(0);
@@ -3853,7 +3849,7 @@ Listview
   -o-animation: slideupin 400ms cubic-bezier(0.25, 0.46, 0.45, 1);
   animation: slideupin 400ms cubic-bezier(0.25, 0.46, 0.45, 1);
 }
-.slideup.out:not(.ui-popup) {
+.slideup.out:not(.ui-popup):not(.ui-popup-overlay) {
   -webkit-transform: scale3d(0.6, 0.6, 1);
   -moz-transform: scale3d(0.6, 0.6, 1);
   -ms-transform: scale3d(0.6, 0.6, 1);
@@ -3865,7 +3861,7 @@ Listview
   -o-animation: slideupout 400ms cubic-bezier(0.25, 0.46, 0.45, 1);
   animation: slideupout 400ms cubic-bezier(0.25, 0.46, 0.45, 1);
 }
-.slideup.out.reverse:not(.ui-popup) {
+.slideup.out.reverse:not(.ui-popup):not(.ui-popup-overlay) {
   z-index: 101;
   -webkit-transform: translateY(100%);
   -moz-transform: translateY(100%);
@@ -3878,7 +3874,7 @@ Listview
   -o-animation: slideupoutreverse 400ms cubic-bezier(0.25, 0.46, 0.45, 1);
   animation: slideupoutreverse 400ms cubic-bezier(0.25, 0.46, 0.45, 1);
 }
-.slideup.in.reverse:not(.ui-popup) {
+.slideup.in.reverse:not(.ui-popup):not(.ui-popup-overlay) {
   -webkit-transform: scale3d(1, 1, 1);
   -moz-transform: scale3d(1, 1, 1);
   -ms-transform: scale3d(1, 1, 1);
@@ -4192,63 +4188,63 @@ Listview
 }
 .ui-scrollbar-bouncing-effect.ui-top {
   top: 0;
-  -webkit-mask-image: url("images/Scroller/bouncing_top_glow.png");
-  -moz-mask-image: url("images/Scroller/bouncing_top_glow.png");
-  -ms-mask-image: url("images/Scroller/bouncing_top_glow.png");
-  -o-mask-image: url("images/Scroller/bouncing_top_glow.png");
-  mask-image: url("images/Scroller/bouncing_top_glow.png");
+  -webkit-mask-image: url("./images/Scroller/bouncing_top_glow.png");
+  -moz-mask-image: url("./images/Scroller/bouncing_top_glow.png");
+  -ms-mask-image: url("./images/Scroller/bouncing_top_glow.png");
+  -o-mask-image: url("./images/Scroller/bouncing_top_glow.png");
+  mask-image: url("./images/Scroller/bouncing_top_glow.png");
 }
 .ui-scrollbar-bouncing-effect.ui-top::before {
-  -webkit-mask-image: url("images/Scroller/bouncing_top_edge.png");
-  -moz-mask-image: url("images/Scroller/bouncing_top_edge.png");
-  -ms-mask-image: url("images/Scroller/bouncing_top_edge.png");
-  -o-mask-image: url("images/Scroller/bouncing_top_edge.png");
-  mask-image: url("images/Scroller/bouncing_top_edge.png");
+  -webkit-mask-image: url("./images/Scroller/bouncing_top_edge.png");
+  -moz-mask-image: url("./images/Scroller/bouncing_top_edge.png");
+  -ms-mask-image: url("./images/Scroller/bouncing_top_edge.png");
+  -o-mask-image: url("./images/Scroller/bouncing_top_edge.png");
+  mask-image: url("./images/Scroller/bouncing_top_edge.png");
 }
 .ui-scrollbar-bouncing-effect.ui-bottom {
   bottom: 0;
-  -webkit-mask-image: url("images/Scroller/bouncing_bottom_glow.png");
-  -moz-mask-image: url("images/Scroller/bouncing_bottom_glow.png");
-  -ms-mask-image: url("images/Scroller/bouncing_bottom_glow.png");
-  -o-mask-image: url("images/Scroller/bouncing_bottom_glow.png");
-  mask-image: url("images/Scroller/bouncing_bottom_glow.png");
+  -webkit-mask-image: url("./images/Scroller/bouncing_bottom_glow.png");
+  -moz-mask-image: url("./images/Scroller/bouncing_bottom_glow.png");
+  -ms-mask-image: url("./images/Scroller/bouncing_bottom_glow.png");
+  -o-mask-image: url("./images/Scroller/bouncing_bottom_glow.png");
+  mask-image: url("./images/Scroller/bouncing_bottom_glow.png");
 }
 .ui-scrollbar-bouncing-effect.ui-bottom::before {
-  -webkit-mask-image: url("images/Scroller/bouncing_bottom_edge.png");
-  -moz-mask-image: url("images/Scroller/bouncing_bottom_edge.png");
-  -ms-mask-image: url("images/Scroller/bouncing_bottom_edge.png");
-  -o-mask-image: url("images/Scroller/bouncing_bottom_edge.png");
-  mask-image: url("images/Scroller/bouncing_bottom_edge.png");
+  -webkit-mask-image: url("./images/Scroller/bouncing_bottom_edge.png");
+  -moz-mask-image: url("./images/Scroller/bouncing_bottom_edge.png");
+  -ms-mask-image: url("./images/Scroller/bouncing_bottom_edge.png");
+  -o-mask-image: url("./images/Scroller/bouncing_bottom_edge.png");
+  mask-image: url("./images/Scroller/bouncing_bottom_edge.png");
 }
 .ui-scrollbar-bouncing-effect.ui-left {
   left: 0;
-  -webkit-mask-image: url("images/Scroller/bouncing_left_glow.png");
-  -moz-mask-image: url("images/Scroller/bouncing_left_glow.png");
-  -ms-mask-image: url("images/Scroller/bouncing_left_glow.png");
-  -o-mask-image: url("images/Scroller/bouncing_left_glow.png");
-  mask-image: url("images/Scroller/bouncing_left_glow.png");
+  -webkit-mask-image: url("./images/Scroller/bouncing_left_glow.png");
+  -moz-mask-image: url("./images/Scroller/bouncing_left_glow.png");
+  -ms-mask-image: url("./images/Scroller/bouncing_left_glow.png");
+  -o-mask-image: url("./images/Scroller/bouncing_left_glow.png");
+  mask-image: url("./images/Scroller/bouncing_left_glow.png");
 }
 .ui-scrollbar-bouncing-effect.ui-left::before {
-  -webkit-mask-image: url("images/Scroller/bouncing_left_edge.png");
-  -moz-mask-image: url("images/Scroller/bouncing_left_edge.png");
-  -ms-mask-image: url("images/Scroller/bouncing_left_edge.png");
-  -o-mask-image: url("images/Scroller/bouncing_left_edge.png");
-  mask-image: url("images/Scroller/bouncing_left_edge.png");
+  -webkit-mask-image: url("./images/Scroller/bouncing_left_edge.png");
+  -moz-mask-image: url("./images/Scroller/bouncing_left_edge.png");
+  -ms-mask-image: url("./images/Scroller/bouncing_left_edge.png");
+  -o-mask-image: url("./images/Scroller/bouncing_left_edge.png");
+  mask-image: url("./images/Scroller/bouncing_left_edge.png");
 }
 .ui-scrollbar-bouncing-effect.ui-right {
   right: 0;
-  -webkit-mask-image: url("images/Scroller/bouncing_right_glow.png");
-  -moz-mask-image: url("images/Scroller/bouncing_right_glow.png");
-  -ms-mask-image: url("images/Scroller/bouncing_right_glow.png");
-  -o-mask-image: url("images/Scroller/bouncing_right_glow.png");
-  mask-image: url("images/Scroller/bouncing_right_glow.png");
+  -webkit-mask-image: url("./images/Scroller/bouncing_right_glow.png");
+  -moz-mask-image: url("./images/Scroller/bouncing_right_glow.png");
+  -ms-mask-image: url("./images/Scroller/bouncing_right_glow.png");
+  -o-mask-image: url("./images/Scroller/bouncing_right_glow.png");
+  mask-image: url("./images/Scroller/bouncing_right_glow.png");
 }
 .ui-scrollbar-bouncing-effect.ui-right::before {
-  -webkit-mask-image: url("images/Scroller/bouncing_right_edge.png");
-  -moz-mask-image: url("images/Scroller/bouncing_right_edge.png");
-  -ms-mask-image: url("images/Scroller/bouncing_right_edge.png");
-  -o-mask-image: url("images/Scroller/bouncing_right_edge.png");
-  mask-image: url("images/Scroller/bouncing_right_edge.png");
+  -webkit-mask-image: url("./images/Scroller/bouncing_right_edge.png");
+  -moz-mask-image: url("./images/Scroller/bouncing_right_edge.png");
+  -ms-mask-image: url("./images/Scroller/bouncing_right_edge.png");
+  -o-mask-image: url("./images/Scroller/bouncing_right_edge.png");
+  mask-image: url("./images/Scroller/bouncing_right_edge.png");
 }
 @-webkit-keyframes ui-bouncing-show {
   0% {
@@ -4382,13 +4378,14 @@ Listview
 	Icon and text need to set position or url and so on.
 	We thought that swipelist's content style need to be implemented by developer wanted.
 	*/
+
   margin-left: 2%;
   background-color: F021L1i;
-  -webkit-mask-image: url('images/Swipelist/b_logs_icon_body_btn_call_nor.png');
-  -moz-mask-image: url('images/Swipelist/b_logs_icon_body_btn_call_nor.png');
-  -ms-mask-image: url('images/Swipelist/b_logs_icon_body_btn_call_nor.png');
-  -o-mask-image: url('images/Swipelist/b_logs_icon_body_btn_call_nor.png');
-  mask-image: url('images/Swipelist/b_logs_icon_body_btn_call_nor.png');
+  -webkit-mask-image: url('./images/Swipelist/b_logs_icon_body_btn_call_nor.png');
+  -moz-mask-image: url('./images/Swipelist/b_logs_icon_body_btn_call_nor.png');
+  -ms-mask-image: url('./images/Swipelist/b_logs_icon_body_btn_call_nor.png');
+  -o-mask-image: url('./images/Swipelist/b_logs_icon_body_btn_call_nor.png');
+  mask-image: url('./images/Swipelist/b_logs_icon_body_btn_call_nor.png');
   -webkit-mask-repeat: no-repeat;
   -moz-mask-repeat: no-repeat;
   -ms-mask-repeat: no-repeat;
@@ -4400,6 +4397,7 @@ Listview
 	Icon and text need to set position or url and so on.
 	We thought that swipelist's content style need to be implemented by developer wanted.
 	*/
+
   margin-left: 40%;
 }
 .ui-swipelist-right .ui-swipelist-icon {
@@ -4407,13 +4405,14 @@ Listview
 	Icon and text need to set position or url and so on.
 	We thought that swipelist's content style need to be implemented by developer wanted.
 	*/
+
   margin-left: 80%;
   background-color: F021L1i;
-  -webkit-mask-image: url('images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
-  -moz-mask-image: url('images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
-  -ms-mask-image: url('images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
-  -o-mask-image: url('images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
-  mask-image: url('images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
+  -webkit-mask-image: url('./images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
+  -moz-mask-image: url('./images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
+  -ms-mask-image: url('./images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
+  -o-mask-image: url('./images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
+  mask-image: url('./images/Swipelist/b_logs_icon_actionbar_btn_msg_nor.png');
   -webkit-mask-repeat: no-repeat;
   -moz-mask-repeat: no-repeat;
   -ms-mask-repeat: no-repeat;
@@ -4425,6 +4424,7 @@ Listview
 	Icon and text need to set position or url and so on.
 	We thought that swipelist's content style need to be implemented by developer wanted.
 	*/
+
   margin-left: 20%;
 }
 /***************************************************************************
@@ -4828,6 +4828,52 @@ input[type="checkbox"]:not(.ui-switch-input):active:checked::before {
   opacity: 0.6;
   background-color: #000000;
 }
+.ui-slider {
+  position: relative;
+  box-sizing: border-box;
+  background-color: B065L3;
+}
+.ui-slider .ui-slider-value {
+  background-color: B065L2;
+}
+.ui-slider .ui-slider-handler {
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: #fafafa;
+  border-radius: 50%;
+  position: absolute;
+  text-indent: 9999px;
+  -webkit-transition: transform 300ms ease-out;
+  -moz-transition: transform 300ms ease-out;
+  -o-transition: transform 300ms ease-out;
+  -ms-transition: transform 300ms ease-out;
+  transition: transform 300ms ease-out;
+}
+.ui-slider.ui-slider-horizontal {
+  width: 100%;
+  height: 6px;
+  margin: 20px 0;
+}
+.ui-slider.ui-slider-horizontal .ui-slider-value {
+  height: 6px;
+}
+.ui-slider.ui-slider-horizontal .ui-slider-handler {
+  top: 50%;
+  margin-left: -20px;
+  border: 3px solid B065L2;
+  -webkit-transform: translate(0, -50%) scale(0.6);
+  -moz-transform: translate(0, -50%) scale(0.6);
+  -ms-transform: translate(0, -50%) scale(0.6);
+  -o-transform: translate(0, -50%) scale(0.6);
+  transform: translate(0, -50%) scale(0.6);
+}
+.ui-slider.ui-slider-horizontal .ui-slider-handler.ui-slider-handler-active {
+  -webkit-transform: translate(0, -50%) scale(1);
+  -moz-transform: translate(0, -50%) scale(1);
+  -ms-transform: translate(0, -50%) scale(1);
+  -o-transform: translate(0, -50%) scale(1);
+  transform: translate(0, -50%) scale(1);
+}
 .ui-selector {
   position: absolute;
   top: 0;
@@ -4973,11 +5019,11 @@ input[type="checkbox"]:not(.ui-switch-input):active:checked::before {
   height: 100%;
   top: 0;
   left: 0;
-  -webkit-mask-image: url('images/Common/b_rotary_selector_center_pointer.png');
-  -moz-mask-image: url('images/Common/b_rotary_selector_center_pointer.png');
-  -ms-mask-image: url('images/Common/b_rotary_selector_center_pointer.png');
-  -o-mask-image: url('images/Common/b_rotary_selector_center_pointer.png');
-  mask-image: url('images/Common/b_rotary_selector_center_pointer.png');
+  -webkit-mask-image: url('./images/Common/b_rotary_selector_center_pointer.png');
+  -moz-mask-image: url('./images/Common/b_rotary_selector_center_pointer.png');
+  -ms-mask-image: url('./images/Common/b_rotary_selector_center_pointer.png');
+  -o-mask-image: url('./images/Common/b_rotary_selector_center_pointer.png');
+  mask-image: url('./images/Common/b_rotary_selector_center_pointer.png');
   -webkit-mask-size: 100% 100%;
   -moz-mask-size: 100% 100%;
   -ms-mask-size: 100% 100%;
