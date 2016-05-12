@@ -1,4 +1,4 @@
-/*global bus, marqueeList, moreoption */
+﻿/*global bus, marqueeList, moreoption */
 function keyEventHandler(event) {
 	if( event.keyName === "back" ) {
 		var page = document.getElementsByClassName('ui-page-active')[0],
@@ -79,6 +79,19 @@ function init() {
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
 
+	/** When click list element, find subway stations around */ 
+	document.getElementById('searchSurroundingSubway').addEventListener('click', subway.findSurroundingStationsByGps);
+	
+	/** Test - image zoom in & out */
+	document.getElementById('viewMap').addEventListener('pagebeforshow', function() {
+		window.addEventListener('rotarydetent', zoom.rotaryEventHandler);
+	});
+	
+	document.getElementById('viewMap').addEventListener('pagebeforhide', function() {
+		window.removeEventListener('rotarydetent', zoom.rotaryEventHandler);
+	});
+	
+	
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }
 
