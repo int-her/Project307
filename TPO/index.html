@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -129,6 +129,7 @@
 		<div class="ui-popup-content">
 		</div>
 	</div>
+
 	<div class = "ui-popup ui-popup-toast ui-popup-toast-graphic" id="toastGraphicPopup">
 		<div class="ui-popup-content">
 			<div class="ui-popup-toast-check-icon"></div>
@@ -137,75 +138,88 @@
 
 
 	<!--  Subway Page : Main Menu -->
- 	<div class="ui-page" id="subway-main">
- 		<header class="ui-header">
- 			<h2 class="ui-title">지하철</h2>
- 		</header>
- 		<div class="ui-content">
- 			<ul class="ui-listview">
- 				<li><a href="#inputStation">역 정보</a></li>
- 				<li><a href="#viewMap">노선 보기</a></li>
- 				<li><a href="#testView">테스트</a></li>
- 				<li>경로 찾기</li>
- 			</ul>
- 		</div>
- 	</div>
- 	
- 	<!-- Subway Page : Station Information -->
- 	<div id="inputStation" class="ui-page">
- 		<div class="ui-header">
- 			<h3 class="ui-title">노선 번호</h3>
- 		</div>
- 		<div class="ui-content">
- 			<ul class="ui-listview">
- 				<li>1</li>
- 				<li><a href="#line2">2</a></li>
- 				<li>3</li>
- 			</ul>
- 		</div>
- 	</div>
- 	
- 	<!-- Subway Page : 2nd line -->
- 	<div id="line2" class="ui-page">
- 		<div class="ui-content">
- 			<ul class="ui-listview">
- 				<li>봉천</li>
- 				<li>서울대입구</li>
- 				<li>사당</li>
- 				<li>낙성대</li>
- 			</ul>
- 		</div>
- 	</div>
-	
-	<!-- Subway Page : View Subway Route Map -->
-	<div id="viewMap" class="ui-page">
-         <img src="images/subway_width_3.984.jpg">
-	</div>
-	
-	<!-- Test Page : Test image size -->
-	<div id="testView" class="ui-page">
+	<div class="ui-page" id="subway-main">
 		<header class="ui-header">
-			<h2 class="ui-title">Image Size</h2>
+			<h2 class="ui-title">지하철</h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview">
-				<li><a href="#test50%">50%</a></li>
-				<li><a href="#test25%">25%</a></li>
-				<li><a href="#test10%">10%</a></li>
+				<li><a href="#stationInfo">지하철 도착 정보</a></li>
+				<li><a href="#viewMap">전체 노선도 보기</a></li>
+				<li>경로 찾기</li>
 			</ul>
 		</div>
 	</div>
 	
-	<div id="test50%" class="ui-page">
-		<img src="images/width_3.98_50%.jpg">
+	<!-- Subway Page : Arrival Time -->
+	<div class="ui-page" id="stationInfo">
+		<header class="ui-header">
+			<h2 class="ui-title">지하철 정류장 검색</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview">
+				<li class="li-has-multiline" id="searchSurroundingSubway">
+					<div>주변 정류장 찾기</div>
+					<div class="ui-li-sub-text li-text-sub">10개 이내</div>
+				</li>
+				<li><a href="#listStation">직접 찾기</a></li>
+			</ul>
+		</div>
 	</div>
 	
-	<div id="test25%" class="ui-page">
-		<img src="images/width_3.98_25%.jpg">
+	<div class="ui-page" id="surroundingSubwayStation">
+		<header class="ui-header">
+			<h2 class="ui-title">정류장 목록</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview marquee-list expand-list" id="lvSubwayStation">
+				
+			</ul>
+		</div>
 	</div>
-
-	<div id="test10%" class="ui-page">
-		<img src="images/width_3.98_10%.jpg">
+	
+	
+	<!-- Subway Page : Station Information -->
+	<div id="listStation" class="ui-page">
+		<div class="ui-header">
+			<h3 class="ui-title">노선 번호</h3>
+		</div>
+		<div class="ui-content">
+			<ul class="ui-listview">
+				<li>1</li>
+				<li><a href="#line2">2</a></li>
+				<li>3</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- Subway Page : 2nd line -->
+	<div id="line2" class="ui-page">
+		<div class="ui-content">
+			<ul class="ui-listview">
+				<li><a href="javascript:subway.realtimeStationArrival('봉천')">봉천</a></li>
+				<li><a href="javascript:subway.realtimeStationArrival('서울대입구')">서울대입구</a></li>
+				<li><a href="javascript:subway.realtimeStationArrival('낙성대')">낙성대</a></li>
+				<li><a href="javascript:subway.realtimeStationArrival('사당')">사당</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- Test Page : realtimeStationInfo API -->
+	<div id="testAPI" class="ui-page">
+		<div class="ui-header">
+			<h6 class="ui-title">도착 정보</h6>
+		</div>
+		<div class="ui-content">
+			<ul id="rtSubwayStation" class="ui-listview">
+			
+			</ul>
+		</div>
+	</div>
+	
+	<!-- Subway Page : View Subway Route Map -->
+	<div id="viewMap" class="ui-page">
+         <img src="images/width_3.98_50%.jpg">
 	</div>
 	
 	<script type="text/javascript" src="js/marqueeList.js"></script>
@@ -213,6 +227,8 @@
 	<script type="text/javascript" src="js/moreoption.js"></script>
 	<script type="text/javascript" src="js/list.js"></script>
 	<script type="text/javascript" src="js/bus.js"></script>
+	<script type="text/javascript" src="js/subway.js"></script>
+	<script type="text/javascript" src="js/image.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
