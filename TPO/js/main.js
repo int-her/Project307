@@ -1,15 +1,23 @@
-/*global busStation, marqueeList */
+﻿/*global bus, marqueeList, moreoption */
 function keyEventHandler(event) {
 	if( event.keyName === "back" ) {
 		var page = document.getElementsByClassName('ui-page-active')[0],
-			pageid = page ? page.id : "";
+			popup = document.getElementsByClassName('ui-popup-active')[0],
+			pageid = popup ? popup.id : (page ? page.id : "");
+		
 		if( pageid === "main" ) {
 			try {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
-		} else if (pageid === "busArrivalTime") {
+		} else if (pageid === "surroundingBusStation") {
+			window.history.go(-2);
+		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-3);
+		} else if (pageid === "processing") {
+			// 아무것도 하지 않음
+		} else if (pageid === "busArrivalTime_MoreOptions") {
+			tau.closePopup(popup);
 		} else {
 			window.history.back();
 		}
@@ -17,15 +25,17 @@ function keyEventHandler(event) {
 }
 
 function init() {
+	var marqueeList = new MARQUEELIST(),
+		moreoption = new MOREOPTION();
+	
+	// 버스 정류장 ID 입력
 	document.getElementById('inputBusID').addEventListener('pagebeforeshow', function() {
 		document.getElementById('txtBusID').value = "";
 	});
-	
-	/** Enter bus number */
 	document.getElementById('txtBusID').addEventListener('keypress', function(event) {
 		if (event.keyCode === 13) {
-			/** Press the enter */
-			busNumber.busId(document.getElementById('txtBusID').value);
+			// enter
+			bus.busId(document.getElementById('txtBusID').value);
 		}
 	});
 	
@@ -33,16 +43,15 @@ function init() {
 	document.getElementById('inputStationID').addEventListener('pagebeforeshow', function() {
 		document.getElementById('txtStationID').value = "";
 	});
-	
-	/** Enter station number */
+	// Enter station number
 	document.getElementById('txtStationID').addEventListener('keypress', function(event) {
 		if (event.keyCode === 13) {
-			/** Press the enter */
-			busStation.showBusArrivalTime(document.getElementById('txtStationID').value);
+			// enter
+			bus.showBusArrivalTime(document.getElementById('txtStationID').value);
 		}
 	});
 	
-	/** Progress */
+	// 로딩 페이지
 	document.getElementById('processing').addEventListener("pageshow", function(event) {
 		var page = event.target,
 		processing = page.querySelector(".ui-processing");
@@ -54,15 +63,22 @@ function init() {
 		processing.style.visibility = "hidden";
 	});
 	
-	/** Set marquee List */
+	// More option 초기화
+	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
+		moreoption.pageBeforeShowHandler('busArrivalTime');
+	});
+	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', moreoption.pageBeforeHideHandler);
+	
+	
+	// Marquee list 초기화 
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
 		marqueeList.pageBeforeShowHandler('surroundingBusStation');
 	});
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
 	
-	/** When click list element, find bus stations around */ 
-	document.getElementById('searchSurrounding').addEventListener('click', busStation.showSurroundingStationsByGps);
-	
+	// 주변 정류장 클릭
+	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
+
 	/** When click list element, find subway stations around */ 
 	document.getElementById('searchSurroundingSubway').addEventListener('click', subway.findSurroundingStationsByGps);
 	

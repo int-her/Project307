@@ -28,11 +28,27 @@
 	margin-bottom: -15px;
 }
 
-.ui-listview.expand-list li.li-has-multiline .ui-li-sub-text{
+.ui-listview.expand-list li.li-has-multiline .li-expand {
+	-webkit-transform: translate(0, 16px);
+}
+
+.ui-listview.expand-list li.li-has-multiline.ui-snap-listview-selected .li-expand {
+	-webkit-transform: translate3d(0, 0, 0);
+	-webkit-transition: all ease 1s;
+}
+
+.ui-listview.expand-list li.li-has-multiline .ui-li-sub-text {
 	opacity: 0;
 }
-.ui-listview.expand-list li.li-has-multiline.ui-snap-listview-selected .ui-li-sub-text{
+
+.ui-listview.expand-list li.li-has-multiline.ui-snap-listview-selected .ui-li-sub-text {
 	opacity: 1;
+	-webkit-transition: all ease 1s;
+}
+
+.ui-popup.ui-popup-toast.ui-popup-toast-graphic .ui-popup-toast-check-icon {
+	position: relative;
+  	left: 35%;
 }
 
 .small-processing-container {
@@ -41,3 +57,50 @@
 	left: 50%;
 	-webkit-transform: translate3d(-50%, -50%, 0);
 }
+
+.ui-processing-text {
+  margin: 0 auto;
+  text-align: center;
+  width: 13rem;
+  font-size: 1.5rem;
+  color: rgba(245, 245, 245, 1);
+}
+
+/*----------------------- More Option -----------------------*/
+.ui-item.ui-item-active::before {
+	background-color: rgba(2, 129, 209, 1);
+}
+
+.check-icon::before {
+	position: absolute;
+	content: "";
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-mask-image: url(./icon/moreoption_check.png);
+	-webkit-mask-size: 100% 100%;
+	background-color: rgb(8, 8, 8);
+	-webkit-mask-repeat: no-repeat;
+}
+
+/*----------------------- Page Style -----------------------*/
+	/* -------------Small progress sample page-----------*/
+	#processing .ui-footer {
+		display: none;
+	}
+	
+	#processing .result {
+		-webkit-transform: translate(0, -70%);
+	}
+	
+	#processing .ui-progressbar-small {
+		-webkit-transform: translate(0, -70%);
+	}
+	
+	/*------------- More Option -------------*/
+	#busArrivalTime_MoreOptions {
+		background-color: rgba(255, 255, 255, 0.1);
+		-webkit-mask-image: -webkit-radial-gradient(black 71%, transparent 0);
+		background-image: none;
+	}
