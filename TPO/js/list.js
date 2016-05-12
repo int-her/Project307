@@ -3,7 +3,7 @@
 (function(tau) {
 	'use strict';
 	var page, elScroller, list, listHelper = [], i, len;
-
+	
 	if (tau.support.shape.circle) {
 		document.addEventListener("pagebeforeshow", function(e) {
 			page = e.target;
@@ -19,7 +19,7 @@
 				}
 			}
 		});
-
+		
 		document.addEventListener("pagebeforehide", function(e) {
 			len = listHelper.length;
 			if (len) {

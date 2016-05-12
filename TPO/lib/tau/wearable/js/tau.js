@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 (function(window, document, undefined) {
-
-var ns = window.tau = {},
+'use strict';
+var ns = window.tau = window.tau || {},
 nsConfig = window.tauConfig = window.tauConfig || {};
 nsConfig.rootNamespace = 'tau';
 nsConfig.fileName = 'tau';
-ns.version = '0.10.29-14';
+ns.version = '0.11.7';
 /*global window, console, define, ns, nsConfig */
 /*jslint plusplus:true */
 /*
@@ -49,7 +48,7 @@ ns.version = '0.10.29-14';
  * @author Tomasz Lukawski <t.lukawski@samsung.com>
  */
 (function (document, ns, nsConfig) {
-	
+	"use strict";
 			var idNumberCounter = 0,
 			currentDate = +new Date(),
 			slice = [].slice,
@@ -205,7 +204,7 @@ ns.version = '0.10.29-14';
  * @class ns.defaults
  */
 (function (ns) {
-	
+	"use strict";
 	
 			ns.defaults = {};
 
@@ -304,7 +303,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (ns) {
-	
+	"use strict";
 	
 			// Default configuration properties
 			ns.setConfig('rootDir', ns.getFrameworkPath(), true);
@@ -341,7 +340,7 @@ ns.version = '0.10.29-14';
  * @author Maciej Urbanski <m.urbanski@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 			var isTizen = !(typeof tizen === "undefined");
 
 			function isCircleShape() {
@@ -405,7 +404,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (ns) {
-	
+	"use strict";
 				// Default configuration properties for wearable
 			ns.setConfig("autoBuildOnPageChange", false, true);
 
@@ -459,7 +458,7 @@ ns.version = '0.10.29-14';
  * @author Krzysztof Antoszek <k.antoszek@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 				var currentFrame = null,
 				/**
 				 * requestAnimationFrame function
@@ -738,7 +737,7 @@ ns.version = '0.10.29-14';
  * @class ns.util.array
  */
 (function (window, document, ns) {
-	
+	"use strict";
 				/**
 			 * Create an array containing the range of integers or characters
 			 * from low to high (inclusive)
@@ -964,7 +963,7 @@ ns.version = '0.10.29-14';
  * @class ns.event
  */
 (function (window, ns) {
-	
+	"use strict";
 	
 			/**
 			* Checks if specified variable is a array or not
@@ -1388,7 +1387,7 @@ ns.version = '0.10.29-14';
  * @class ns.info
  */
 (function (window, document, ns) {
-	
+	"use strict";
 				/**
 			 * @property {Object} info
 			 * @property {string} [info.profile="default"] Current runtime profile
@@ -1471,7 +1470,7 @@ ns.version = '0.10.29-14';
  * @author Damian Osipiuk <d.osipiuk@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				/**
 			 * @method slice Alias for array slice method
 			 * @member ns.util.selectors
@@ -1860,7 +1859,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (ns) {
-	
+	"use strict";
 	
 			var object = {
 				/**
@@ -2057,7 +2056,7 @@ ns.version = '0.10.29-14';
  * @author Przemyslaw Ciezkowski <p.ciezkowski@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 				/**
 			 * @method slice Array.slice
 			 * @private
@@ -3118,7 +3117,7 @@ ns.version = '0.10.29-14';
  * @author Konrad Lipner <k.lipner@samsung.com>
  */
 (function (document, window, ns) {
-	
+	"use strict";
 				/* anchorHighlightController.js
 			To prevent perfomance regression when scrolling,
 			do not apply hover class in anchor.
@@ -3136,7 +3135,7 @@ ns.version = '0.10.29-14';
 			 * @private
 			 * @static
 			 */
-			var startX,
+			var startX = 0,
 				/**
 				 * Touch start y
 				 * @property {number} startY
@@ -3144,7 +3143,7 @@ ns.version = '0.10.29-14';
 				 * @private
 				 * @static
 				 */
-				startY,
+				startY = 0,
 				/**
 				 * Did page scrolled
 				 * @property {boolean} didScroll
@@ -3152,7 +3151,7 @@ ns.version = '0.10.29-14';
 				 * @private
 				 * @static
 				 */
-				didScroll,
+				didScroll = false,
 				/**
 				 * Touch target element
 				 * @property {HTMLElement} target
@@ -3160,20 +3159,12 @@ ns.version = '0.10.29-14';
 				 * @private
 				 * @static
 				 */
-				target,
-				/**
-				 * Timer id of adding activeClass delay
-				 * @property {number} addActiveClassTimerID
-				 * @member ns.util.anchorHighlight
-				 * @private
-				 * @static
-				 */
-				addActiveClassTimerID,
+				target = null,
 				/**
 				 * Object with default options
 				 * @property {Object} options
 				 * Treshold after which didScroll will be set
-				 * @property {number} [options.scrollThreshold=5]
+				 * @property {number} [options.scrollThreshold=30]
 				 * Time to wait before adding activeClass
 				 * @property {number} [options.addActiveClassDelay=10]
 				 * Time to stay activeClass after touch end
@@ -3196,21 +3187,21 @@ ns.version = '0.10.29-14';
 				 */
 				activeClassLI = "ui-li-active",
 				/**
-				 * Function invoked after touch move ends
-				 * @method removeTouchMove
-				 * @member ns.util.anchorHighlight
-				 * @private
-				 * @static
-				 */
-				removeTouchMove,
-				/**
 				 * Alias for class {@link ns.util.selectors}
 				 * @property {Object} selectors
 				 * @member ns.util.anchorHighlight
 				 * @private
 				 * @static
 				 */
-				selectors = ns.util.selectors;
+				selectors = ns.util.selectors,
+				// cache function
+				requestAnimationFrame = ns.util.requestAnimationFrame,
+				// cache function
+				abs = Math.abs,
+				startTime = 0,
+				startRemoveTime = 0,
+				// cache function
+				slice = Array.prototype.slice;
 
 
 			/**
@@ -3223,8 +3214,7 @@ ns.version = '0.10.29-14';
 			 * @static
 			 */
 			function detectHighlightTarget(target) {
-				target = selectors.getClosestBySelector(target, 'a, label');
-				return target;
+				return selectors.getClosestBySelector(target, "a, label");
 			}
 
 			/**
@@ -3237,8 +3227,7 @@ ns.version = '0.10.29-14';
 			 * @static
 			 */
 			function detectLiElement(target) {
-				target = selectors.getClosestByTag(target, 'li');
-				return target;
+				return selectors.getClosestByTag(target, "li");
 			}
 
 			/**
@@ -3249,12 +3238,24 @@ ns.version = '0.10.29-14';
 			 * @static
 			 */
 			function addActiveClass() {
-				var liTarget;
-				target = detectHighlightTarget(target);
-				if (!didScroll && target && (target.tagName === "A" || target.tagName === "LABEL")) {
-					liTarget = detectLiElement(target);
-					if( liTarget ) {
-						liTarget.classList.add(activeClassLI);
+				var liTarget = null,
+					dTime = 0;
+
+				if (startTime) {
+					dTime = Date.now() - startTime;
+
+					if (dTime > options.addActiveClassDelay) {
+						startTime = 0;
+						target = detectHighlightTarget(target);
+						if (!didScroll) {
+							liTarget = detectLiElement(target);
+							if( liTarget ) {
+								liTarget.classList.add(activeClassLI);
+							}
+							liTarget = null;
+						}
+					} else {
+						requestAnimationFrame(addActiveClass);
 					}
 				}
 			}
@@ -3268,7 +3269,20 @@ ns.version = '0.10.29-14';
 			 * @static
 			 */
 			function getActiveElements() {
-				return document.getElementsByClassName(activeClassLI);
+				return slice.call(document.getElementsByClassName(activeClassLI));
+			}
+
+			/**
+			 * Remove active class from current active objects
+			 */
+			function clearActiveClass () {
+				var activeA = getActiveElements(),
+					activeALength = activeA.length,
+					i = 0;
+				for (; i < activeALength; i++) {
+					activeA[i].classList.remove(activeClassLI);
+				}
+				activeA = null;
 			}
 
 			/**
@@ -3279,13 +3293,13 @@ ns.version = '0.10.29-14';
 			 * @static
 			 */
 			function removeActiveClass() {
-				var activeA = getActiveElements(),
-					activeALength = activeA.length,
-					i;
-				for (i = 0; i < activeALength; i++) {
-					if (activeA[i]) {
-						activeA[i].classList.remove(activeClassLI);
-					}
+				var dTime = Date.now() - startRemoveTime;;
+
+				if (dTime > options.keepActiveClassDelay) {
+					// after touchend
+					clearActiveClass();
+				} else {
+					requestAnimationFrame(removeActiveClass);
 				}
 			}
 
@@ -3298,14 +3312,19 @@ ns.version = '0.10.29-14';
 			 * @static
 			 */
 			function touchmoveHandler(event) {
-				var touch = event.touches[0];
-				didScroll = didScroll ||
-					(Math.abs(touch.clientX - startX) > options.scrollThreshold || Math.abs(touch.clientY - startY) > options.scrollThreshold);
+				var touch = event.touches[0],
+					scrollThreshold = options.scrollThreshold;
 
-				if (didScroll) {
-					removeTouchMove();
-					removeActiveClass();
+				// if move looks like scroll
+				if (!didScroll &&
+					// if move is bigger then threshold
+					(abs(touch.clientX - startX) > scrollThreshold || abs(touch.clientY - startY) > scrollThreshold)) {
+					startTime = 0;
+					// we clear active classes
+					requestAnimationFrame(clearActiveClass);
+					didScroll = true;
 				}
+				touch = null;
 			}
 
 			/**
@@ -3318,23 +3337,22 @@ ns.version = '0.10.29-14';
 			 */
 			function touchstartHandler(event) {
 				var touches = event.touches,
-					touch = touches[0];
+					touch = null;
 
 				if (touches.length === 1) {
+					touch = touches[0];
 					didScroll = false;
 					startX = touch.clientX;
 					startY = touch.clientY;
 					target = event.target;
-
-					document.addEventListener("touchmove", touchmoveHandler, false);
-					clearTimeout(addActiveClassTimerID);
-					addActiveClassTimerID = setTimeout(addActiveClass, options.addActiveClassDelay);
+					startTime = event.timeStamp;
+					startRemoveTime = 0;
+					requestAnimationFrame(addActiveClass);
+					touch = null;
 				}
+				touches = null;
 			}
 
-			removeTouchMove = function () {
-				document.removeEventListener("touchmove", touchmoveHandler, false);
-			};
 
 			/**
 			 * Function invoked after touch
@@ -3345,11 +3363,12 @@ ns.version = '0.10.29-14';
 			 * @static
 			 */
 			function touchendHandler(event) {
+				startRemoveTime = event.timeStamp;
+
 				if (event.touches.length === 0) {
-					clearTimeout(addActiveClassTimerID);
-					addActiveClassTimerID = null;
 					if (!didScroll) {
-						setTimeout(removeActiveClass, options.keepActiveClassDelay);
+						startTime = 0;
+						requestAnimationFrame(removeActiveClass);
 					}
 					didScroll = false;
 				}
@@ -3377,6 +3396,8 @@ ns.version = '0.10.29-14';
 			function enable() {
 				document.addEventListener("touchstart", touchstartHandler, false);
 				document.addEventListener("touchend", touchendHandler, false);
+				document.addEventListener("touchmove", touchmoveHandler, false);
+
 				document.addEventListener("visibilitychange", checkPageVisibility, false);
 				window.addEventListener("pagehide", removeActiveClass, false);
 			}
@@ -3390,6 +3411,9 @@ ns.version = '0.10.29-14';
 			function disable() {
 				document.removeEventListener("touchstart", touchstartHandler, false);
 				document.removeEventListener("touchend", touchendHandler, false);
+				document.removeEventListener("touchmove", touchmoveHandler, false);
+
+				document.removeEventListener("visibilitychange", checkPageVisibility, false);
 				window.removeEventListener("pagehide", removeActiveClass, false);
 			}
 
@@ -3398,6 +3422,311 @@ ns.version = '0.10.29-14';
 			ns.util.anchorHighlight = {
 				enable: enable,
 				disable: disable
+			};
+
+			}(document, window, ns));
+
+/* global requestAnimationFrame, define, ns */
+/**
+ * # JS base scrolling tool
+ *
+ * This enable fast scrolling on element
+ *
+ * @class ns.util.scrolling
+ */
+(function (document, window, ns) {
+	"use strict";
+				var eventUtil = ns.event,
+				// position when was last touch start
+				startPosition = 0,
+				// current state of scroll position
+				scrollPosition = 0,
+				lastScrollPosition = 0,
+				moveToPosition = 0,
+				lastRenderedPosition = 0,
+				lastTime = Date.now(),
+				elementStyle = null,
+				maxScrollPosition = 0,
+				// scrolling element
+				scollingElement = null,
+				// cache of previous overflow style to revert after disable
+				previousOverflow = "",
+				// cache abs function
+				abs = Math.abs,
+				// inform that is touched
+				isTouch = false,
+				isScoll = false,
+				// direction of scrolling, 0 - mean Y, 1 - mean X
+				direction = 0,
+				// cache of round function
+				round = Math.round;
+
+
+			/**
+			 * Chack that current target is inside scrolling element
+			 * @param {HTMLElement} target
+			 * @return boolean
+			 */
+			function detectTarget(target) {
+				while (target && target !== document) {
+					if (target === scollingElement) {
+						return true;
+					}
+					target = target.parentElement;
+				}
+				return false;
+			}
+
+			/**
+			 * Handler for touchstart event
+			 * @param {Event} event
+			 */
+			function touchStart(event) {
+				var touches = event.touches,
+					touch = touches[0];
+
+				isScoll = detectTarget(event.target);
+				// is is only one touch
+				if (isScoll && touches.length === 1) {
+					// save current touch point
+					startPosition = direction ? touch.clientX : touch.clientY;
+					// save current time for calculate acceleration on touchend
+					lastTime = Date.now();
+					// reset acceleration state
+					moveToPosition = scrollPosition;
+				}
+				// clean
+				touches = null;
+				touch = null;
+			}
+
+			/**
+			 * Handler for touchmove event
+			 * @param event
+			 */
+			function touchMove(event) {
+				var touches = event.touches,
+					touch = touches[0],
+					// get current position in correct direction
+					clientPosition = direction ? touch.clientX : touch.clientY;
+
+				// if touch start was on scrolled element
+				if (isScoll) {
+					// if is only one touch
+					if (touches.length === 1) {
+						// calculate difference between touch start and current position
+						lastScrollPosition = clientPosition - startPosition;
+						// normalize value to be in bound [0, maxScroll]
+						if (scrollPosition + lastScrollPosition > 0) {
+							lastScrollPosition = -scrollPosition;
+						}
+						if (scrollPosition + lastScrollPosition < -maxScrollPosition) {
+							lastScrollPosition = -maxScrollPosition - scrollPosition;
+						}
+						// trigger event scroll
+						eventUtil.trigger(scollingElement, "scroll", {scrollTop: -(scrollPosition + lastScrollPosition)});
+					}
+					// if this is first touch move
+					if (!isTouch) {
+						// we need start request loop
+						isTouch = true;
+						requestAnimationFrame(render);
+					}
+				}
+				// clean
+				touches = null;
+				touch = null;
+			}
+
+			/**
+			 * Handler for touchend event
+			 */
+			function touchEnd() {
+				var diffTime = Date.now() - lastTime;
+
+				// calculate speed of touch move
+				if (abs(lastScrollPosition / diffTime) > 1) {
+					// if it was fast move, we start animation of scrolling after touch end
+					moveToPosition = round(scrollPosition + 1000 * lastScrollPosition / diffTime);
+					requestAnimationFrame(moveTo);
+				} else {
+					// touch move was slow, just finish render loop
+					isTouch = false;
+				}
+				// update state of scrolling
+				scrollPosition += lastScrollPosition;
+				// normalize value to be in bound [0, maxScroll]
+				if (scrollPosition < -maxScrollPosition) {
+					scrollPosition = -maxScrollPosition;
+				}
+				if (scrollPosition > 0) {
+					scrollPosition = 0;
+				}
+				lastScrollPosition = 0;
+				// trigger event scroll
+				eventUtil.trigger(scollingElement, "scroll", {scrollTop: -(scrollPosition)});
+				// we stop scrolling
+				isScoll = false;
+			}
+
+			/**
+			 * Loop function to calculate state in animation after touchend
+			 */
+			function moveTo() {
+				// calculate difference between current position and expected scroll end
+				var diffPosition = moveToPosition - scrollPosition,
+					// get absolute value
+					absDiffPosition = abs(diffPosition);
+				// if difference is big
+				if (absDiffPosition > 10) {
+					// we move 10% of difference
+					scrollPosition = round(scrollPosition + diffPosition / 10);
+					requestAnimationFrame(moveTo);
+				} else if (absDiffPosition > 2) {
+					// else if is difference < 10 then we move 50%
+					scrollPosition = round(scrollPosition + diffPosition / 2);
+					requestAnimationFrame(moveTo);
+				} else {
+					// if difference is <=2 then we move to end value and finish loop
+					scrollPosition = moveToPosition;
+					isTouch = false;
+				}
+
+				// normalize scroll value
+				if (scrollPosition < -maxScrollPosition) {
+					scrollPosition = -maxScrollPosition;
+				}
+				if (scrollPosition > 0) {
+					scrollPosition = 0;
+				}
+				// trigger event scroll
+				eventUtil.trigger(scollingElement, "scroll", {scrollTop: -(scrollPosition)});
+			}
+
+			/**
+			 * Render loop on request animation frame
+			 */
+			function render() {
+				// calculate ne position of scrolling as sum of last scrolling state + move
+				var newRenderedPosition = scrollPosition + lastScrollPosition;
+				// is position was changed
+				if (newRenderedPosition !== lastRenderedPosition) {
+					// we update styles
+					lastRenderedPosition = newRenderedPosition;
+					elementStyle.transform = direction ?
+						"translate3D(" + lastRenderedPosition + "px,0,0)" :
+						"translate3D(0, " + lastRenderedPosition + "px,0)";
+				}
+				// if is still touched then we continue loop
+				if (elementStyle && isTouch) {
+					requestAnimationFrame(render);
+				}
+			}
+
+			/**
+			 * Enable JS scrolling on element
+			 * @method enable
+			 * @param {HTMLElement} element element for scrolling
+			 * @param {"x"|"y"} [setDirection="y"] direction of scrolling
+			 * @member ns.util.scrolling
+			 */
+			function enable(element, setDirection) {
+				var parentRectangle = null,
+					rectangle = null,
+					childElement = element.firstElementChild;
+
+				if (scollingElement) {
+					console.warn("Scrolling exist on another element, first call disable method");
+				} else {
+					// detect direction
+					if (setDirection === "x") {
+						direction = 1;
+					} else {
+						direction = 0;
+					}
+					// setting scrolling element
+					scollingElement = element;
+					// calculate maxScroll
+					parentRectangle = element.getBoundingClientRect();
+					rectangle = childElement.getBoundingClientRect();
+					if (direction) {
+						maxScrollPosition = round(rectangle.width - parentRectangle.width);
+					} else {
+						maxScrollPosition = round(rectangle.height - parentRectangle.height);
+					}
+					// cache style element
+					elementStyle = childElement.style;
+
+					// init internal variables
+					startPosition = 0;
+					scrollPosition = 0;
+					lastScrollPosition = 0;
+					moveToPosition = 0;
+					lastRenderedPosition = 0;
+					lastTime = Date.now();
+					// cache current overflow value to restore in disable
+					previousOverflow = window.getComputedStyle(element).getPropertyValue("overflow");
+					// set overflow hidden
+					element.style.overflow = "hidden";
+
+					// add event listeners
+					document.addEventListener("touchstart", touchStart, false);
+					document.addEventListener("touchmove", touchMove, false);
+					document.addEventListener("touchend", touchEnd, false);
+				}
+			}
+
+			/**
+			 * @method disable
+			 * @member ns.util.scrolling
+			 */
+			function disable() {
+				// clear event listeners
+				document.removeEventListener("touchstart", touchStart, false);
+				document.removeEventListener("touchmove", touchMove, false);
+				document.removeEventListener("touchend", touchEnd, false);
+
+				scollingElement.style.overflow = previousOverflow;
+
+				elementStyle = null;
+				scollingElement = null;
+			}
+
+			/**
+			 * Scroll to give position
+			 * @method scrollTo
+			 * @param {number} value
+			 * @member ns.util.scrolling
+			 */
+			function scrollTo(value) {
+				scrollPosition = value;
+				lastScrollPosition = 0;
+				render();
+			}
+
+			ns.util.scrolling = {
+				enable: enable,
+				disable: disable,
+				scrollTo: scrollTo,
+				/**
+				 * Return true is given element is current scrolling element
+				 * @method isElement
+				 * @param {HTMLElement} element element to check
+				 * @returns {boolean}
+				 * @member ns.util.scrolling
+				 */
+				isElement: function(element) {
+					return scollingElement === element;
+				},
+				/**
+				 * Update max scrolling position
+				 * @method setMaxScroll
+				 * @param maxValue
+				 * @member ns.util.scrolling
+				 */
+				setMaxScroll: function(maxValue) {
+					maxScrollPosition = maxValue;
+				}
 			};
 
 			}(document, window, ns));
@@ -3567,7 +3896,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (ns) {
-	
+	"use strict";
 				ns.util.DOM = ns.util.DOM || {};
 			}(ns));
 
@@ -3595,7 +3924,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 	
 
 			var selectors = ns.util.selectors,
@@ -3848,7 +4177,7 @@ ns.version = '0.10.29-14';
  * @class ns.widget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var engine = ns.engine,
 				widget = {
 					/**
@@ -3935,7 +4264,7 @@ ns.version = '0.10.29-14';
  *
  *		@example
  *		(function (ns) {
- *			
+ *			"use strict";
  *			 *					var BaseWidget = ns.widget.BaseWidget, // create alias to main objects
  *						...
  *						arrayOfElements, // example of private property, common for all instances of widget
@@ -4009,7 +4338,7 @@ ns.version = '0.10.29-14';
  * @class ns.widget.BaseWidget
  */
 (function (document, ns, undefined) {
-	
+	"use strict";
 				/**
 			 * Alias to Array.slice function
 			 * @method slice
@@ -4760,7 +5089,7 @@ ns.version = '0.10.29-14';
  * @class ns.widget
  */
 (function (document, ns) {
-	
+	"use strict";
 				ns.widget.core = ns.widget.core || {};
 			}(window.document, ns));
 
@@ -4789,7 +5118,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 	
 			var DOM = ns.util.DOM,
 				DASH_TO_UPPER_CASE_REGEXP = /-([a-z])/gi;
@@ -5400,7 +5729,7 @@ ns.version = '0.10.29-14';
  * @author Damian Osipiuk <d.osipiuk@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				/**
 			 * Alias for {@link ns.widget.BaseWidget}
 			 * @property {Object} BaseWidget
@@ -5712,9 +6041,39 @@ ns.version = '0.10.29-14';
 			 * @member ns.widget.core.Page
 			 */
 			prototype._setContent = function(element, value) {
-				if (typeof value === "string") {
-					this.options.content =
-						this._ui.content.textContent = value;
+				var self = this,
+					ui = self._ui,
+					content = ui.content,
+					child = element.firstChild,
+					next;
+
+				if (!content && value) {
+					content = document.createElement("div");
+					while (child) {
+						next = child.nextSibling;
+						if (child !== ui.footer && child !== ui.header) {
+							content.appendChild(child);
+						}
+						child = next;
+					}
+					element.insertBefore(content, ui.footer);
+					ui.content = content;
+				}
+				if (content) {
+					// remove child if content exist and value is set to false
+					if (value === false) {
+						element.removeChild(content);
+					} else {
+						// if options is set to true, to string or not is set
+						// add class
+						content.classList.add(classes.uiContent);
+						// if is string fill content by string value
+						if (typeof value === "string") {
+							content.textContent = value;
+						}
+					}
+					// and remember options
+					self.options.content = value;
 				}
 			};
 
@@ -5754,28 +6113,9 @@ ns.version = '0.10.29-14';
 			 * @member ns.widget.core.Page
 			 */
 			prototype._buildContent = function(element) {
-				var self = this,
-					content = utilSelectors.getChildrenBySelector(element, "[data-role='content'],." + classes.uiContent)[0],
-					next,
-					child = element.firstChild,
-					ui = self._ui;
-				// content must always exists
-				if (!content) {
-					content = document.createElement("div");
-					while (child) {
-						next = child.nextSibling;
-						if (child !== ui.footer && child !== ui.header) {
-							content.appendChild(child);
-						}
-						child = next;
-					}
-				}
+				var self = this;
 
-				// we put it before footer or if footer not exists as last child of element
-				element.insertBefore(content, ui.footer);
-				content.classList.add(classes.uiContent);
-				ui.content = content;
-				// we set content text if is set in options.content
+				self._ui.content = utilSelectors.getChildrenBySelector(element, "[data-role='content'],." + classes.uiContent)[0];
 				self._setContent(element, self.options.content);
 			};
 
@@ -6008,7 +6348,7 @@ ns.version = '0.10.29-14';
  * @author Krzysztof Głodowski <k.glodowski@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				Page = ns.widget.core.Page,
 				util = ns.util,
@@ -6031,6 +6371,7 @@ ns.version = '0.10.29-14';
 					 * @member ns.widget.core.PageContainer
 					 */
 					this.activePage = null;
+					this.inTransition = false;
 				},
 				EventType = {
 					/**
@@ -6047,7 +6388,8 @@ ns.version = '0.10.29-14';
 					 * @event pagechange
 					 * @member ns.widget.core.PageContainer
 					 */
-					PAGE_CHANGE: "pagechange"
+					PAGE_CHANGE: "pagechange",
+					PAGE_REMOVE: "pageremove"
 				},
 				animationend = "animationend",
 				webkitAnimationEnd = "webkitAnimationEnd",
@@ -6122,6 +6464,9 @@ ns.version = '0.10.29-14';
 						resolve: function () {
 							if (fromPageWidget) {
 								fromPageWidget.onHide();
+								if (options.reverse) {
+									fromPageWidget.destroy();
+								}
 								self._removeExternalPage(fromPageWidget, options);
 							}
 							toPageWidget.onShow();
@@ -6158,6 +6503,7 @@ ns.version = '0.10.29-14';
 				if (options.reverse) {
 					clearClasses.push(classes.reverse);
 				}
+				self.inTransition = true;
 				elementClassList.add(classes.uiViewportTransitioning);
 				oldDeferredResolve = deferred.resolve;
 				deferred.resolve = function () {
@@ -6167,6 +6513,7 @@ ns.version = '0.10.29-14';
 					self._setActivePage(toPageWidget);
 
 					elementClassList.remove(classes.uiViewportTransitioning);
+					self.inTransition = false;
 					clearClasses.forEach(function (className) {
 						toPageWidgetClassList.remove(className);
 					});
@@ -6298,9 +6645,9 @@ ns.version = '0.10.29-14';
 				var fromPage = fromPageWidget.element;
 				options = options || {};
 				if (options.reverse && DOM.hasNSData(fromPage, "external")) {
-					fromPageWidget.destroy();
 					if (fromPage.parentNode) {
 						fromPage.parentNode.removeChild(fromPage);
+						this.trigger(EventType.PAGE_REMOVE);
 					}
 				}
 			};
@@ -6319,23 +6666,9 @@ ns.version = '0.10.29-14';
 			);
 			}(window.document, ns));
 
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/*global window, define, ns */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				engine = ns.engine,
 				Button = function () {
@@ -6351,8 +6684,7 @@ ns.version = '0.10.29-14';
 					BTN_CIRCLE: "ui-btn-circle",
 					BTN_NOBG: "ui-btn-nobg",
 					BTN_ICON_ONLY: "ui-btn-icon-only",
-					BTN_ICON_POSITION_PREFIX: "ui-btn-icon-",
-					MULTILINE: "ui-multiline"
+					BTN_ICON_POSITION_PREFIX: "ui-btn-icon-"
 				},
 				buttonStyle = {
 					CIRCLE: "circle",
@@ -6371,17 +6703,15 @@ ns.version = '0.10.29-14';
 			 * @protected
 			 * @member ns.widget.core.Button
 			 */
-			prototype._configure = function (element) {
+			prototype._configure = function () {
 				this.options = {
 					// common options
-					inline: false,
+					inline: false,//url
 					icon: null,
 					disabled: false,
 					// mobile options
 					style: null,
-					iconpos: "left",
-					// wearable options
-					multiline: false,
+					iconpos: "left"
 				};
 			};
 
@@ -6395,43 +6725,20 @@ ns.version = '0.10.29-14';
 			 */
 			prototype._setStyle = function (element, style) {
 				var options = this.options,
-					buttonClassList = element.classList,
-					innerTextLength = element.textContent.length || (element.value ? element.value.length : 0);
+					buttonClassList = element.classList;
 
 				style = style || options.style;
 
 				switch (style) {
 					case buttonStyle.CIRCLE:
-						if (innerTextLength == 0) {
-							buttonClassList.remove(classes.BTN_NOBG);
-							buttonClassList.add(classes.BTN_CIRCLE);
-						}
+						buttonClassList.remove(classes.BTN_NOBG);
+						buttonClassList.add(classes.BTN_CIRCLE);
 						break;
 					case buttonStyle.NOBG:
-						if (innerTextLength == 0) {
-							buttonClassList.remove(classes.BTN_CIRCLE);
-							buttonClassList.add(classes.BTN_NOBG);
-						}
+						buttonClassList.remove(classes.BTN_CIRCLE);
+						buttonClassList.add(classes.BTN_NOBG);
 						break;
 					default:
-				}
-			};
-
-			/**
-			 * Set multiline option
-			 * @method _setMultiline
-			 * @param {HTMLElement} element
-			 * @param {boolean} multiline
-			 * @protected
-			 * @member ns.widget.core.Button
-			 */
-			prototype._setMultiline = function (element, multiline) {
-				var options = this.options;
-
-				multiline = multiline || options.multiline;
-
-				if (multiline) {
-					element.classList.add(classes.MULTILINE);
 				}
 			};
 
@@ -6470,6 +6777,7 @@ ns.version = '0.10.29-14';
 				if (icon) {
 					element.classList.add(classes.BTN_ICON);
 					element.classList.add(classes.ICON_PREFIX + icon);
+
 					self._setTitleForIcon(element);
 				}
 			};
@@ -6484,11 +6792,12 @@ ns.version = '0.10.29-14';
 			 */
 			prototype._setIconpos = function (element, iconpos) {
 				var options = this.options,
+					style = options.style,
 					innerTextLength = element.textContent.length || (element.value ? element.value.length : 0);
 
 				iconpos = iconpos || options.iconpos;
 
-				if (options.icon) {
+				if (options.icon && style !== buttonStyle.CIRCLE  && style !== buttonStyle.NOBG) {
 					if (innerTextLength > 0) {
 						element.classList.add(classes.BTN_ICON_POSITION_PREFIX + iconpos);
 					} else {
@@ -6505,20 +6814,23 @@ ns.version = '0.10.29-14';
 			 * @member ns.widget.core.Button
 			 */
 			prototype._setTitleForIcon = function (element) {
-				var self = this,
-					elementTagName = element.tagName.toLowerCase(),
-					options = self.options,
+				var options = this.options,
 					buttonText = element.textContent;
 
 				// Add title to element if button not has text.
 				if (options.iconpos === "notext" && !element.getAttribute("title")) {
 					element.setAttribute("title", buttonText);
-				}
-				if (!buttonText.length && elementTagName !== "label") {
-					element.textContent = options.icon.replace("naviframe-", "");
+					ns.warn("iconpos='notext' is deprecated.");
 				}
 			};
 
+			/**
+			 * Sets button to disabled if element.disabled or element.disabled property is true,
+			 * or class is set to ui-state-disabled
+			 * @method _setDisabled
+			 * @param {HTMLElement} element
+			 * @protected
+			 */
 			prototype._setDisabled = function (element) {
 				var self = this,
 					options = self.options,
@@ -6546,7 +6858,6 @@ ns.version = '0.10.29-14';
 				}
 
 				self._setStyle(element);
-				self._setMultiline(element);
 				self._setInline(element);
 				self._setIconpos(element);
 				self._setIcon(element);
@@ -6566,7 +6877,6 @@ ns.version = '0.10.29-14';
 					element = this.element;
 
 				self._setStyle(element);
-				self._setMultiline(element);
 				self._setInline(element);
 				self._setIconpos(element);
 				self._setIcon(element);
@@ -6575,7 +6885,8 @@ ns.version = '0.10.29-14';
 				return null;
 			};
 
-			/* Get value of button
+			/**
+			 * Get value of button
 			 * @method _getValue
 			 * @protected
 			 * @member ns.widget.core.Button
@@ -6584,7 +6895,8 @@ ns.version = '0.10.29-14';
 				return this.element.textContent;
 			};
 
-			/* Set value of button
+			/**
+			 * Set value of button
 			 * @method _setValue
 			 * @param {string} value
 			 * @protected
@@ -6602,8 +6914,7 @@ ns.version = '0.10.29-14';
 			 * @member ns.widget.core.Button
 			 */
 			prototype._enable = function (element) {
-				var options = this.options,
-					tagName = element.tagName.toLowerCase();
+				var options = this.options;
 
 				if (element) {
 					if (element.tagName.toLowerCase() === "button") {
@@ -6644,6 +6955,7 @@ ns.version = '0.10.29-14';
 			);
 			}(window.document, ns));
 
+/*global window, define, ns */
 /*
  * Copyright (c) 2015 Samsung Electronics Co., Ltd
  *
@@ -6659,222 +6971,174 @@ ns.version = '0.10.29-14';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*jslint nomen: true, plusplus: true */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget  = ns.widget.BaseWidget,
 				engine = ns.engine,
-				selectors = ns.util.selectors,
-				slice = [].slice,
-				Checkboxradio = function () {
+				Checkbox = function () {
 					var self = this;
 
-					self._label = null;
 					self._inputtype = null;
 				},
 				classes = {
-					DISABLED: "ui-state-disabled",
-					UI_PREFIX: "ui-"
+					checkbox: "ui-checkbox"
 				},
 				prototype = new BaseWidget();
 
-			Checkboxradio.prototype = prototype;
+			Checkbox.prototype = prototype;
 
+			/**
+			 * Build Checkbox widget
+			 * @method _build
+			 * @param {HTMLElement} element
+			 * @protected
+			 * @member ns.widget.Checkbox
+			 * @instance
+			 */
 			prototype._build = function (element) {
-				var inputtype = element.getAttribute("type"),
-					elementClassList = element.classList;
+				var inputType = element.getAttribute("type");
 
-				if (inputtype !== "checkbox" && inputtype !== "radio") {
+				if (inputType !== "checkbox") {
+					//_build should always return element
+					return element;
+				}
+				element.classList.add(classes.checkbox);
+				return element;
+			};
+
+			/**
+			 * Returns the value of checkbox
+			 * @method _getValue
+			 * @member ns.widget.Checkbox
+			 * @return {?string}
+			 * @protected
+			 * @instance
+			 * @new
+			 */
+			prototype._getValue = function () {
+				return this.element.value;
+			};
+
+			/**
+			 * Set value to the checkbox
+			 * @method _setValue
+			 * @param {string} value
+			 * @member ns.widget.Checkbox
+			 * @chainable
+			 * @instance
+			 * @protected
+			 * @new
+			 */
+			prototype._setValue = function (value) {
+				this.element.value = value;
+			};
+
+			// definition
+			ns.widget.core.Checkbox = Checkbox;
+			engine.defineWidget(
+				"Checkbox",
+				"input[type='checkbox']:not(.ui-slider-switch-input):not([data-role='toggleswitch']):not(.ui-toggleswitch), " +
+				"input.ui-checkbox",
+				[],
+				Checkbox,
+				""
+			);
+			}(window.document, ns));
+
+/*global window, define, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+(function (document, ns) {
+	"use strict";
+				var BaseWidget  = ns.widget.BaseWidget,
+				engine = ns.engine,
+				Radio = function () {
+					var self = this;
+
+					self._inputtype = null;
+				},
+				classes = {
+					radio: "ui-radio"
+				},
+				prototype = new BaseWidget();
+
+			Radio.prototype = prototype;
+
+			/**
+			 * Build Radio widget
+			 * @method _build
+			 * @param {HTMLElement} element
+			 * @protected
+			 * @member ns.widget.Radio
+			 * @instance
+			 */
+			prototype._build = function (element) {
+				var inputType = element.getAttribute("type");
+
+				if (inputType !== "radio") {
 					//_build should always return element
 					return element;
 				}
 
-				elementClassList.add(classes.UI_PREFIX + inputtype);
+				element.classList.add(classes.radio);
 
 				return element;
 			};
 
 			/**
-			* Inits widget
-			* @method _init
-			* @param {HTMLElement} element
-			* @protected
-			* @member ns.widget.Checkboxradio
-			* @instance
-			*/
-			prototype._init = function (element) {
-				var self = this;
-
-				self._label = element.labels ? element.labels[0] : null;
-				self._inputtype = element.getAttribute("type");
-			};
-
-			/**
-			* Returns either a set of radios with the same name attribute or a single checkbox
-			* @method getInputSet
-			* @return {Array}
-			* @protected
-			* @member ns.widget.Checkboxradio
-			* @instance
-			*/
-			prototype._getInputSet = function () {
-				var self = this,
-					element = self.element,
-					parent;
-
-				if (self._inputtype === "checkbox") {
-					return [element];
-				}
-
-				parent = selectors.getClosestBySelector(element, "form, fieldset, .ui-page, [data-role='page'], [data-role='dialog']");
-
-				if (parent) {
-					return slice.call(parent.querySelectorAll("input[name='" + element.name + "'][type='" + self._inputtype + "']"));
-				}
-
-				return [];
-			};
-
-			/**
-			* Refreshes widget
-			* @method _refresh
-			* @member ns.widget.Checkboxradio
-			* @instance
-			*/
-			prototype._refresh = function () {
-				var self = this,
-					element = this.element;
-
-				if (element.getAttribute("disabled")) {
-					self._disable();
-				} else {
-					self._enable();
-				}
-			};
-
-			/**
-			* Enables widget
-			* @method _enable
-			* @member ns.widget.Checkboxradio
-			* @protected
-			* @instance
-			*/
-			prototype._enable = function (element) {
-				if (element) {
-					element.classList.remove(classes.DISABLED);
-					element.removeAttribute("disabled");
-				}
-			};
-
-			/**
-			* Disables widget
-			* @method _disable
-			* @protected
-			* @member ns.widget.Checkboxradio
-			* @instance
-			*/
-			prototype._disable = function (element) {
-				if (element) {
-					element.classList.add(classes.DISABLED);
-					element.setAttribute("disabled", true);
-				}
-			};
-
-			/**
-			* Return checked checkboxradio element
-			* @method getCheckedElement
-			* @return {?HTMLElement}
-			* @member ns.widget.Checkboxradio
-			* @new
-			*/
-			prototype.getCheckedElement = function () {
-				var radios = this._getInputSet(),
-					i,
-					max = radios.length;
-				for (i = 0; i < max; i++) {
-					if (radios[i].checked) {
-						return radios[i];
-					}
-				}
-				return null;
-			};
-
-			/**
-			* Returns value of checkbox if it is checked or value of radios with the same name
-			* @method _getValue
-			* @member ns.widget.Checkboxradio
-			* @return {?string}
-			* @protected
-			* @instance
-			* @new
-			*/
+			 * Returns the value of radio
+			 * @method _getValue
+			 * @member ns.widget.Radio
+			 * @return {?string}
+			 * @protected
+			 * @instance
+			 * @new
+			 */
 			prototype._getValue = function () {
-				var checkedElement = this.getCheckedElement();
-
-				if (checkedElement) {
-					return checkedElement.value;
-				}
-				return null;
+				return this.element.value;
 			};
 
 			/**
-			* Check element with value
-			* @method _setValue
-			* @param {string} value
-			* @member ns.widget.Checkboxradio
-			* @chainable
-			* @instance
-			* @protected
-			* @new
-			*/
+			 * Set value to the radio
+			 * @method _setValue
+			 * @param {string} value
+			 * @member ns.widget.Radio
+			 * @chainable
+			 * @instance
+			 * @protected
+			 * @new
+			 */
 			prototype._setValue = function (value) {
-				var self = this,
-					radios = self._getInputSet(),
-					checkedElement,
-					i,
-					max = radios.length;
-
-				for (i = 0; i < max; i++) {
-					if (radios[i].value === value) {
-						checkedElement = self.getCheckedElement();
-						if (checkedElement) {
-							checkedElement.checked = false;
-						}
-						radios[i].checked = true;
-						return self;
-					}
-				}
-				return self;
-			};
-
-			/**
-			* Cleans widget's resources
-			* @method _destroy
-			* @protected
-			* @member ns.widget.Checkboxradio
-			* @instance
-			*/
-			prototype._destroy = function () {
-				var self = this;
-
-				self._label = null;
-				self._inputtype = null;
+				this.element.value = value;
 			};
 
 			// definition
-			ns.widget.core.Checkboxradio = Checkboxradio;
+			ns.widget.core.Radio = Radio;
 			engine.defineWidget(
-				"Checkboxradio",
-				"input[type='checkbox']:not(.ui-slider-switch-input):not([data-role='toggleswitch']):not(.ui-toggleswitch), " +
-				"input[type='radio'], " +
-				"input.ui-checkbox, " +
-				"input.ui-radio",
+				"Radio",
+				"input[type='radio'], input.ui-radio",
 				[],
-				Checkboxradio,
+				Radio,
 				""
 			);
 			}(window.document, ns));
 
-/*global window, define, console */
+/*global window, define, console, ns */
 /*
  * Copyright (c) 2015 Samsung Electronics Co., Ltd
  *
@@ -6915,7 +7179,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 	
 			var BaseWidget = ns.widget.BaseWidget,
 				/**
@@ -7111,12 +7375,12 @@ ns.version = '0.10.29-14';
 			function setAnimationStyle(self, options) {
 				var marqueeInnerElement = self._ui.marqueeInnerElement,
 					marqueeInnerElementStyle = marqueeInnerElement.style,
-					duration = getAnimationDuration(self, isNaN(parseInt(options.speed))? defaults.speed : options.speed ),
+					duration = getAnimationDuration(self, isNaN(parseInt(options.speed, 10))? defaults.speed : options.speed ),
 					marqueeKeyFrame = setMarqueeKeyFrame(self, options.marqueeStyle),
 					iteration;
 
 				// warning when option value is not correct.
-				if (isNaN(parseInt(options.speed))) {
+				if (isNaN(parseInt(options.speed, 10))) {
 					ns.warn("speed value must be number(px/sec)");
 				}
 				if ((options.iteration !== "infinite") && isNaN(options.iteration)) {
@@ -7217,7 +7481,7 @@ ns.version = '0.10.29-14';
 
 				self._callbacks.animationEnd = animationEndCallback;
 
-				utilEvent.one(marqueeInnerElement, "webkitAnimationEnd", animationEndCallback)
+				utilEvent.one(marqueeInnerElement, "webkitAnimationEnd", animationEndCallback);
 			};
 
 			/**
@@ -7423,7 +7687,7 @@ ns.version = '0.10.29-14';
 				self._state = states.IDLE;
 				marqueeInnerElementClassList.remove(classes.ANIMATION_RUNNING, classes.ANIMATION_STOPPED);
 				marqueeInnerElementClassList.add(classes.ANIMATION_IDLE);
-				if (self.options.ellipsisEffect == ellipsisEffect.ELLIPSIS) {
+				if (self.options.ellipsisEffect === ellipsisEffect.ELLIPSIS) {
 					marqueeElementClassList.add(classes.MARQUEE_ELLIPSIS);
 				}
 
@@ -7465,7 +7729,7 @@ ns.version = '0.10.29-14';
  * @class ns.util.load
  */
 (function (document, ns) {
-	
+	'use strict';
 	
 			/**
 			 * Local alias for document HEAD element
@@ -7751,7 +8015,7 @@ ns.version = '0.10.29-14';
  * @class ns.theme
  */
 (function (window, document, ns) {
-	
+	"use strict";
 			/**
 			 * Local alias for document HEAD element
 			 * @property {HTMLHeadElement} head
@@ -8077,7 +8341,7 @@ ns.version = '0.10.29-14';
  * @class ns.event.gesture
  */
 (function ( ns, window, undefined ) {
-	
+	"use strict";
 	
 			var Gesture = function( elem, options ) {
 				return new ns.event.gesture.Instance( elem, options );
@@ -8217,7 +8481,7 @@ ns.version = '0.10.29-14';
  * @class ns.event.gesture.utils
  */
 (function (ns, Math, undefined) {
-	
+	"use strict";
 	
 				/**
 				 * Local alias for {@link ns.event.gesture}
@@ -8411,7 +8675,7 @@ ns.version = '0.10.29-14';
  * @class ns.event.gesture.Detector
  */
 ( function ( ns, window, undefined ) {
-	
+	"use strict";
 					/**
 				 * Local alias for {@link ns.event.gesture}
 				 * @property {Object}
@@ -8513,7 +8777,7 @@ ns.version = '0.10.29-14';
  * @class ns.event.gesture.Manager
  */
 ( function ( ns, window, document) {
-	
+	"use strict";
 	
 				/**
 				 * Local alias for {@link ns.event.gesture}
@@ -9116,7 +9380,7 @@ ns.version = '0.10.29-14';
  * @class ns.event.gesture.Instance
  */
 ( function ( ns, window, undefined ) {
-	
+	"use strict";
 					/**
 				 * Local alias for {@link ns.event.gesture}
 				 * @property {Object}
@@ -9324,7 +9588,7 @@ ns.version = '0.10.29-14';
  * @class ns.event.gesture.Drag
  */
 ( function ( ns, window, undefined ) {
-	
+	"use strict";
 	
 				/**
 				 * Local alias for {@link ns.event.gesture}
@@ -9375,7 +9639,7 @@ ns.version = '0.10.29-14';
 				 * @property {string[]} types
 				 * @member ns.event.gesture.Drag
 				 */
-				types: ["drag", "dragstart", "dragend", "dragcancel"],
+				types: ["drag", "dragstart", "dragend", "dragcancel", "dragprepare"],
 
 				/**
 				 * Default values for drag gesture
@@ -9417,7 +9681,8 @@ ns.version = '0.10.29-14';
 							drag: this.types[0],
 							start: this.types[1],
 							end: this.types[2],
-							cancel: this.types[3]
+							cancel: this.types[3],
+							prepare: this.types[4]
 						},
 						direction = ge.direction;
 
@@ -9468,10 +9733,17 @@ ns.version = '0.10.29-14';
 					switch( ge.eventType ) {
 						case Gesture.Event.START:
 							this.triggerd = false;
+							if (sender.sendEvent( event.prepare, ge ) === false) {
+								result = Gesture.Result.FINISHED;
+							}
 							break;
 						case Gesture.Event.MOVE:
 							if ( !this.triggerd ) {
-								sender.sendEvent( event.start, ge );
+								if (sender.sendEvent( event.start, ge ) === false) {
+									result = Gesture.Result.FINISHED;
+									ge.preventDefault();
+									break;
+								}
 							}
 							result = sender.sendEvent( event.drag, ge ) ? Gesture.Result.RUNNING : Gesture.Result.FINISHED;
 							ge.preventDefault();
@@ -9528,7 +9800,7 @@ ns.version = '0.10.29-14';
  * @class ns.event.gesture.Swipe
  */
 ( function ( ns, window, undefined ) {
-	
+	"use strict";
     
 				/**
 				 * Local alias for {@link ns.event.gesture}
@@ -9609,6 +9881,163 @@ ns.version = '0.10.29-14';
 			});
 			} ( ns, window ) );
 
+/*global ns, window, define */
+/*jslint nomen: true */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * # Gesture Plugin: pinch
+ * Plugin enables pinch event.
+ *
+ * @class ns.event.gesture.Pinch
+ */
+( function ( ns, window, undefined ) {
+	"use strict";
+	
+				/**
+				 * Local alias for {@link ns.event.gesture}
+				 * @property {Object}
+				 * @member ns.event.gesture.Pinch
+				 * @private
+				 * @static
+				 */
+			var Gesture = ns.event.gesture,
+				/**
+				 * Local alias for {@link ns.event.gesture.Detector}
+				 * @property {Object}
+				 * @member ns.event.gesture.Pinch
+				 * @private
+				 * @static
+				 */
+				Detector = ns.event.gesture.Detector;
+
+			ns.event.gesture.Pinch = Detector.plugin.create({
+				/**
+				 * Gesture name
+				 * @property {string} [name="pinch"]
+				 * @member ns.event.gesture.Pinch
+				 */
+				name: "pinch",
+
+				/**
+				 * Gesture Index
+				 * @property {number} [index=300]
+				 * @member ns.event.gesture.Pinch
+				 */
+				index: 300,
+
+				/**
+				 * Array of posible pinch events
+				 * @property {string[]} types
+				 * @member ns.event.gesture.Pinch
+				 */
+				types: ["pinchstart", "pinchmove", "pinchend", "pinchcancel", "pinchin", "pinchout"],
+
+				/**
+				 * Default values for pinch gesture
+				 * @property {Object} defaults
+				 * @property {number} [defaults.velocity=0.6]
+				 * @property {number} [defaults.timeThreshold=400]
+				 * @member ns.event.gesture.Pinch
+				 */
+				defaults: {
+					velocity: 0.6,
+					timeThreshold: 400
+				},
+
+				/**
+				 * Triggered
+				 * @property {boolean} [triggerd=false]
+				 * @member ns.event.gesture.Pinch
+				 */
+				triggerd: false,
+
+				/**
+				 * Handler for pinch gesture
+				 * @method handler
+				 * @param {Event} gestureEvent gesture event
+				 * @param {Object} sender event's sender
+				 * @param {Object} options options
+				 * @return {ns.event.gesture.Result.PENDING|ns.event.gesture.Result.END|ns.event.gesture.Result.FINISHED|ns.event.gesture.Result.BLOCK}
+				 * @member ns.event.gesture.Pinch
+				 */
+				handler: function ( gestureEvent, sender, options ) {
+					var ge = gestureEvent,
+						result = Gesture.Result.PENDING,
+						event = {
+							start: this.types[0],
+							move: this.types[1],
+							end: this.types[2],
+							cancel: this.types[3],
+							in: this.types[4],
+							out: this.types[5]
+						};
+
+					switch( ge.eventType ) {
+						case Gesture.Event.MOVE:
+							if (ge.pointers.length === 1 && ge.distance > 35) {
+								result = Gesture.Result.FINISHED;
+								return result;
+							} else if ( !this.triggerd && ge.pointers.length >= 2) {
+								this.triggerd = true;
+								sender.sendEvent( event.start, ge );
+								ge.preventDefault();
+								result = Gesture.Result.RUNNING;
+							} else if ( this.triggerd) {
+								if ( ( ge.deltaTime < options.timeThreshold ) &&
+									( ge.velocityX > options.velocity || ge.velocityY > options.velocity ) ) {
+									if (ge.scale < 1) {
+										sender.sendEvent( event.in, gestureEvent );
+									} else {
+										sender.sendEvent( event.out, gestureEvent );
+									}
+									ge.preventDefault();
+									this.triggerd = false;
+									result = Gesture.Result.FINISHED | Gesture.Result.BLOCK;
+									return result;
+								} else {
+									sender.sendEvent( event.move, ge );
+									ge.preventDefault();
+									result = Gesture.Result.RUNNING;
+								}
+							}
+							break;
+						case Gesture.Event.BLOCKED:
+						case Gesture.Event.END:
+							if ( this.triggerd ) {
+								sender.sendEvent( event.end, ge );
+								ge.preventDefault();
+								this.triggerd = false;
+								result = Gesture.Result.FINISHED;
+							}
+							break;
+						case Gesture.Event.CANCEL:
+							if ( this.triggerd ) {
+								sender.sendEvent( event.cancel, ge );
+								ge.preventDefault();
+								this.triggerd = false;
+								result = Gesture.Result.FINISHED;
+							}
+							break;
+					}
+					return result;
+				}
+			});
+			} ( ns, window ) );
+
 /*global window, define, CustomEvent */
 /*jslint nomen: true */
 /*
@@ -9630,7 +10059,7 @@ ns.version = '0.10.29-14';
  * @class ns.event.gesture
  */
 (function (ns) {
-	
+	"use strict";
 				var instances = [],
 				gesture = ns.event.gesture || {};
 
@@ -9740,7 +10169,7 @@ ns.version = '0.10.29-14';
  * @author Hyeoncheol Choi <hc7.choi@samsung.com>
  */
 (function (ns) {
-	
+	"use strict";
 				ns.widget.core.viewswitcher = ns.widget.core.viewswitcher || {};
 			}(ns));
 
@@ -9767,7 +10196,7 @@ ns.version = '0.10.29-14';
  * @class ns.widget.core.ViewSwitcher.animation
  */
 (function (window, ns) {
-	
+	"use strict";
 				/** @namespace ns.widget.wearable */
 			ns.widget.core.viewswitcher.animation = ns.widget.core.viewswitcher.animation || {};
 			}(window, ns));
@@ -9795,7 +10224,7 @@ ns.version = '0.10.29-14';
  * @class ns.widget.core.viewswitcher.animation.interface
  */
 (function (document, ns) {
-	
+	"use strict";
 	
 			ns.widget.core.viewswitcher.animation.interface = {
 				/**
@@ -9859,7 +10288,7 @@ ns.version = '0.10.29-14';
  * @author Hyeoncheol Choi <hc7.choi@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 	
 			var object = ns.util.object,
 				utilDOM = ns.util.DOM,
@@ -10080,7 +10509,7 @@ ns.version = '0.10.29-14';
  * @author Hyeoncheol Choi <hc7.choi@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				/**
 			 * @property {Object} Widget Alias for {@link ns.widget.BaseWidget}
 			 * @member ns.widget.core.viewswitcher.ViewSwitcher
@@ -10499,6 +10928,4547 @@ ns.version = '0.10.29-14';
 			);
 			}(window.document, ns));
 
+/*global window, define, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * #PageIndicator Widget
+ * Widget create dots page indicator.
+ * @class ns.widget.core.PageIndicator
+ * @extends ns.widget.BaseWidget
+ */
+(function (document, ns) {
+	"use strict";
+				var BaseWidget = ns.widget.BaseWidget,
+				engine = ns.engine,
+
+				PageIndicator = function () {
+					var self = this;
+					self._activeIndex = null;
+					self.options = {};
+				},
+				classes = {
+					indicator: "ui-page-indicator",
+					indicatorActive: "ui-page-indicator-active",
+					indicatorItem: "ui-page-indicator-item",
+					linearIndicator: "ui-page-indicator-linear",
+					circularIndicator: "ui-page-indicator-circular"
+				},
+				maxDots = {
+					IN_CIRCLE: 60,
+					IN_LINEAR: 5
+				},
+				layoutType = {
+					LINEAR: "linear",
+					CIRCULAR: "circular"
+				},
+				DISTANCE_FROM_EDGE = 15,
+
+				prototype = new BaseWidget();
+
+			PageIndicator.classes = classes;
+
+			prototype._configure = function () {
+				/**
+				 * Options for widget.
+				 * @property {Object} options
+				 * @property {number} [options.maxPage=null] Maximum number of dots(pages) in indicator.
+				 * @property {number} [options.numberOfPages=null] Number of pages to be linked to PageIndicator.
+				 * @property {string} [options.layout="linear"] Layout type of page indicator.
+				 * @property {number} [options.intervalAngle=6] angle between each dot in page indicator.
+				 * @member ns.widget.core.PageIndicator
+				 */
+				this.options = {
+					maxPage: null,
+					numberOfPages: null,
+					layout: "linear",
+					intervalAngle: 6
+				};
+			};
+			/**
+			 * Build PageIndicator
+			 * @method _build
+			 * @param {HTMLElement} element
+			 * @return {HTMLElement}
+			 * @protected
+			 * @member ns.widget.core.PageIndicator
+			 */
+			prototype._build = function (element) {
+				var self = this;
+				self._createIndicator(element);
+				if (self.options.layout === layoutType.CIRCULAR) {
+					self._circularPositioning(element);
+				}
+				return element;
+			};
+
+			/**
+			 * Create HTML elements for PageIndicator
+			 * @method _createIndicator
+			 * @param {HTMLElement} element
+			 * @protected
+			 * @member ns.widget.core.PageIndicator
+			 */
+			prototype._createIndicator = function (element) {
+				var self = this,
+					i,
+					len,
+					maxPage,
+					span,
+					numberOfPages = self.options.numberOfPages;
+
+				if(numberOfPages === null) {
+					ns.error("build error: numberOfPages is null");
+					return;
+				}
+
+				self.options.layout = self.options.layout.toLowerCase();
+
+				if (self.options.layout === layoutType.CIRCULAR) {
+					element.classList.remove(classes.linearIndicator);
+					element.classList.add(classes.circularIndicator);
+				} else {
+					element.classList.remove(classes.circularIndicator);
+					element.classList.add(classes.linearIndicator);
+				}
+
+				maxPage = self._getMaxPage();
+
+				len = numberOfPages < maxPage ? numberOfPages : maxPage;
+
+				for(i = 0; i < len; i++) {
+					span = document.createElement("span");
+					span.classList.add(classes.indicatorItem);
+
+					element.appendChild(span);
+				}
+			};
+
+			/**
+			 * Make circular positioned indicator
+			 * @method _circularPositioning
+			 * @param {HTMLElement} element
+			 * @protected
+			 * @member ns.widget.core.PageIndicator
+			 */
+			prototype._circularPositioning = function (element) {
+				var self = this,
+					items = element.children,
+					numberOfDots = items.length,
+					intervalAngle = self.options.intervalAngle - "0",
+					translatePixel,
+					style,
+					i;
+
+				translatePixel = element.offsetWidth / 2 - DISTANCE_FROM_EDGE;
+
+				for(i=0;i<numberOfDots;i++) {
+					style = "rotate(" + (i * intervalAngle - 90 - (numberOfDots-1) * intervalAngle * 0.5) + "deg) translate(" +
+					translatePixel + "px) ";
+
+					items[i].style.transform = style;
+				}
+
+			};
+
+			/**
+			 * Return maximum number of dots(pages) in indicator
+			 * @method _getMaxPage
+			 * @protected
+			 * @member ns.widget.core.PageIndicator
+			 */
+			prototype._getMaxPage = function() {
+				var self = this,
+					options = self.options,
+					maxPage;
+				if (options.layout === layoutType.CIRCULAR) {
+					maxPage = options.maxPage || maxDots.IN_CIRCLE;
+				} else {
+					maxPage = options.maxPage || maxDots.IN_LINEAR;
+				}
+				return maxPage;
+			};
+
+			/**
+			 * Remove contents of HTML elements for PageIndicator
+			 * @method _removeIndicator
+			 * @param {HTMLElement} element
+			 * @protected
+			 * @member ns.widget.core.PageIndicator
+			 */
+			prototype._removeIndicator =  function (element) {
+				element.textContent = "";
+			};
+
+			/**
+			 * This method sets a dot to active state.
+			 * @method setActive
+			 * @param {number} position index to be active state.
+			 * @member ns.widget.core.PageIndicator
+			 */
+			prototype.setActive = function (position) {
+				var self = this,
+					dotIndex = position,
+					elPageIndicatorItems = self.element.children,
+					maxPage,
+					numberOfPages = self.options.numberOfPages,
+					middle,
+					numberOfCentralDotPages = 0,
+					indicatorActive = classes.indicatorActive,
+					previousActive;
+
+				if(position === null || position === undefined) {
+					return;
+				}
+
+				self._activeIndex = position;
+				maxPage = self._getMaxPage();
+				middle = window.parseInt(maxPage/2, 10);
+
+				if(numberOfPages > maxPage) {
+					numberOfCentralDotPages = numberOfPages - maxPage;
+				} else if(numberOfPages === null) {
+					ns.error("setActive error: numberOfPages is null");
+					return;
+				} else if(numberOfPages === 0) {
+					return;
+				}
+
+				previousActive = self.element.querySelector("." + indicatorActive);
+				if(previousActive) {
+					previousActive.classList.remove(indicatorActive);
+				}
+
+				if ((middle < position) && (position <= (middle + numberOfCentralDotPages))) {
+					dotIndex = middle;
+				} else if (position > (middle + numberOfCentralDotPages)) {
+					dotIndex = position - numberOfCentralDotPages;
+				}
+
+				elPageIndicatorItems[dotIndex].classList.add(indicatorActive);
+			};
+
+			/**
+			 * Refresh widget structure
+			 * @method _refresh
+			 * @protected
+			 * @member ns.widget.core.PageIndicator
+			 */
+			prototype._refresh = function () {
+				var self = this,
+					element = self.element;
+				self._removeIndicator(element);
+				self._createIndicator(element);
+				if (self.options.layout === layoutType.CIRCULAR) {
+					self._circularPositioning(element);
+				}
+			};
+
+			/**
+			 * Destroy widget
+			 * @method _destroy
+			 * @protected
+			 * @member ns.widget.core.PageIndicator
+			 */
+			prototype._destroy = function () {
+				this._removeIndicator(this.element);
+			};
+
+			PageIndicator.prototype = prototype;
+
+			ns.widget.core.PageIndicator = PageIndicator;
+
+			engine.defineWidget(
+				"PageIndicator",
+				"[data-role='page-indicator'], .ui-page-indicator",
+				["setActive"],
+				PageIndicator,
+				"core"
+			);
+			}(window.document, ns));
+
+/*global window, define, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * #Scroller namespace
+ * Namespace contains classes and objects connected with scroller widget.
+ * @class ns.widget.wearable.scroller
+ * @author Maciej Urbanski <m.urbanski@samsung.com>
+ */
+(function (window, ns) {
+	"use strict";
+				ns.widget.core.scroller = ns.widget.core.scroller || {};
+			}(window, ns));
+
+/*global window, define, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*
+ * #Effect namespace
+ * Namespace with effects for scroller widget.
+ * @author Maciej Urbanski <m.urbanski@samsung.com>
+ * @class ns.widget.core.scroller.effect
+ */
+(function (window, ns) {
+	"use strict";
+				ns.widget.core.scroller.effect = ns.widget.core.scroller.effect || {};
+			}(window, ns));
+
+/*global window, define, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+/**
+ * # Bouncing effect
+ * Bouncing effect for scroller widget.
+ * @class ns.widget.core.scroller.effect.Bouncing
+ * @since 2.3
+ */
+(function (document, ns) {
+	"use strict";
+				// scroller.start event trigger when user try to move scroller
+			var utilsObject = ns.util.object,
+				selectors = ns.util.selectors,
+				Bouncing = function (scrollerElement, options) {
+					var self = this;
+					self._orientation = null;
+					self._maxValue = null;
+
+					self._container = null;
+					self._minEffectElement = null;
+					self._maxEffectElement = null;
+
+					self.options = utilsObject.merge({}, Bouncing.defaults, {scrollEndEffectArea: ns.getConfig("scrollEndEffectArea", Bouncing.defaults.scrollEndEffectArea)});
+				/**
+				 * target element for bouncing effect
+				 * @property {HTMLElement} targetElement
+				 * @member ns.widget.core.scroller.effect.Bouncing
+				 */
+					self._targetElement = null;
+
+					self._isShow = false;
+					self._isDrag = false;
+					self._isShowAnimating = false;
+					self._isHideAnimating = false;
+
+					self._create(scrollerElement, options);
+				},
+				endEffectAreaType = {
+					content: "content",
+					screen: "screen"
+				},
+				defaults = {
+					duration: 500,
+					scrollEndEffectArea : "content"
+				},
+				classes = {
+					bouncingEffect: "ui-scrollbar-bouncing-effect",
+					page: "ui-page",
+					left: "ui-left",
+					right: "ui-right",
+					top: "ui-top",
+					bottom: "ui-bottom",
+					hide: "ui-hide",
+					show: "ui-show"
+				};
+
+			Bouncing.defaults = defaults;
+
+			Bouncing.prototype = {
+				_create: function (scrollerElement, options) {
+					var self = this;
+					if( self.options.scrollEndEffectArea === endEffectAreaType.content ){
+						self._container = scrollerElement;
+					} else {
+						self._container = selectors.getClosestByClass(scrollerElement, classes.page);
+					}
+
+					self._orientation = options.orientation;
+					self._maxValue = self._getValue( options.maxScrollX, options.maxScrollY );
+
+					self._initLayout();
+				},
+
+				_initLayout: function() {
+					var self = this,
+						minElement = self._minEffectElement = document.createElement("DIV"),
+						maxElement = self._maxEffectElement = document.createElement("DIV"),
+						className = classes.bouncingEffect;
+
+					if ( self._orientation === ns.widget.core.scroller.Scroller.Orientation.HORIZONTAL ) {
+						minElement.className = className + " " + classes.left;
+						maxElement.className = className + " " + classes.right;
+					} else {
+						minElement.className = className + " " + classes.top;
+						maxElement.className = className + " " + classes.bottom;
+					}
+
+					self._container.appendChild( minElement );
+					self._container.appendChild( maxElement );
+
+					minElement.addEventListener("animationEnd", this);
+					minElement.addEventListener("webkitAnimationEnd", this);
+					minElement.addEventListener("mozAnimationEnd", this);
+					minElement.addEventListener("msAnimationEnd", this);
+					minElement.addEventListener("oAnimationEnd", this);
+
+					maxElement.addEventListener("animationEnd", this);
+					maxElement.addEventListener("webkitAnimationEnd", this);
+					maxElement.addEventListener("mozAnimationEnd", this);
+					maxElement.addEventListener("msAnimationEnd", this);
+					maxElement.addEventListener("oAnimationEnd", this);
+				},
+
+				/**
+				 * ...
+				 * @method drag
+				 * @param x
+				 * @param y
+				 * @member ns.widget.core.scroller.effect.Bouncing
+				 */
+				drag: function( x, y ) {
+					this._isDrag = true;
+					this._checkAndShow( x, y );
+				},
+
+				/**
+				 * ...
+				 * @method dragEnd
+				 * @member ns.widget.core.scroller.effect.Bouncing
+				 */
+				dragEnd: function() {
+					var self = this;
+					if ( self._isShow && !self._isShowAnimating && !self._isHideAnimating ) {
+						self._beginHide();
+					}
+
+					self._isDrag = false;
+				},
+
+				/**
+				 * Shows effect.
+				 * @method show
+				 * @member ns.widget.core.scroller.effect.Bouncing
+				 */
+				show: function() {
+					var self = this;
+					if ( self._targetElement ) {
+						self._isShow = true;
+						self._beginShow();
+					}
+				},
+
+				/**
+				 * Hides effect.
+				 * @method hide
+				 * @member ns.widget.core.scroller.effect.Bouncing
+				 */
+				hide: function() {
+					var self = this;
+					if ( self._isShow ) {
+						self._minEffectElement.style.display = "none";
+						self._maxEffectElement.style.display = "none";
+						self._targetElement.classList.remove(classes.hide);
+						self._targetElement.classList.remove(classes.show);
+					}
+					self._isShow = false;
+					self._isShowAnimating = false;
+					self._isHideAnimating = false;
+					self._targetElement = null;
+				},
+
+				_checkAndShow: function( x, y ) {
+					var self = this,
+						val = self._getValue(x, y);
+					if ( !self._isShow ) {
+						if ( val >= 0 ) {
+							self._targetElement = self._minEffectElement;
+							self.show();
+						} else if ( val <= self._maxValue ) {
+							self._targetElement = self._maxEffectElement;
+							self.show();
+						}
+
+					} else if ( self._isShow && !self._isDrag && !self._isShowAnimating && !self._isHideAnimating ) {
+						self._beginHide();
+					}
+				},
+
+				_getValue: function(x, y) {
+					return this._orientation === ns.widget.core.scroller.Scroller.Orientation.HORIZONTAL ? x : y;
+				},
+
+				_beginShow: function() {
+					var self = this;
+					if ( !self._targetElement || self._isShowAnimating ) {
+						return;
+					}
+
+					self._targetElement.style.display = "block";
+
+					self._targetElement.classList.remove(classes.hide);
+					self._targetElement.classList.add(classes.show);
+
+					self._isShowAnimating = true;
+					self._isHideAnimating = false;
+				},
+
+				_finishShow: function() {
+					var self = this;
+					self._isShowAnimating = false;
+					if ( !self._isDrag ) {
+						self._targetElement.classList.remove(classes.show);
+						self._beginHide();
+					}
+				},
+
+				_beginHide: function() {
+					var self = this;
+					if ( self._isHideAnimating ) {
+						return;
+					}
+
+					self._targetElement.classList.remove(classes.show);
+					self._targetElement.classList.add(classes.hide);
+
+					self._isHideAnimating = true;
+					self._isShowAnimating = false;
+				},
+
+				_finishHide: function() {
+					var self = this;
+					self._isHideAnimating = false;
+					self._targetElement.classList.remove(classes.hide);
+					self.hide();
+					self._checkAndShow();
+				},
+
+				/**
+				 * Supports events.
+				 * @method handleEvent
+				 * @member ns.widget.core.scroller.effect.Bouncing
+				 */
+				handleEvent: function( event ) {
+					if (event.type.toLowerCase().indexOf("animationend") > -1) {
+						if ( this._isShowAnimating ) {
+							this._finishShow();
+						} else if ( this._isHideAnimating ) {
+							this._finishHide();
+						}
+					}
+				},
+
+				/**
+				 * Destroys effect.
+				 * @method destroy
+				 * @member ns.widget.core.scroller.effect.Bouncing
+				 */
+				destroy: function() {
+					var self = this,
+						maxEffectElement = this._maxEffectElement,
+						minEffectElement = this._minEffectElement;
+
+					minEffectElement.removeEventListener("animationEnd", this);
+					minEffectElement.removeEventListener("webkitAnimationEnd", this);
+					minEffectElement.removeEventListener("mozAnimationEnd", this);
+					minEffectElement.removeEventListener("msAnimationEnd", this);
+					minEffectElement.removeEventListener("oAnimationEnd", this);
+
+					maxEffectElement.removeEventListener("animationEnd", this);
+					maxEffectElement.removeEventListener("webkitAnimationEnd", this);
+					maxEffectElement.removeEventListener("mozAnimationEnd", this);
+					maxEffectElement.removeEventListener("msAnimationEnd", this);
+					maxEffectElement.removeEventListener("oAnimationEnd", this);
+
+					self._container.removeChild( minEffectElement );
+					self._container.removeChild( maxEffectElement );
+
+					self._container = null;
+					self._minEffectElement = null;
+					self._maxEffectElement = null;
+					self._targetElement = null;
+
+					self._isShow = null;
+					self._orientation = null;
+					self._maxValue = null;
+				}
+			};
+
+			ns.widget.core.scroller.effect.Bouncing = Bouncing;
+			}(window.document, ns));
+
+/*global window, define, Event, console, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+/**
+ * # Scroller Widget
+ * Widget creates scroller on content.
+ * @class ns.widget.core.scroller.Scroller
+ * @since 2.3
+ * @extends ns.widget.BaseWidget
+ */
+(function (document, ns) {
+	"use strict";
+				// scroller.start event trigger when user try to move scroller
+			var BaseWidget = ns.widget.BaseWidget,
+				Gesture = ns.event.gesture,
+				engine = ns.engine,
+				utilsObject = ns.util.object,
+				utilsEvents = ns.event,
+				eventTrigger = utilsEvents.trigger,
+				prototype = new BaseWidget(),
+				EffectBouncing = ns.widget.core.scroller.effect.Bouncing,
+				eventType = {
+					/**
+					 * event trigger when scroller start
+					 * @event scrollstart
+					 */
+					START: "scrollstart",
+					/**
+					 * event trigger when scroller move
+					 * @event scrollmove
+					 */
+					MOVE: "scrollmove",
+					/**
+					 * event trigger when scroller end
+					 * @event scrollend
+					 */
+					END: "scrollend",
+					/**
+					 * event trigger when scroll is cancel
+					 * @event scrollcancel
+					 */
+					CANCEL: "scrollcancel"
+				},
+
+				/*
+				 * this option is related operation of scroll bar.
+				 * the value is true, scroll bar is shown during touching screen even if content doesn't scroll.
+				 * the value is false, scroll bar disappear when there is no movement of the scroll bar.
+				 */
+				_keepShowingScrollbarOnTouch = false,
+
+				Scroller = function () {
+				};
+
+			Scroller.Orientation = {
+				VERTICAL: "vertical",
+				HORIZONTAL: "horizontal"
+			};
+
+			Scroller.EventType = eventType;
+
+			prototype._build = function (element) {
+				if (element.children.length !== 1) {
+					throw "scroller has only one child.";
+				}
+
+				this.scroller = element.children[0];
+				this.scrollerStyle = this.scroller.style;
+
+				this.bouncingEffect = null;
+				this.scrollbar = null;
+
+				this.scrollerWidth = 0;
+				this.scrollerHeight = 0;
+				this.scrollerOffsetX = 0;
+				this.scrollerOffsetY = 0;
+
+				this.maxScrollX = 0;
+				this.maxScrollY = 0;
+
+				this.startScrollerOffsetX = 0;
+				this.startScrollerOffsetY = 0;
+
+				this.orientation = null;
+
+				this.enabled = true;
+				this.scrolled = false;
+				this.dragging = false;
+				this.scrollCanceled = false;
+
+				return element;
+			};
+
+			prototype._configure = function () {
+				/**
+				 * @property {Object} options Options for widget
+				 * @property {number} [options.scrollDelay=0]
+				 * @property {number} [options.threshold=10]
+				 * @property {""|"bar"|"tab"} [options.scrollbar=""]
+				 * @property {boolean} [options.useBouncingEffect=false]
+				 * @property {"vertical"|"horizontal"} [options.orientation="vertical"]
+				 * @member ns.widget.core.Scroller
+				 */
+				this.options = utilsObject.merge({}, this.options, {
+					scrollDelay: 0,
+					threshold: 30,
+					scrollbar: "",
+					useBouncingEffect: false,
+					orientation: "vertical"	// vertical or horizontal,
+				});
+			};
+
+			prototype._init = function (element) {
+				var options = this.options,
+					scrollerChildren = this.scroller.children,
+					elementStyle = this.element.style,
+					scrollerStyle = this.scroller.style,
+					elementHalfWidth =  this.element.offsetWidth / 2,
+					elementHalfHeight = this.element.offsetHeight / 2;
+
+				this.orientation = this.orientation ? this.orientation :
+					(options.orientation === "horizontal" ? Scroller.Orientation.HORIZONTAL : Scroller.Orientation.VERTICAL);
+				this.scrollerWidth = this.scroller.offsetWidth;
+				this.scrollerHeight = this.scroller.offsetHeight;
+
+				this.maxScrollX = elementHalfWidth - this.scrollerWidth + scrollerChildren[scrollerChildren.length - 1].offsetWidth / 2;
+				this.maxScrollY = elementHalfHeight - this.scrollerHeight + scrollerChildren[scrollerChildren.length - 1].offsetHeight / 2;
+				this.minScrollX = elementHalfWidth - scrollerChildren[0].offsetWidth / 2;
+				this.minScrollY = elementHalfHeight - scrollerChildren[0].offsetHeight / 2;
+
+				this.scrolled = false;
+				this.touching = true;
+				this.scrollCanceled = false;
+
+				if ( this.orientation === Scroller.Orientation.HORIZONTAL ) {
+					this.maxScrollY = 0;
+				} else {
+					this.maxScrollX = 0;
+				}
+				elementStyle.overflow = "hidden";
+				elementStyle.position = "relative";
+				scrollerStyle.position = "absolute";
+				scrollerStyle.top = "0px";
+				scrollerStyle.left = "0px";
+				scrollerStyle.width = this.scrollerWidth + "px";
+				scrollerStyle.height = this.scrollerHeight + "px";
+				this._initScrollbar();
+				this._initBouncingEffect();
+				return element;
+			};
+
+			prototype._initScrollbar = function () {
+				var type = this.options.scrollbar,
+					scrollbarType;
+
+				if ( type ) {
+					scrollbarType = ns.widget.core.scroller.scrollbar.type[type];
+					if ( scrollbarType ) {
+						this.scrollbar = engine.instanceWidget(this.element, "ScrollBar", {
+							type: scrollbarType,
+							orientation: this.orientation
+						});
+					}
+				}
+			};
+
+			prototype._initBouncingEffect = function () {
+				var o = this.options;
+				if ( o.useBouncingEffect ) {
+					this.bouncingEffect = new EffectBouncing(this.element, {
+						maxScrollX: this.maxScrollX,
+						maxScrollY: this.maxScrollY,
+						orientation: this.orientation
+					});
+				}
+			};
+
+			prototype._resetLayout = function () {
+				var elementStyle = this.element.style,
+					scrollerStyle = this.scrollerStyle;
+
+				elementStyle.overflow = "";
+				elementStyle.position = "";
+
+				elementStyle.overflow = "hidden";
+				elementStyle.position = "relative";
+
+				if (scrollerStyle) {
+					scrollerStyle.position = "";
+					scrollerStyle.top = "";
+					scrollerStyle.left = "";
+					scrollerStyle.width = "";
+					scrollerStyle.height = "";
+
+					scrollerStyle["-webkit-transform"] = "";
+					scrollerStyle["-moz-transition"] = "";
+					scrollerStyle["-ms-transition"] = "";
+					scrollerStyle["-o-transition"] = "";
+					scrollerStyle["transition"] = "";
+				}
+			};
+
+			prototype._bindEvents = function () {
+				ns.event.enableGesture(
+					this.scroller,
+
+					new ns.event.gesture.Drag({
+						threshold: this.options.threshold,
+						delay: this.options.scrollDelay,
+						blockVertical: this.orientation === Scroller.Orientation.HORIZONTAL,
+						blockHorizontal: this.orientation === Scroller.Orientation.VERTICAL
+					})
+				);
+
+				utilsEvents.on( this.scroller, "drag dragstart dragend dragcancel", this );
+				window.addEventListener("resize", this);
+			};
+
+			prototype._unbindEvents = function () {
+				if (this.scroller) {
+					ns.event.disableGesture( this.scroller );
+					utilsEvents.off( this.scroller, "drag dragstart dragend dragcancel", this );
+					window.removeEventListener("resize", this);
+				}
+			};
+
+			/* jshint -W086 */
+			prototype.handleEvent = function (event) {
+				switch (event.type) {
+					case "dragstart":
+						this._start( event );
+						break;
+					case "drag":
+						this._move( event );
+						break;
+					case "dragend":
+						this._end( event );
+						break;
+					case "dragcancel":
+						this.cancel( event );
+						break;
+					case "resize":
+						this.refresh();
+						break;
+				}
+			};
+
+			/**
+			 * Set options for widget.
+			 * @method setOptions
+			 * @param {Object} options
+			 * @member ns.widget.core.scroller.Scroller
+			 */
+			prototype.setOptions = function (options) {
+				var name;
+				for ( name in options ) {
+					if ( options.hasOwnProperty(name) && !!options[name] ) {
+						this.options[name] = options[name];
+					}
+				}
+			};
+
+			prototype._refresh = function () {
+				this._clear();
+				this._unbindEvents();
+				this._init(this.element);
+				this._bindEvents();
+			};
+
+			/**
+			 * Scrolls to new position.
+			 * @method scrollTo
+			 * @param x
+			 * @param y
+			 * @param duration
+			 * @member ns.widget.core.scroller.Scroller
+			 */
+			prototype.scrollTo = function (x, y, duration) {
+				this._translate(x, y, duration);
+				this._translateScrollbar(x, y, duration);
+			};
+
+			prototype._translate = function (x, y, duration) {
+				var translate,
+					transition = {
+						normal: "none",
+						webkit: "none",
+						moz: "none",
+						ms: "none",
+						o: "none"
+					},
+					scrollerStyle = this.scrollerStyle;
+
+				if (duration) {
+					transition.normal = "transform " + duration / 1000 + "s ease-out";
+					transition.webkit = "-webkit-transform " + duration / 1000 + "s ease-out";
+					transition.moz = "-moz-transform " + duration / 1000 + "s ease-out";
+					transition.ms = "-ms-transform " + duration / 1000 + "s ease-out";
+					transition.o = "-o-transform " + duration / 1000 + "s ease-out";
+				}
+				translate = "translate3d(" + x + "px," + y + "px, 0)";
+
+				scrollerStyle["-webkit-transform"] =
+						scrollerStyle["-moz-transform"] =
+						scrollerStyle["-ms-transform"] =
+						scrollerStyle["-o-transform"] =
+						scrollerStyle.transform = translate;
+				scrollerStyle.transition = transition.normal;
+				scrollerStyle["-webkit-transition"] = transition.webkit;
+				scrollerStyle["-moz-transition"] = transition.moz;
+				scrollerStyle["-ms-transition"] = transition.ms;
+				scrollerStyle["-o-transition"] = transition.o;
+
+				this.scrollerOffsetX = window.parseInt(x, 10);
+				this.scrollerOffsetY = window.parseInt(y, 10);
+			};
+
+			prototype._translateScrollbar = function (x, y, duration, autoHidden) {
+				if (!this.scrollbar) {
+					return;
+				}
+
+				this.scrollbar.translate(this.orientation === Scroller.Orientation.HORIZONTAL ? -x : -y, duration, autoHidden);
+			};
+
+			prototype._start = function(/* e */) {
+				this.scrolled = false;
+				this.dragging = true;
+				this.scrollCanceled = false;
+				this.startScrollerOffsetX = this.scrollerOffsetX;
+				this.startScrollerOffsetY = this.scrollerOffsetY;
+			};
+
+			prototype._move = function (e, pos) {
+				var newX = this.startScrollerOffsetX,
+					newY = this.startScrollerOffsetY,
+					autoHide = !_keepShowingScrollbarOnTouch;
+
+				if ( !this.enabled || this.scrollCanceled || !this.dragging ) {
+					return;
+				}
+
+				if ( this.orientation === Scroller.Orientation.HORIZONTAL ) {
+					newX += e.detail.estimatedDeltaX;
+				} else {
+					newY += e.detail.estimatedDeltaY;
+				}
+
+				if ( newX > this.minScrollX || newX < this.maxScrollX ) {
+					newX = newX > this.minScrollX ? this.minScrollX : this.maxScrollX;
+				}
+				if ( newY > this.minScrollY || newY < this.maxScrollY ) {
+					newY = newY > this.minScrollY ? this.minScrollY : this.maxScrollY;
+				}
+
+				if ( newX !== this.scrollerOffsetX || newY !== this.scrollerOffsetY ) {
+					if ( !this.scrolled ) {
+						this._fireEvent( eventType.START );
+					}
+					this.scrolled = true;
+
+					this._translate( newX, newY );
+					this._translateScrollbar( newX, newY, 0, autoHide );
+					// TODO to dispatch move event is too expansive. it is better to use callback.
+					this._fireEvent( eventType.MOVE );
+
+					if ( this.bouncingEffect ) {
+						this.bouncingEffect.hide();
+					}
+				} else {
+					if ( this.bouncingEffect ) {
+						this.bouncingEffect.drag( newX, newY );
+					}
+					this._translateScrollbar( newX, newY, 0, autoHide );
+				}
+			};
+
+			prototype._end = function (/* e */) {
+				if ( !this.dragging ) {
+					return;
+				}
+
+				// bouncing effect
+				if ( this.bouncingEffect ) {
+					this.bouncingEffect.dragEnd();
+				}
+
+				if ( this.scrollbar ) {
+					this.scrollbar.end();
+				}
+
+				this._endScroll();
+				this.dragging = false;
+			};
+
+			prototype._endScroll = function () {
+				if (this.scrolled) {
+					this._fireEvent(eventType.END);
+				}
+
+				this.scrolled = false;
+			};
+
+			/**
+			 * Cancels scroll.
+			 * @method cancel
+			 * @member ns.widget.core.scroller.Scroller
+			 */
+			prototype.cancel = function () {
+				this.scrollCanceled = true;
+
+				if ( this.scrolled ) {
+					this._translate( this.startScrollerOffsetX, this.startScrollerOffsetY );
+					this._translateScrollbar( this.startScrollerOffsetX, this.startScrollerOffsetY );
+					this._fireEvent( eventType.CANCEL );
+				}
+
+				if ( this.scrollbar ) {
+					this.scrollbar.end();
+				}
+
+				this.scrolled = false;
+				this.dragging = false;
+			};
+
+			prototype._fireEvent = function (eventName, detail) {
+				eventTrigger( this.element, eventName, detail );
+			};
+
+			prototype._clear = function () {
+				this.scrolled = false;
+				this.scrollCanceled = false;
+
+				this._resetLayout();
+				this._clearScrollbar();
+				this._clearBouncingEffect();
+			};
+
+			prototype._clearScrollbar = function () {
+				if ( this.scrollbar ) {
+					this.scrollbar.destroy();
+				}
+				this.scrollbar = null;
+			};
+
+			prototype._clearBouncingEffect = function () {
+				if (this.bouncingEffect) {
+					this.bouncingEffect.destroy();
+				}
+				this.bouncingEffect = null;
+			};
+
+			prototype._disable = function () {
+				this.enabled = false;
+			};
+
+			prototype._enable = function () {
+				this.enabled = true;
+			};
+
+			prototype._destroy = function () {
+				this._clear();
+				this._unbindEvents();
+				this.scrollerStyle = null;
+				this.scroller = null;
+			};
+
+			Scroller.prototype = prototype;
+
+			ns.widget.core.scroller.Scroller = Scroller;
+
+			engine.defineWidget(
+				"Scroller",
+				".scroller",
+				["scrollTo", "cancel"],
+				Scroller
+			);
+			}(window.document, ns));
+
+/*global window, define, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*
+ * #Scrollbar namespace
+ * Namespace with scrollbar for scroller widget.
+ * @author Maciej Urbanski <m.urbanski@samsung.com>
+ * @class ns.widget.core.scroller.scrollbar
+ */
+(function (window, ns) {
+	"use strict";
+				ns.widget.core.scroller.scrollbar = ns.widget.core.scroller.scrollbar || {};
+			}(window, ns));
+
+/*global window, define, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*
+ * #type namespace
+ * Namespace with types of scroll bars..
+ * @author Maciej Urbanski <m.urbanski@samsung.com>
+ * @class ns.widget.core.scroller.scrollbar.type
+ */
+(function (window, ns) {
+	"use strict";
+				/** @namespace ns.widget.core */
+			ns.widget.core.scroller.scrollbar.type = ns.widget.core.scroller.scrollbar.type || {};
+			}(window, ns));
+
+/*global window, define, Event, console, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+/**
+ * #Type Interface
+ * Interface for types used in scroll bar widget.
+ * @class ns.widget.core.scroller.scrollbar.type.interface
+ */
+(function (document, ns) {
+	"use strict";
+				// scroller.start event trigger when user try to move scroller
+
+			ns.widget.core.scroller.scrollbar.type.interface = {
+				/**
+				 * Inserts elements end decorate.
+				 * @method insertAndDecorate
+				 * @param options
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.interface
+				 */
+				setScrollbarLayout: function (/* options */) {
+				},
+				/**
+				 * Removes element.
+				 * @method remove
+				 * @param options
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.interface
+				 */
+				remove: function (/* options */) {
+				},
+				/**
+				 * ...
+				 * @method start
+				 * @param scrollbarElement
+				 * @param barElement
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.interface
+				 */
+				start: function (/* scrollbarElement, barElement */) {
+				},
+				/**
+				 * ...
+				 * @method end
+				 * @param scrollbarElement
+				 * @param barElement
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.interface
+				 */
+				end: function (/* scrollbarElement, barElement */) {
+				},
+				/**
+				 * ...
+				 * @method offset
+				 * @param orientation
+				 * @param offset
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.interface
+				 */
+				offset: function (/* orientation, offset  */) {
+				}
+			};
+			}(window.document, ns));
+
+/*global window, define, Event, console, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+/**
+ * #Bar Type
+ * Bar type support for scroll bar widget.
+ * @class ns.widget.core.scroller.scrollbar.type.bar
+ * @extends ns.widget.core.scroller.scrollbar.type.interface
+ */
+(function (document, ns) {
+	"use strict";
+				// scroller.start event trigger when user try to move scroller
+			var utilsObject = ns.util.object,
+				type = ns.widget.core.scroller.scrollbar.type,
+				typeInterface = type.interface,
+				Scroller = ns.widget.core.scroller.Scroller;
+
+			type.bar = utilsObject.merge({}, typeInterface, {
+				options: {
+					animationDuration: 500
+				},
+
+				/**
+				 * @method setScrollbar
+				 * @param viewLayout
+				 * @param firstChildLayout
+				 * @param clipLayout
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.bar
+				 */
+
+				setScrollbar: function(viewLayout, firstChildLayout, clipLayout) {
+					this._viewLayout = viewLayout;
+					this._clipLayout = clipLayout;
+					this._firstChildLayout = firstChildLayout;
+					this._ratio = clipLayout / firstChildLayout;
+				},
+
+				/**
+				 * @method getScrollbarSize
+				 * @return scrollbar size
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.bar
+				 */
+				getScrollbarSize: function() {
+					return this._firstChildLayout / this._viewLayout * this._firstChildLayout * this._ratio;
+				},
+				/**
+				 * @method offset
+				 * @param orientation
+				 * @param offset
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.bar
+				 */
+				offset: function( orientation, offset ) {
+					var x, y;
+
+					offset = offset * this._clipLayout / this._viewLayout;
+
+					if ( orientation === Scroller.Orientation.VERTICAL ) {
+						x = 0;
+						y = offset;
+					} else {
+						x = offset;
+						y = 0;
+					}
+
+					return {
+						x: x,
+						y: y
+					};
+				},
+
+				/**
+				 * @method start
+				 * @param scrollbarElement
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.bar
+				 */
+				start: function( scrollbarElement/*, barElement */) {
+					var style = scrollbarElement.style,
+						duration = this.options.animationDuration;
+					style["-webkit-transition"] =
+							style["-moz-transition"] =
+							style["-ms-transition"] =
+							style["-o-transition"] =
+							style.transition = "opacity " + duration / 1000 + "s ease";
+					style.opacity = 1;
+				},
+
+				/**
+				 * @method end
+				 * @param scrollbarElement
+				 * @static
+				 * @member ns.widget.core.scroller.scrollbar.type.bar
+				 */
+				end: function( scrollbarElement/*, barElement */) {
+					var style = scrollbarElement.style,
+						duration = this.options.animationDuration;
+					style["-webkit-transition"] =
+							style["-moz-transition"] =
+							style["-ms-transition"] =
+							style["-o-transition"] =
+							style.transition = "opacity " + duration / 1000 + "s ease";
+					style.opacity = 0;
+				}
+			});
+
+			}(window.document, ns));
+
+/*global window, define, Event, console, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+/**
+ * #Scroll Bar Widget
+ * Widget creates scroll bar.
+ * @class ns.widget.core.scroller.scrollbar.ScrollBar
+ * @extends ns.widget.BaseWidget
+ */
+(function (document, ns) {
+	"use strict";
+				// scroller.start event trigger when user try to move scroller
+			var BaseWidget = ns.widget.BaseWidget,
+				engine = ns.engine,
+				prototype = new BaseWidget(),
+				utilsObject = ns.util.object,
+				selectors = ns.util.selectors,
+				Page = ns.widget.core.Page,
+				Classes = {
+					wrapperClass: "ui-scrollbar-bar-type",
+					barClass: "ui-scrollbar-indicator",
+					orientationClass: "ui-scrollbar-",
+					page: Page.classes.uiPage
+				},
+
+				Scroller = ns.widget.core.scroller.Scroller,
+				ScrollerScrollBar = function () {
+
+					this.wrapper = null;
+					this.barElement = null;
+
+					this.container = null;
+					this.view = null;
+
+					this.options = {};
+					this.type = null;
+
+					this.maxScroll = null;
+					this.started = false;
+					this.displayDelayTimeoutId = null;
+
+					this.lastScrollPosition = 0;
+				};
+
+			prototype._build = function (scrollElement) {
+				this.clip = scrollElement;
+				this.view = scrollElement.children[0];
+				this.firstChild = this.view.children[0];
+				return scrollElement;
+			};
+
+			prototype._configure = function () {
+				/**
+				 * @property {Object} options Options for widget
+				 * @property {boolean} [options.type=false]
+				 * @property {number} [options.displayDelay=700]
+				 * @property {"vertical"|"horizontal"} [options.orientation="vertical"]
+				 * @member ns.widget.core.scroller.scrollbar.ScrollBar
+				 */
+				this.options = utilsObject.merge({}, this.options, {
+					type: false,
+					displayDelay: 700,
+					orientation: Scroller.Orientation.VERTICAL
+				});
+			};
+
+			prototype._init = function () {
+				this.type = this.options.type;
+
+				if ( !this.type ) {
+					return;
+				}
+				this._createScrollbar();
+			};
+
+			prototype._bindEvents = function() {
+				document.addEventListener("visibilitychange", this);
+			};
+
+			prototype._createScrollbar = function () {
+				var orientation = this.options.orientation,
+					wrapper = document.createElement("DIV"),
+					bar = document.createElement("span"),
+					view = this.view,
+					clip = this.clip,
+					firstChild = this.firstChild,
+					type = this.type;
+
+				clip.appendChild(wrapper);
+				wrapper.appendChild(bar);
+				wrapper.classList.add(Classes.wrapperClass);
+				bar.className = Classes.barClass;
+
+				if (orientation === Scroller.Orientation.HORIZONTAL) {
+					type.setScrollbar(view.offsetWidth, firstChild.offsetWidth, clip.offsetWidth);
+					bar.style.width = type.getScrollbarSize() + "px";
+					wrapper.classList.add(Classes.orientationClass + "horizontal");
+				} else {
+					type.setScrollbar(view.offsetHeight, firstChild.offsetHeight, clip.offsetHeight);
+					bar.style.height = type.getScrollbarSize() + "px";
+					wrapper.classList.add(Classes.orientationClass + "vertical");
+				}
+
+				this.wrapper = wrapper;
+				this.barElement = bar;
+			};
+
+			prototype._removeScrollbar = function () {
+				this.clip.removeChild(this.wrapper);
+
+				this.wrapper = null;
+				this.barElement = null;
+			};
+
+			prototype._refresh = function () {
+				var self = this;
+				self._clear();
+				self._init();
+				self.translate(self.lastScrollPosition);
+			};
+
+			/**
+			 * Translates widget.
+			 * @method translate
+			 * @param offset
+			 * @param duration
+			 * @member ns.widget.core.scroller.scrollbar.ScrollBar
+			 */
+			prototype.translate = function (offset, duration, autoHidden) {
+				var orientation = this.options.orientation,
+					translate,
+					transition = {
+						normal: "none",
+						webkit: "none",
+						moz: "none",
+						ms: "none",
+						o: "none"
+					},
+					barStyle,
+					endDelay;
+
+				if ( !this.wrapper || !this.type || this.lastScrollPosition === offset ) {
+					return;
+				}
+
+				autoHidden = autoHidden !== false;
+
+				this.lastScrollPosition = offset;
+
+				offset = this.type.offset( orientation, offset );
+
+				barStyle = this.barElement.style;
+				if (duration) {
+					transition.normal = "transform " + duration / 1000 + "s ease-out";
+					transition.webkit = "-webkit-transform " + duration / 1000 + "s ease-out";
+					transition.moz = "-moz-transform " + duration / 1000 + "s ease-out";
+					transition.ms = "-ms-transform " + duration / 1000 + "s ease-out";
+					transition.o = "-o-transform " + duration / 1000 + "s ease-out";
+				}
+
+				translate = "translate3d(" + offset.x + "px," + offset.y + "px, 0)";
+
+				barStyle["-webkit-transform"] =
+					barStyle["-moz-transform"] =
+					barStyle["-ms-transform"] =
+					barStyle["-o-transform"] =
+					barStyle.transform = translate;
+				barStyle["-webkit-transition"] = transition.webkit;
+				barStyle["-moz-transition"] = transition.moz;
+				barStyle["-ms-transition"] = transition.ms;
+				barStyle["-o-transition"] = transition.o;
+				barStyle.transition = transition.normal;
+
+				if ( !this.started ) {
+					this._start();
+				}
+
+				if ( this.displayDelayTimeoutId !== null ) {
+					window.clearTimeout( this.displayDelayTimeoutId );
+					this.displayDelayTimeoutId = null;
+				}
+
+				if ( autoHidden ) {
+					endDelay = ( duration || 0 ) + this.options.displayDelay;
+					this.displayDelayTimeoutId = window.setTimeout(this._end.bind(this), endDelay);
+				}
+			};
+
+			prototype.end = function () {
+				if ( !this.displayDelayTimeoutId ) {
+					this.displayDelayTimeoutId = window.setTimeout(this._end.bind(this), this.options.displayDelay);
+				}
+			};
+
+			prototype._start = function () {
+				this.type.start(this.wrapper, this.barElement);
+				this.started = true;
+			};
+
+			prototype._end = function () {
+				this.started = false;
+				this.displayDelayTimeoutId = null;
+
+				if ( this.type ) {
+					this.type.end(this.wrapper, this.barElement);
+				}
+			};
+
+			/**
+			 * Supports events.
+			 * @method handleEvent
+			 * @param event
+			 * @member ns.widget.core.scroller.scrollbar.ScrollBar
+			 */
+			prototype.handleEvent = function(event) {
+				var page;
+
+				switch(event.type) {
+				case "visibilitychange":
+					page = selectors.getClosestBySelector(this.clip, "." + Classes.page);
+					if (document.visibilityState === "visible" && page === ns.activePage) {
+						this.refresh();
+					}
+					break;
+				}
+			};
+
+			prototype._clear = function () {
+				this._removeScrollbar();
+
+				this.started = false;
+				this.type = null;
+				this.barElement = null;
+				this.displayDelayTimeoutId = null;
+			};
+
+			prototype._destroy = function () {
+				this._clear();
+				document.removeEventListener("visibilitychange", this);
+
+				this.options = null;
+				this.clip = null;
+				this.view = null;
+			};
+
+			ScrollerScrollBar.prototype = prototype;
+
+			ns.widget.core.scroller.scrollbar.ScrollBar = ScrollerScrollBar;
+
+			engine.defineWidget(
+				"ScrollBar",
+				"",
+				["translate"],
+				ScrollerScrollBar
+			);
+			}(window.document, ns));
+
+/*global window, define */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * #Grid Utility
+ * Object helps creating grids.
+ * @class ns.util.grid
+ */
+(function (ns) {
+	"use strict";
+				/**
+			 * Local alias for ns.util.selectors
+			 * @property {Object} selectors Alias for {@link ns.util.selectors}
+			 * @member ns.util.grid
+			 * @static
+			 * @private
+			 */
+			var selectors = ns.util.selectors,
+				/**
+				 * Alias to Array.slice method
+				 * @method slice
+				 * @member ns.util.grid
+				 * @private
+				 * @static
+				 */
+				slice = [].slice,
+				/**
+				 * grid types
+				 * @property {Array} gridTypes
+				 * @member ns.util.grid
+				 * @static
+				 * @private
+				*/
+				gridTypes = [
+					null,
+					"solo", //1
+					"a",	//2
+					"b",	//3
+					"c",	//4
+					"d"	//5
+				];
+
+			/**
+			 * Add classes on the matched elements
+			 * @method setClassOnMatches
+			 * @param {HTMLElementCollection} elements
+			 * @param {string} selector
+			 * @param {string} className
+			 * @private
+			 * @member ns.util.grid
+			 * @static
+			 */
+			function setClassOnMatches(elements, selector, className) {
+				elements.forEach(function (item) {
+					if (selectors.matchesSelector(item, selector)) {
+						item.classList.add(className);
+					}
+				});
+			}
+			ns.util.grid = {
+				/**
+				* make css grid
+				* @method makeGrid
+				* @param {HTMLElement} element
+				* @param {?string} [gridType="a"]
+				* @static
+				* @member ns.util.grid
+				*/
+				makeGrid: function (element, gridType) {
+					var gridClassList = element.classList,
+						kids = slice.call(element.children),
+						iterator;
+					if (!gridType) {
+						gridType = gridTypes[kids.length];
+						if (!gridType) {
+							//if gridType is not defined in gritTypes
+							//make it grid type "a""
+							gridType = "a";
+							iterator = 2;
+							gridClassList.add("ui-grid-duo");
+						}
+					}
+					if (!iterator) {
+						//jquery grid doesn't care if someone gives non-existing gridType
+						iterator = gridTypes.indexOf(gridType);
+					}
+
+					gridClassList.add("ui-grid-" + gridType);
+
+					setClassOnMatches(kids, ":nth-child(" + iterator + "n+1)", "ui-block-a");
+
+					if (iterator > 1) {
+						setClassOnMatches(kids, ":nth-child(" + iterator + "n+2)", "ui-block-b");
+					}
+					if (iterator > 2) {
+						setClassOnMatches(kids, ":nth-child(" + iterator + "n+3)", "ui-block-c");
+					}
+					if (iterator > 3) {
+						setClassOnMatches(kids, ":nth-child(" + iterator + "n+4)", "ui-block-d");
+					}
+					if (iterator > 4) {
+						setClassOnMatches(kids, ":nth-child(" + iterator + "n+5)", "ui-block-e");
+					}
+				}
+			};
+			}(ns));
+
+/*global CustomEvent, define, window, ns */
+/*jslint plusplus: true, nomen: true, bitwise: true */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * #Virtual Mouse Events
+ * Reimplementation of jQuery Mobile virtual mouse events.
+ *
+ * ##Purpose
+ * It will let for users to register callbacks to the standard events like bellow,
+ * without knowing if device support touch or mouse events
+ * @class ns.event.vmouse
+ */
+/**
+ * Triggered after mouse-down or touch-started.
+ * @event vmousedown
+ * @member ns.event.vmouse
+ */
+/**
+ * Triggered when mouse-click or touch-end when touch-move didn't occur
+ * @event vclick
+ * @member ns.event.vmouse
+ */
+/**
+ * Triggered when mouse-up or touch-end
+ * @event vmouseup
+ * @member ns.event.vmouse
+ */
+/**
+ * Triggered when mouse-move or touch-move
+ * @event vmousemove
+ * @member ns.event.vmouse
+ */
+/**
+ * Triggered when mouse-over or touch-start if went over coordinates
+ * @event vmouseover
+ * @member ns.event.vmouse
+ */
+/**
+ * Triggered when mouse-out or touch-end
+ * @event vmouseout
+ * @member ns.event.vmouse
+ */
+/**
+ * Triggered when mouse-cancel or touch-cancel and when scroll occur during touchmove
+ * @event vmousecancel
+ * @member ns.event.vmouse
+ */
+(function (window, document, ns) {
+	"use strict";
+				/**
+			 * Object with default options
+			 * @property {Object} vmouse
+			 * @member ns.event.vmouse
+			 * @static
+			 * @private
+			 **/
+			var vmouse,
+				/**
+				 * @property {Object} eventProps Contains the properties which are copied from the original event to custom v-events
+				 * @member ns.event.vmouse
+				 * @static
+				 * @private
+				 **/
+				eventProps,
+				/**
+				 * Indicates if the browser support touch events
+				 * @property {boolean} touchSupport
+				 * @member ns.event.vmouse
+				 * @static
+				 **/
+				touchSupport = window.hasOwnProperty("ontouchstart"),
+				/**
+				 * @property {boolean} didScroll The flag tell us if the scroll event was triggered
+				 * @member ns.event.vmouse
+				 * @static
+				 * @private
+				 **/
+				didScroll,
+				/** @property {HTMLElement} lastOver holds reference to last element that touch was over
+				 * @member ns.event.vmouse
+				 * @private
+				 */
+				lastOver = null,
+				/**
+				 * @property {Number} [startX=0] Initial data for touchstart event
+				 * @member ns.event.vmouse
+				 * @static
+				 * @private
+				 **/
+				startX = 0,
+				/**
+				 * @property {Number} [startY=0] Initial data for touchstart event
+				 * @member ns.event.vmouse
+				 * @private
+				 * @static
+				 **/
+				startY = 0,
+				touchEventProps = ["clientX", "clientY", "pageX", "pageY", "screenX", "screenY"],
+				KEY_CODES = {
+					enter: 13
+				};
+
+			/**
+			 * Extends objects with other objects
+			 * @method copyProps
+			 * @param {Object} from Sets the original event
+			 * @param {Object} to Sets the new event
+			 * @param {Object} properties Sets the special properties for position
+			 * @param {Object} propertiesNames Describe parameters which will be copied from Original to To event
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function copyProps(from, to, properties, propertiesNames) {
+				var i,
+					length,
+					descriptor,
+					property;
+
+				for (i = 0, length = propertiesNames.length; i < length; ++i) {
+					property = propertiesNames[i];
+					if (isNaN(properties[property]) === false || isNaN(from[property]) === false) {
+						descriptor = Object.getOwnPropertyDescriptor(to, property);
+						if (property !== "detail" && (!descriptor || descriptor.writable)) {
+							to[property] = properties[property] || from[property];
+						}
+					}
+				}
+			}
+
+			/**
+			 * Create custom event
+			 * @method createEvent
+			 * @param {string} newType gives a name for the new Type of event
+			 * @param {Event} original Event which trigger the new event
+			 * @param {Object} properties Sets the special properties for position
+			 * @return {Event}
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function createEvent(newType, original, properties) {
+				var evt = new CustomEvent(newType, {
+						"bubbles": original.bubbles,
+						"cancelable": original.cancelable,
+						"detail": original.detail
+					}),
+					orginalType = original.type,
+					changeTouches,
+					touch,
+					j = 0,
+					len,
+					prop;
+
+				copyProps(original, evt, properties, eventProps);
+				evt._originalEvent = original;
+
+				if (orginalType.indexOf("touch") !== -1) {
+					orginalType = original.touches;
+					changeTouches = original.changedTouches;
+
+					if (orginalType && orginalType.length) {
+						touch = orginalType[0];
+					} else {
+						touch = (changeTouches && changeTouches.length) ? changeTouches[0] : null;
+					}
+
+					if (touch) {
+						for (len = touchEventProps.length; j < len; j++) {
+							prop = touchEventProps[j];
+							evt[prop] = touch[prop];
+						}
+					}
+				}
+
+				return evt;
+			}
+
+			/**
+			 * Dispatch Events
+			 * @method fireEvent
+			 * @param {string} eventName event name
+			 * @param {Event} evt original event
+			 * @param {Object} [properties] Sets the special properties for position
+			 * @return {boolean}
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function fireEvent(eventName, evt, properties) {
+				return evt.target.dispatchEvent(createEvent(eventName, evt, properties || {}));
+			}
+
+			eventProps = [
+				"currentTarget",
+				"detail",
+				"button",
+				"buttons",
+				"clientX",
+				"clientY",
+				"offsetX",
+				"offsetY",
+				"pageX",
+				"pageY",
+				"screenX",
+				"screenY",
+				"toElement",
+				"which"
+			];
+
+			vmouse = {
+				/**
+				 * Sets the distance of pixels after which the scroll event will be successful
+				 * @property {number} [eventDistanceThreshold=10]
+				 * @member ns.event.vmouse
+				 * @static
+				 */
+				eventDistanceThreshold: 10,
+
+				touchSupport: touchSupport
+			};
+
+			/**
+			 * Handle click down
+			 * @method handleDown
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleDown(evt) {
+				fireEvent("vmousedown", evt);
+			}
+
+			/**
+			 * Prepare position of event for keyboard events.
+			 * @method preparePositionForClick
+			 * @param {Event} event
+			 * @return {?Object} options
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function preparePositionForClick(event) {
+				var x = event.clientX,
+					y = event.clientY;
+				// event comes from keyboard
+				if (!x && !y) {
+					return preparePositionForEvent(event);
+				}
+			}
+
+			/**
+			 * Handle click
+			 * @method handleClick
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleClick(evt) {
+				fireEvent("vclick", evt, preparePositionForClick(evt));
+			}
+
+			/**
+			 * Handle click up
+			 * @method handleUp
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleUp(evt) {
+				fireEvent("vmouseup", evt);
+			}
+
+			/**
+			 * Handle click move
+			 * @method handleMove
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleMove(evt) {
+				fireEvent("vmousemove", evt);
+			}
+
+			/**
+			 * Handle click over
+			 * @method handleOver
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleOver(evt) {
+				fireEvent("vmouseover", evt);
+			}
+
+			/**
+			 * Handle click out
+			 * @method handleOut
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleOut(evt) {
+				fireEvent("vmouseout", evt);
+			}
+
+			/**
+			 * Handle touch start
+			 * @method handleTouchStart
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleTouchStart(evt) {
+				var touches = evt.touches,
+					firstTouch,
+					over;
+				//if touches are registered and we have only one touch
+				if (touches && touches.length === 1) {
+					didScroll = false;
+					firstTouch = touches[0];
+					startX = firstTouch.pageX;
+					startY = firstTouch.pageY;
+
+					// Check if we have touched something on our page
+					// @TODO refactor for multi touch
+					over = document.elementFromPoint(startX, startY);
+					if (over) {
+						lastOver = over;
+						fireEvent("vmouseover", evt);
+					}
+					fireEvent("vmousedown", evt);
+				}
+
+			}
+
+			/**
+			 * Handle touch end
+			 * @method handleTouchEnd
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleTouchEnd(evt) {
+				var touches = evt.touches;
+				if (touches && touches.length === 0) {
+					fireEvent("vmouseup", evt);
+					fireEvent("vmouseout", evt);
+					// Reset flag for last over element
+					lastOver = null;
+				}
+			}
+
+			/**
+			 * Handle touch move
+			 * @method handleTouchMove
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleTouchMove(evt) {
+				var over,
+					firstTouch = evt.touches && evt.touches[0],
+					didCancel = didScroll,
+				//sets the threshold, based on which we consider if it was the touch-move event
+					moveThreshold = vmouse.eventDistanceThreshold;
+
+				/**
+				 * Ignore the touch which has identifier other than 0.
+				 * Only first touch has control others are ignored.
+				 * Patch for webkit behaviour where touchmove event
+				 * is triggered between touchend events
+				 * if there is multi touch.
+				 */
+				if (firstTouch.identifier > 0) {
+					evt.preventDefault();
+					evt.stopPropagation();
+					return;
+				}
+
+				didScroll = didScroll ||
+					//check in both axes X,Y if the touch-move event occur
+					(Math.abs(firstTouch.pageX - startX) > moveThreshold ||
+						Math.abs(firstTouch.pageY - startY) > moveThreshold);
+
+				// detect over event
+				// for compatibility with mouseover because "touchenter" fires only once
+				// @TODO Handle many touches
+				over = document.elementFromPoint(firstTouch.pageX, firstTouch.pageY);
+				if (over && lastOver !== over) {
+					lastOver = over;
+					fireEvent("vmouseover", evt);
+				}
+
+				//if didscroll occur and wasn't canceled then trigger touchend otherwise just touchmove
+				if (didScroll && !didCancel) {
+					fireEvent("vmousecancel", evt);
+					lastOver = null;
+				}
+				fireEvent("vmousemove", evt);
+			}
+
+			/**
+			 * Handle Scroll
+			 * @method handleScroll
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleScroll(evt) {
+				if (!didScroll) {
+					fireEvent("vmousecancel", evt);
+				}
+				didScroll = true;
+			}
+
+			/**
+			 * Handle touch cancel
+			 * @method handleTouchCancel
+			 * @param {Event} evt
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleTouchCancel(evt) {
+				fireEvent("vmousecancel", evt);
+				lastOver = null;
+			}
+
+			/**
+			 * Prepare position of event for keyboard events.
+			 * @method preparePositionForEvent
+			 * @param {Event} event
+			 * @return {Object} properties
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function preparePositionForEvent(event) {
+				var targetRect = event.target && event.target.getBoundingClientRect(),
+					properties = {};
+				if (targetRect) {
+					properties = {
+						"clientX": targetRect.left + targetRect.width / 2,
+						"clientY": targetRect.top + targetRect.height / 2,
+						"which": 1
+					};
+				}
+				return properties;
+			}
+
+			/**
+			 * Handle key up
+			 * @method handleKeyUp
+			 * @param {Event} event
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleKeyUp(event) {
+				var properties;
+				if (event.keyCode === KEY_CODES.enter) {
+					properties = preparePositionForEvent(event);
+					fireEvent("vmouseup", event, properties);
+					fireEvent("vclick", event, properties);
+				}
+			}
+
+			/**
+			 * Handle key down
+			 * @method handleKeyDown
+			 * @param {Event} event
+			 * @private
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			function handleKeyDown(event) {
+				if (event.keyCode === KEY_CODES.enter) {
+					fireEvent("vmousedown", event, preparePositionForEvent(event));
+				}
+			}
+
+			/**
+			 * Binds events common to mouse and touch to support virtual mouse.
+			 * @method bindCommonEvents
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			vmouse.bindCommonEvents = function () {
+				document.addEventListener("keyup", handleKeyUp, true);
+				document.addEventListener("keydown", handleKeyDown, true);
+				document.addEventListener("scroll", handleScroll, true);
+				document.addEventListener("click", handleClick, true);
+			};
+
+			// @TODO delete touchSupport flag and attach touch and mouse listeners,
+			// @TODO check if v-events are not duplicated if so then called only once
+
+			/**
+			 * Binds touch events to support virtual mouse.
+			 * @method bindTouch
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			vmouse.bindTouch = function () {
+				document.addEventListener("touchstart", handleTouchStart, true);
+				document.addEventListener("touchend", handleTouchEnd, true);
+				document.addEventListener("touchmove", handleTouchMove, true);
+				document.addEventListener("touchcancel", handleTouchCancel, true);
+
+				// touchenter and touchleave are removed from W3C spec
+				// No need to listen to touchover as it has never exited
+				// document.addEventListener("touchenter", handleTouchOver, true);
+				// document.addEventListener("touchleave", callbacks.out, true);
+				document.addEventListener("touchcancel", handleTouchCancel, true);
+			};
+
+			/**
+			 * Binds mouse events to support virtual mouse.
+			 * @method bindMouse
+			 * @static
+			 * @member ns.event.vmouse
+			 */
+			vmouse.bindMouse = function () {
+				document.addEventListener("mousedown", handleDown, true);
+
+				document.addEventListener("mouseup", handleUp, true);
+				document.addEventListener("mousemove", handleMove, true);
+				document.addEventListener("mouseover", handleOver, true);
+				document.addEventListener("mouseout", handleOut, true);
+			};
+
+			ns.event.vmouse = vmouse;
+
+			if (touchSupport) {
+				vmouse.bindTouch();
+			} else {
+				vmouse.bindMouse();
+			}
+			vmouse.bindCommonEvents();
+
+			}(window, window.document, ns));
+/*global window, define */
+/*jslint nomen: true, plusplus: true */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * #Easing Utility
+ * Utility calculates time function for animations.
+ * @class ns.util.easing
+ */
+
+(function (ns) {
+	"use strict";
+				ns.util.easing = {
+				/**
+				* Performs cubit out easing calcuclations based on time
+				* @method cubicOut
+				* @member ns.util.easing
+				* @param {number} currentTime
+				* @param {number} startValue
+				* @param {number} changeInValue
+				* @param {number} duration
+				* @return {number}
+				* @static
+				*/
+				cubicOut: function (currentTime, startValue, changeInValue, duration) {
+					currentTime /= duration;
+					currentTime--;
+					return changeInValue * (currentTime * currentTime * currentTime + 1) + startValue;
+				},
+
+				/**
+				 * Performs quad easing out calcuclations based on time
+				 * @method easeOutQuad
+				 * @member ns.util.easing
+				 * @param {number} currentTime
+				 * @param {number} startValue
+				 * @param {number} changeInValue
+				 * @param {number} duration
+				 * @return {number}
+				 * @static
+				 */
+				easeOutQuad: function (currentTime, startValue, changeInValue, duration) {
+					return -changeInValue * (currentTime /= duration) * (currentTime - 2) + startValue;
+				},
+
+				/**
+				* Performs out expo easing calcuclations based on time
+				* @method easeOutExpo
+				* @member ns.util.easing
+				* @param {number} currentTime
+				* @param {number} startValue
+				* @param {number} changeInValue
+				* @param {number} duration
+				* @return {number}
+				* @static
+				*/
+				easeOutExpo: function (currentTime, startValue, changeInValue, duration) {
+					return (currentTime === duration) ?
+							startValue + changeInValue :
+								changeInValue * (-Math.pow(2, -10 * currentTime / duration) + 1) +
+								startValue;
+				},
+				/**
+				* Performs out linear calcuclations based on time
+				* @method linear
+				* @member ns.util.easing
+				* @param {number} currentTime
+				* @param {number} startValue
+				* @param {number} changeInValue
+				* @param {number} duration
+				* @return {number}
+				* @static
+				*/
+				linear: function (currentTime, startValue, changeInValue, duration) {
+					return startValue + duration * currentTime;
+				}
+			};
+			}(ns));
+
+/*global window, define */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * #Event orientationchange
+ * Namespace to support orientationchange event
+ * @class ns.event.orientationchange
+ */
+/**
+ * Event orientationchange
+ * @event orientationchange
+ * @member ns.event.orientationchange
+ */
+(function (window, document, ns) {
+	"use strict";
+				var body = document.body,
+				orientation = null,
+				eventUtils = ns.event,
+				orientationchange = {
+					/**
+					 * Informs about support orientation change event.
+					 * @property {boolean} supported
+					 * @member ns.event.orientationchange
+					 */
+					supported: (window.orientation !== undefined) && (window.onorientationchange !== undefined),
+					/**
+					 * Returns current orientation.
+					 * @method getOrientation
+					 * @return {"landscape"|"portrait"}
+					 * @member ns.event.orientationchange
+					 * @static
+					 */
+					getOrientation: function () {
+						return orientation;
+					},
+					/**
+					 * Triggers event orientationchange on element
+					 * @method trigger
+					 * @param {HTMLElement} element
+					 * @member ns.event.orientationchange
+					 * @static
+					 */
+					trigger: function (element) {
+						eventUtils.trigger(element, "orientationchange", {'orientation': orientation});
+					},
+					/**
+					 * List of properties copied to event details object
+					 * @property {Array} properties
+					 * @member ns.event.orientationchange
+					 * @static
+					 */
+					properties: ['orientation']
+				},
+				detectOrientationByDimensions = function (omitCustomEvent) {
+					var width = window.innerWidth,
+						height = window.innerHeight;
+					if (window.screen) {
+						width = window.screen.availWidth;
+						height = window.screen.availHeight;
+					}
+
+					if (width > height) {
+						orientation = "landscape";
+					} else {
+						orientation = "portrait";
+					}
+
+					if (!omitCustomEvent) {
+						eventUtils.trigger(window, "orientationchange", {'orientation': orientation});
+					}
+				},
+				checkReportedOrientation = function () {
+					if (window.orientation) {
+						switch (window.orientation) {
+						case 90:
+						case -90:
+							orientation = "portrait";
+							break;
+						default:
+							orientation = "landscape";
+							break;
+						}
+					} else {
+						detectOrientationByDimensions(true);
+					}
+				},
+				matchMediaHandler = function (mediaQueryList) {
+					if (mediaQueryList.matches) {
+						orientation = "portrait";
+					} else {
+						orientation = "landscape";
+					}
+					eventUtils.trigger(window, "orientationchange", {'orientation': orientation});
+				},
+				portraitMatchMediaQueryList;
+
+			if (orientationchange.supported) {
+				window.addEventListener("orientationchange", checkReportedOrientation, false);
+				checkReportedOrientation();
+				// try media queries
+			} else {
+				if (window.matchMedia) {
+					portraitMatchMediaQueryList = window.matchMedia("(orientation: portrait)");
+					if (portraitMatchMediaQueryList.matches) {
+						orientation = "portrait";
+					} else {
+						orientation = "landscape";
+					}
+					portraitMatchMediaQueryList.addListener(matchMediaHandler);
+				} else {
+					body.addEventListener("throttledresize", detectOrientationByDimensions);
+					detectOrientationByDimensions();
+				}
+			}
+
+			ns.event.orientationchange = orientationchange;
+
+			}(window, window.document, ns));
+
+/*global window, define, ns*/
+/*jslint nomen: true */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * # ScrollView Widget
+ * Widgets allows for creating scrollable panes, lists, etc.
+ *
+ * ## Default selectors
+ * All elements with _data-role=content attribute or _.ui-scrollview
+ * css class will be changed to ScrollView widgets, unless they specify
+ * _data-scroll=none attribute.
+ *
+ * ### HTML Examples
+ *
+ * #### Data attribute
+ *
+ *		@example
+ *		<div data-role="page">
+ *			<div data-role="content"><!-- this will become scrollview //-->
+ *				content data
+ *			</div>
+ *		</div>
+ *
+ * #### CSS Class
+ *
+ *		@example
+ *		<div data-role="page">
+ *			<div class="ui-content"><!-- this will become scrollview //-->
+ *				content data
+ *			</div>
+ *		</div>
+ *
+ * ## Manual constructor
+ *
+ * To create the widget manually you can use 2 different APIs, the TAU
+ * API or jQuery API.
+ *
+ * ### Create scrollview by TAU API
+ *
+ *		@example
+ *		<div data-role="page" id="myPage">
+ *			<div data-role="content">
+ *				page content
+ *			</div>
+ *		</div>
+ *		<script>
+ *			var page = tau.widget.Page(document.getElementById("myPage")),
+ *				scrollview = tau.widget.Scrollview(page.ui.content);
+ *		</script>
+ *
+ * ### Create scrollview using jQuery API
+ *
+ *		@example
+ *		<div data-role="page" id="myPage">
+ *			<div data-role="content">
+ *				page content
+ *			</div>
+ *		</div>
+ *		<script>
+ *			$("#myPage > div[data-role='content']").scrollview();
+ *		</script>
+ *
+ * ## Options for Scrollview widget
+ *
+ * Options can be set using data-* attributes or by passing them to
+ * the constructor.
+ *
+ * There is also a method **option** for changing them after widget
+ * creation.
+ *
+ * jQuery mobile format is also supported.
+ *
+ * ## Scroll
+ *
+ * This options specifies of a content element should become Scrollview
+ * widget.
+ *
+ * You can change this by all available methods for changing options.
+ *
+ * ### By data-scroll attribute
+ *
+ *		@example
+ *		<div data-role="page">
+ *			<div data-role="content" data-scroll="none">
+ *				content
+ *			</div>
+ *		</div>
+ *
+ * ### By config passed to constructor
+ *
+ *		@example
+ *		<div class="myPageClass" data-role="page">
+ *			<div data-role="content">
+ *				content
+ *			</div>
+ *		</div>
+ *		<script>
+ *			var contentElement = document.querySelector(".myPageClass > div[data-role=content]");
+ *			tau.widget.Scrollview(contentElement, {
+ *				"scroll": false
+ *			});
+ *		</script>
+ *
+ * ### By using jQuery API
+ *
+ *		@example
+ *		<div class="myPageClass" data-role="page">
+ *			<div data-role="content">
+ *				content
+ *			</div>
+ *		</div>
+ *		<script>
+ *			$(".myPageClass > div[data-role='content']").scrollview({
+ *				"scroll": false
+ *			});
+ *		</script>
+ *
+ * ## ScrollJumps
+ *
+ * Scroll jumps are small buttons which allow the user to quickly
+ * scroll to top or left
+ *
+ * You can change this by all available methods for changing options.
+ *
+ * ### By data-scroll-jump
+ *
+ *		@example
+ *		<div data-role="page">
+ *			<div data-role="content" data-scroll-jump="true">
+ *				content
+ *			</div>
+ *		</div>
+ *
+ * ### By config passed to constructor
+ *
+ *		@example
+ *		<div class="myPageClass" data-role="page">
+ *			<div data-role="content">
+ *				content
+ *			</div>
+ *		</div>
+ *		<script>
+ *			var contentElement = document.querySelector(".myPageClass > div[data-role=content]");
+ *			tau.widget.Scrollview(contentElement, {
+ *				"scrollJump": true
+ *			});
+ *		</script>
+ *
+ * ### By using jQuery API
+ *
+ *		@example
+ *		<div class="myPageClass" data-role="page">
+ *			<div data-role="content">
+ *				content
+ *			</div>
+ *		</div>
+ *		<script>
+ *			$(".myPageClass > div[data-role='content']").scrollview({
+ *				"scrollJump": true
+ *			});
+ *		</script>
+ *
+ * ## Methods
+ *
+ * Page methods can be called trough 2 APIs: TAU API and jQuery API
+ * (jQuery mobile-like API)
+ *
+ * @class ns.widget.core.Scrollview
+ * @extends ns.widget.BaseWidget
+ *
+ * @author Krzysztof Antoszek <k.antoszek@samsung.com>
+ * @author Maciej Urbanski <m.urbanski@samsung.com>
+ * @author Grzegorz Osimowicz <g.osimowicz@samsung.com>
+ * @author Jadwiga Sosnowska <j.sosnowska@samsung.com>
+ * @author Maciej Moczulski <m.moczulski@samsung.com>
+ * @author Hyunkook Cho <hk0713.cho@samsung.com>
+ * @author Junhyeon Lee <juneh.lee@samsung.com>
+ */
+/**
+ * Triggered when scrolling operation starts
+ * @event scrollstart
+ * @member ns.widget.core.Scrollview
+ */
+/**
+ * Triggered when scroll is being updated
+ * @event scrollupdate
+ * @member ns.widget.core.Scrollview
+ */
+/**
+ * Triggered when scrolling stops
+ * @event scrollstop
+ * @member ns.widget.core.Scrollview
+ */
+(function (window, document, ns) {
+	"use strict";
+				var BaseWidget = ns.widget.BaseWidget,
+				engine = ns.engine,
+				util = ns.util,
+				easingUtils = ns.util.easing,
+				eventUtils = ns.event,
+				DOMUtils = ns.util.DOM,
+				selectors = ns.util.selectors,
+				currentTransition = null,
+				Page = ns.widget.core.Page,
+				pageClass = Page.classes.uiPage,
+				pageActiveClass = Page.classes.uiPageActive,
+				Scrollview = function () {
+					var self = this,
+						ui;
+					/**
+					 * @property {Object} state Scrollview internal state object
+					 * @property {Function} state.currentTransition Instance transition function
+					 * @readonly
+					 */
+					self.state = {
+						currentTransition: null
+					};
+					/**
+					 * @property {number} scrollDuration The time length of the scroll animation
+					 * @member ns.widget.core.Scrollview
+					 */
+					self.scrollDuration = 300;
+					self.scrollviewSetHeight = false;
+					/**
+					 * Scrollview options
+					 * @property {Object} options
+					 * @property {string} [options.scroll='y'] Scroll direction
+					 * @property {boolean} [options.scrollJump=false] Scroll jump buttons flag
+					 * @member ns.widget.core.Scrollview
+					 */
+					self.options = {
+						scroll: "y",
+						scrollJump: false,
+						scrollIndicator: false
+					};
+					/**
+					 * Dictionary for holding internal DOM elements
+					 * @property {Object} ui
+					 * @property {HTMLElement} ui.view The main view element
+					 * @property {HTMLElement} ui.page The main page element
+					 * @property {HTMLElement} ui.jumpHorizontalButton Jump left button
+					 * @property {HTMLElement} ui.jumpVerticalButton Jump top button
+					 * @member ns.widget.core.Scrollview
+					 * @readonly
+					 */
+					ui = self._ui || {};
+					ui.view = null;
+					ui.page = null;
+					ui.jumpHorizontalButton = null;
+					ui.jumpVerticalButton = null;
+					self._ui = ui;
+					/**
+					 * Dictionary for holding internal listeners
+					 * @property {Object} _callbacks
+					 * @property {Function} _callbacks.repositionJumps Refresh jumps listener
+					 * @property {Function} _callbacks.jumpTop Top jump button click callback
+					 * @property {Function} _callbacks.jumpLeft Left jump button click callback
+					 * @member ns.widget.core.Scrollview
+					 * @protected
+					 * @readonly
+					 */
+					self._callbacks = {
+						repositionJumps: null,
+						jumpTop: null,
+						jumpBottom: null
+					};
+
+					self._timers = {
+						scrollIndicatorHide: null
+					};
+				},
+				/**
+				 * Dictionary for scrollview css classes
+				 * @property {Object} classes
+				 * @property {string} [classes.view='ui-scrollview-view'] View main class
+				 * @property {string} [classes.clip='ui-scrollview-clip'] Clip main class
+				 * @property {string} [classes.jumpTop='ui-scroll-jump-top-bg'] Jump top button background
+				 * @property {string} [classes.jumpLeft='ui-scroll-jump-left-bg'] Jump bottom button background
+				 * @member ns.widget.core.Scrollview
+				 * @static
+				 * @readonly
+				 */
+				classes =  {
+					view: "ui-scrollview-view",
+					clip: "ui-scrollview-clip",
+					jumpTop: "ui-scroll-jump-top-bg",
+					jumpLeft: "ui-scroll-jump-left-bg",
+					indicatorTop: "ui-overflow-indicator-top",
+					indicatorBottom: "ui-overflow-indicator-bottom",
+					indicatorTopShown: "ui-scrollindicator-top",
+					indicatorBottomShown: "ui-scrollindicator-bottom",
+					indicatorLeftShown: "ui-scrollindicator-left",
+					indicatorRightShown: "ui-scrollindicator-right"
+				};
+
+			// Changes static position to relative
+			// @param {HTMLElement} view
+			function makePositioned(view) {
+				if (DOMUtils.getCSSProperty(view, "position") === "static") {
+					view.style.position = "relative";
+				} else {
+					view.style.position = "absolute";
+				}
+			}
+
+			// Translation animation loop
+			// @param {Object} state Scrollview instance state
+			// @param {HTMLElement} element
+			// @param {number} startTime
+			// @param {number} startX
+			// @param {number} startY
+			// @param {number} translateX
+			// @param {number} translateY
+			// @param {number} endX
+			// @param {number} endY
+			// @param {number} duration
+			function translateTransition(state, element, startTime, startX, startY, translateX, translateY, endX, endY, duration) {
+				var timestamp = (new Date()).getTime() - startTime,
+					newX = parseInt(easingUtils.cubicOut(timestamp, startX, translateX, duration), 10),
+					newY = parseInt(easingUtils.cubicOut(timestamp, startY, translateY, duration), 10);
+				if (element.scrollLeft !== endX) {
+					element.scrollLeft = newX;
+				}
+				if (element.scrollTop !== endY) {
+					element.scrollTop = newY;
+				}
+
+				if ((newX !== endX || newY !== endY) &&
+						(newX >= 0 && newY >= 0) &&
+						state.currentTransition) {
+					util.requestAnimationFrame(state.currentTransition);
+				} else {
+					state.currentTransition = null;
+				}
+			}
+
+			// Translates scroll posotion directly or with an animation
+			// if duration is specified
+			// @param {Object} state Scrollview instance state
+			// @param {HTMLElement} element
+			// @param {number} x
+			// @param {number} y
+			// @param {number=} [duration]
+			function translate(state, element, x, y, duration) {
+				if (duration) {
+					state.currentTransition = translateTransition.bind(
+						null,
+						state,
+						element,
+						(new Date()).getTime(),
+						element.scrollLeft,
+						element.scrollTop,
+						x,
+						y,
+						element.scrollLeft + x,
+						element.scrollTop + y,
+						duration
+					);
+					util.requestAnimationFrame(state.currentTransition);
+				} else {
+					if (x) {
+						element.scrollLeft = element.scrollLeft + x;
+					}
+					if (y) {
+						element.scrollTop = element.scrollTop + y;
+					}
+				}
+			}
+
+			// Refresh jumpTop jumpLeft buttons
+			// @param {ns.widget.core.Scrollview} self
+			function repositionJumps(self) {
+				var ui = self._ui,
+					horizontalJumpButton = ui.jumpHorizontalButton,
+					verticalJumpButton = ui.jumpVerticalButton,
+					offsets = horizontalJumpButton || verticalJumpButton ? DOMUtils.getElementOffset(self.element) : null; // dont calc when not used
+
+				if (horizontalJumpButton) {
+					horizontalJumpButton.style.left = offsets.left + "px";
+				}
+
+				if (verticalJumpButton) {
+					verticalJumpButton.style.top = offsets.top + "px";
+				}
+			}
+
+			Scrollview.classes = classes;
+
+			Scrollview.prototype = new BaseWidget();
+
+			/**
+			 * Builds the widget
+			 * @param {HTMLElement} element
+			 * @return {HTMLElement}
+			 * @method _build
+			 * @protected
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype._build = function (element) {
+				//@TODO wrap element's content with external function
+				var self = this,
+					ui = self._ui,
+					view = selectors.getChildrenByClass(element, classes.view)[0] || document.createElement("div"),
+					clipStyle = element.style,
+					node = null,
+					child = element.firstChild,
+					options = self.options,
+					direction = options.scroll,
+					jumpButton,
+					jumpBackground;
+				view.className = classes.view;
+
+				while (child) {
+					node = child;
+					child = child.nextSibling;
+					if (view !== node) {
+						view.appendChild(node);
+					}
+				}
+
+				if (view.parentNode !== element) {
+					element.appendChild(view);
+				}
+
+				// setting view style
+				makePositioned(view);
+
+				element.classList.add(classes.clip);
+
+				switch (direction) {
+					case "x":
+						clipStyle.overflowX = "scroll";
+						break;
+					case "xy":
+						clipStyle.overflow = "scroll";
+						break;
+					default:
+						clipStyle.overflowY = "auto";
+						break;
+				}
+
+				if (options.scrollJump) {
+					if (direction.indexOf("x") > -1) {
+						jumpBackground = document.createElement("div");
+						jumpBackground.className = classes.jumpLeft;
+						jumpButton = document.createElement("div");
+
+						jumpBackground.appendChild(jumpButton);
+						element.appendChild(jumpBackground);
+						engine.instanceWidget(
+							jumpButton,
+							"Button",
+							{
+								"icon": "scrollleft",
+								"style": "box"
+							}
+						);
+						ui.jumpHorizontalButton = jumpBackground;
+					}
+
+					if (direction.indexOf("y") > -1) {
+						jumpBackground = document.createElement("div");
+						jumpBackground.className = classes.jumpTop;
+						jumpButton = document.createElement("div");
+
+						jumpBackground.appendChild(jumpButton);
+						element.appendChild(jumpBackground);
+						engine.instanceWidget(
+							jumpButton,
+							"Button",
+							{
+								"icon": "scrolltop",
+								"style": "box"
+							}
+						);
+						ui.jumpVerticalButton = jumpBackground;
+					}
+				}
+
+				ui.view = view;
+
+				// add scroll indicators
+				if (options.scrollIndicator) {
+					self._addOverflowIndicator(element);
+				}
+
+				return element;
+			};
+
+			/**
+			 * Inits widget
+			 * @method _init
+			 * @param {HTMLElement} element
+			 * @protected
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype._init = function (element) {
+				var ui = this._ui,
+					page = ui.page;
+
+				if (!ui.view) {
+					ui.view = selectors.getChildrenByClass(element, classes.view)[0];
+				}
+
+				if (!page) {
+					page = selectors.getClosestByClass(element, pageClass);
+					if (page) {
+						ui.page = page;
+						if (page.classList.contains(pageActiveClass) && this.options.scrollJump) {
+							repositionJumps(this);
+						}
+					}
+				}
+			};
+
+			/**
+			 * Adds overflow indicators
+			 * @param {HTMLElement} clip
+			 * @method _addOverflowIndicator
+			 * @protected
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype._addOverflowIndicator = function (clip) {
+				clip.insertAdjacentHTML("beforeend",
+					"<div class='" + classes.indicatorTop + "'></div><div class='" + classes.indicatorBottom + "'></div>");
+			};
+
+			/**
+			 * Clear classes and styles of indicators
+			 * @param {HTMLElement} element
+			 * @method clearIndicator
+			 * @private
+			 * @member ns.widget.core.Scrollview
+			 */
+			function clearIndicator (element) {
+				var clipClasses = element.classList,
+					topIndicator = selectors.getChildrenByClass(element, classes.indicatorTop)[0],
+					bottomIndicator = selectors.getChildrenByClass(element, classes.indicatorBottom)[0];
+
+				clipClasses.remove(classes.indicatorTopShown);
+				clipClasses.remove(classes.indicatorBottomShown);
+				clipClasses.remove(classes.indicatorRightShown);
+				clipClasses.remove(classes.indicatorLeftShown);
+				topIndicator.style = "";
+				bottomIndicator.style = "";
+			}
+
+			/**
+			 * Set top and bottom indicators
+			 * @param {HTMLElement} clip
+			 * @param {object} options
+			 * @method setTopAndBottomIndicators
+			 * @private
+			 * @member ns.widget.core.Scrollview
+			 */
+			function setTopAndBottomIndicators (clip, options) {
+				var topIndicator = selectors.getChildrenByClass(clip, classes.indicatorTop)[0],
+					bottomIndicator = selectors.getChildrenByClass(clip, classes.indicatorBottom)[0],
+					style;
+
+				// set top indicator
+				if (topIndicator) {
+					style = topIndicator.style;
+					style.width = options.width + "px";
+					style.top = options.clipTop + "px";
+					style.backgroundColor = options.color;
+				}
+				if (bottomIndicator) {
+					// set bottom indicator
+					style = bottomIndicator.style;
+					style.width = options.width + "px";
+					style.top = options.clipTop + options.clipHeight - DOMUtils.getElementHeight(bottomIndicator) + "px";
+					style.backgroundColor = options.color;
+				}
+			}
+
+			/**
+			 * Show scroll indicators.
+			 * @method _showScrollIndicator
+			 * @protected
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype._showScrollIndicator = function () {
+				var self = this,
+					clip = self.element,
+					view = self._ui.view,
+					scrollTop = clip.scrollTop,
+					clipHeight = DOMUtils.getElementHeight(clip),
+					clipOffset = DOMUtils.getElementOffset(clip),
+					viewHeight = DOMUtils.getElementHeight(view),
+					viewWidth = DOMUtils.getElementWidth(view),
+					viewOffset = DOMUtils.getElementOffset(view);
+
+				clearIndicator(clip);
+
+				switch (self.options.scroll) {
+					case "x":
+						// @todo
+						break;
+					case "xy":
+						// @todo
+						break;
+					default:
+						setTopAndBottomIndicators(clip, {
+							clipTop: clipOffset.top,
+							clipHeight: clipHeight,
+							width: viewWidth,
+							color: window.getComputedStyle(clip).backgroundColor
+						});
+						if (viewOffset.top - scrollTop < clipOffset.top) {
+							// the top is not visible
+							clip.classList.add(classes.indicatorTopShown);
+						}
+						if (viewOffset.top - scrollTop + viewHeight > clipOffset.top + clipHeight) {
+							// the bottom is not visible
+							clip.classList.add(classes.indicatorBottomShown);
+						}
+				}
+			};
+
+			/**
+			 * Hide scroll indicators.
+			 * @method _hideScrollIndicator
+			 * @protected
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype._hideScrollIndicator = function () {
+				var self = this,
+					timers = self._timers,
+					timer = timers.scrollIndicatorHide;
+
+				if (timer) {
+					window.clearTimeout(timer);
+				}
+				timers.scrollIndicatorHide = window.setTimeout(function () {
+					clearIndicator(self.element);
+				}, 1500);
+			};
+
+			/**
+			 * Scrolls to specified position
+			 *
+			 * ### Example usage with TAU API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var scrollview = tau.widget.Scrollview(document.querySelector(".myPageClass > div[data-role=content]"));
+			 *			scrollview.scrollTo(0, 200, 1000); // scroll to 200px vertical with 1s animation
+			 *		</script>
+			 *
+			 * ### Example usage with jQuery API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var element = $(".myPageClass > div[data-role=content]"));
+			 *			element.scrollview();
+			 *			element.scrollview("scrollTo", 0, 200, 1000); // scroll to 200px vertical with 1s animation
+			 *		</script>
+			 *
+			 * @param {number} x
+			 * @param {number} y
+			 * @param {number=} [duration]
+			 * @method scrollTo
+			 * @protected
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype.scrollTo = function (x, y, duration) {
+				var element = this.element;
+				this.translateTo(x - element.scrollLeft, y - element.scrollTop, duration);
+			};
+
+			/**
+			 * Translates the scroll to specified position
+			 *
+			 * ### Example usage with TAU API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var scrollview = tau.widget.Scrollview(document.querySelector(".myPageClass > div[data-role=content]"));
+			 *			scrollview.translateTo(0, 200, 1000); // scroll forward 200px in vertical direction with 1s animation
+			 *		</script>
+			 *
+			 * ### Example usage with jQuery API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var element = $(".myPageClass > div[data-role=content]"));
+			 *			element.scrollview();
+			 *			element.scrollview("translateTo", 0, 200, 1000); // scroll forward 200px in vertical direction with 1s animation
+			 *		</script>
+			 *
+			 * @param {number} x
+			 * @param {number} y
+			 * @param {number=} [duration]
+			 * @method translateTo
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype.translateTo = function (x, y, duration) {
+				translate(this.state, this.element, x, y, duration);
+			};
+
+			/**
+			 * Ensures that specified element is visible in the
+			 * clip area
+			 *
+			 * ### Example usage with TAU API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *				<div class="testElementClass">somedata</div>
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var scrollview = tau.widget.Scrollview(document.querySelector(".myPageClass > div[data-role=content]")),
+			 *				testElement = document.querySelector(".testElementClass");
+			 *			scrollview.ensureElementIsVisible(testelement);
+			 *		</script>
+			 *
+			 * ### Example usage with jQuery API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *				<div class="testElementClass">somedata</div>
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var element = $(".myPageClass > div[data-role=content]")),
+			 *				testElement = $(".testElementClass");
+			 *			element.scrollview();
+			 *			element.scrollview("ensureElementIsVisible", testElement);
+			 *		</script>
+			 *
+			 * @param {HTMLElement} element
+			 * @method ensureElementIsVisible
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype.ensureElementIsVisible = function (element) {
+				var clip = this.element,
+					clipHeight = DOMUtils.getElementHeight(clip),
+					clipWidth = DOMUtils.getElementWidth(clip),
+					clipTop = 0,
+					clipBottom = clipHeight,
+					elementHeight = DOMUtils.getElementHeight(element),
+					elementWidth = DOMUtils.getElementWidth(element),
+					elementTop = 0,
+					elementBottom,
+					elementFits = clipHeight >= elementHeight && clipWidth >= elementWidth,
+					anchor,
+					anchorPositionX,
+					anchorPositionY,
+					parent,
+					findPositionAnchor = function (input) {
+						var id = input.getAttribute("id"),
+							tagName = input.tagName.toLowerCase();
+						if (id && ["input", "textarea", "button"].indexOf(tagName) > -1) {
+							return input.parentNode.querySelector("label[for=" + id + "]");
+						}
+					},
+					_true = true;
+
+				parent = element.parentNode;
+				while (parent && parent !== clip) {
+					elementTop += parent.offsetTop;
+					//elementLeft += parent.offsetLeft;
+					parent = parent.parentNode;
+				}
+				elementBottom = elementTop + elementHeight;
+				//elementRight = elementLeft + elementWidth;
+
+				switch (_true) {
+					case elementFits && clipTop < elementTop && clipBottom > elementBottom: // element fits in view is inside clip area
+						// pass, element position is ok
+						break;
+					case elementFits && clipTop < elementTop && clipBottom < elementBottom: // element fits in view but its visible only at top
+					case elementFits && clipTop > elementTop && clipBottom > elementBottom: // element fits in view but its visible only at bottom
+					case elementFits: // element fits in view but is not visible
+						this.centerToElement(element);
+						break;
+					case clipTop < elementTop && elementTop < clipBottom && clipBottom < elementBottom: // element visible only at top; eg. partly visible textarea
+					case clipTop > elementTop && clipBottom > elementBottom: // element visible only at bottom
+						// pass, we cant do anything, if we move the scroll
+						// the user could lost view of something he scrolled to
+						break;
+					default: // element is not visible
+						anchor = findPositionAnchor(element);
+						if (!anchor) {
+							anchor = element;
+						}
+						anchorPositionX = anchor.offsetLeft + DOMUtils.getCSSProperty(anchor, "margin-left", 0, "integer");
+						anchorPositionY = anchor.offsetTop + DOMUtils.getCSSProperty(anchor, "margin-top", 0, "integer");
+						parent = anchor.parentNode;
+						while (parent && parent !== clip) {
+							anchorPositionX += parent.offsetLeft;
+							anchorPositionY += parent.offsetTop;
+							parent = parent.parentNode;
+						}
+						this.scrollTo(anchorPositionX, anchorPositionY, this.scrollDuration);
+						break;
+				}
+			};
+
+			/**
+			 * Centers specified element in the clip area
+			 *
+			 * ### Example usage with TAU API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *				<div class="testElementClass">somedata</div>
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var scrollview = tau.widget.Scrollview(document.querySelector(".myPageClass > div[data-role=content]")),
+			 *				testElement = document.querySelector(".testElementClass");
+			 *			scrollview.centerToElement(testelement);
+			 *		</script>
+			 *
+			 * ### Example usage with jQuery API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *				<div class="testElementClass">somedata</div>
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var element = $(".myPageClass > div[data-role=content]")),
+			 *				testElement = $(".testElementClass");
+			 *			element.scrollview();
+			 *			element.scrollview("centerToElement", testElement);
+			 *		</script>
+			 *
+			 * @param {HTMLElement} element
+			 * @method centerToElement
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype.centerToElement = function (element) {
+				var clip = this.element,
+					deltaX = parseInt(DOMUtils.getElementWidth(clip) / 2 - DOMUtils.getElementWidth(element) / 2, 10),
+					deltaY = parseInt(DOMUtils.getElementHeight(clip) / 2 - DOMUtils.getElementHeight(element) / 2, 10),
+					elementPositionX = element.offsetLeft,
+					elementPositionY = element.offsetTop,
+					parent = element.parentNode;
+
+				while (parent && parent !== clip) {
+					elementPositionX += parent.offsetLeft + DOMUtils.getCSSProperty(parent, "margin-left", 0, "integer");
+					elementPositionY += parent.offsetTop + DOMUtils.getCSSProperty(parent, "margin-top", 0, "integer");
+					parent = parent.parentNode;
+				}
+				this.scrollTo(elementPositionX - deltaX, elementPositionY - deltaY, this.scrollDuration);
+			};
+
+			/**
+			 * This is just for compatibility
+			 * @method skipDragging
+			 * @member ns.widget.core.Scrollview
+			 * @deprecated 2.3
+			 */
+			Scrollview.prototype.skipDragging = function () {
+				if (ns.warn) {
+					ns.warn("ns.widget.core.Scrollview: skipDragging is deprecated");
+				}
+			}; // just for TWEBUIFW compat
+
+			/**
+			 * Returns scroll current position
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var scrollview = tau.widget.Scrollview(document.querySelector(".myPageClass > div[data-role=content]")),
+			 *				currentPosition = scrollview.getScrollPosition();
+			 *		</script>
+			 *
+			 * ### Example usage with jQuery API
+			 *
+			 *		@example
+			 *		<div class="myPageClass" data-role="page">
+			 *			<div data-role="content" data-scroll="y">
+			 *				content
+			 *			</div>
+			 *		</div>
+			 *		<script>
+			 *			var element = $(".myPageClass > div[data-role=content]")),
+			 *				position;
+			 *			element.scrollview();
+			 *			position = element.scrollview("getScrollPosition");
+			 *		</script>
+			 *
+			 * @return {Object}
+			 * @method getScrollPosition
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype.getScrollPosition = function () {
+				var element = this.element;
+				return {
+					"x": element.scrollLeft,
+					"y": element.scrollTop
+				};
+			};
+
+			/**
+			 * Binds scrollview events
+			 * @method _bindEvents
+			 * @param {HTMLElement} element
+			 * @protected
+			 * @member ns.widget.core.Scrollview
+			 */
+			Scrollview.prototype._bindEvents = function (element) {
+				var scrollTimer = null,
+					view = element.children[0],
+					lastClipHeight = DOMUtils.getElementHeight(element),
+					lastClipWidth = DOMUtils.getElementWidth(element),
+					notifyScrolled = function () {
+						eventUtils.trigger(element, "scrollstop");
+						window.clearTimeout(scrollTimer);
+						scrollTimer = null;
+					},
+					self = this,
+					//FIXME there should be some other way to get parent container
+					ui = self._ui,
+					page = ui.page,
+					jumpTop = ui.jumpVerticalButton,
+					jumpLeft = ui.jumpHorizontalButton,
+					repositionJumpsCallback,
+					jumpTopCallback,
+					jumpLeftCallback,
+					callbacks = self._callbacks;
+
+				if (page) {
+					if (this.options.scrollJump) {
+						repositionJumpsCallback = repositionJumps.bind(null, this);
+						jumpTopCallback = function () {
+							self.scrollTo(element.scrollLeft, 0, 250);
+						};
+						jumpLeftCallback = function () {
+							self.scrollTo(0, element.scrollTop, 250);
+						};
+						page.addEventListener("pageshow", repositionJumpsCallback, false);
+						if (jumpTop) {
+							jumpTop.firstChild.addEventListener("vclick", jumpTopCallback, false);
+						}
+						if (jumpLeft) {
+							jumpLeft.firstChild.addEventListener("vclick", jumpLeftCallback, false);
+						}
+
+						callbacks.repositionJumps = repositionJumpsCallback;
+						callbacks.jumpTop = jumpTopCallback;
+						callbacks.jumpLeft = jumpLeftCallback;
+					}
+
+					element.addEventListener("scroll", function () {
+						if (scrollTimer) {
+							window.clearTimeout(scrollTimer);
+						} else {
+							eventUtils.trigger(element, "scrollstart");
+						}
+						scrollTimer = window.setTimeout(notifyScrolled, 100);
+						eventUtils.trigger(element, "scrollupdate");
+					}, false);
+
+					document.addEventListener("vmousedown", function () {
+						if (currentTransition) {
+							currentTransition = null;
+						}
+					}, false);
+
+					if (self.options.scrollIndicator) {
+						callbacks.scrollUpdate = self._showScrollIndicator.bind(self);
+						element.addEventListener("scrollupdate", callbacks.scrollUpdate , false);
+						callbacks.scrollStop = self._hideScrollIndicator.bind(self);
+						element.addEventListener("scrollstop", callbacks.scrollStop , false);
+					}
+
+				}
+			};
+
+			Scrollview.prototype._destroy = function () {
+				var self = this,
+					element = self.element,
+					ui = self._ui,
+					page = ui.page,
+					scrollJump = this.options.scrollJump,
+					jumpTop = ui.jumpVerticalButton,
+					jumpLeft = ui.jumpHorizontalButton,
+					callbacks = self._callbacks,
+					repositionJumpsCallback = callbacks.repositionJumps,
+					jumpTopCallback = callbacks.jumpTop,
+					jumpLeftCallback = callbacks.jumpLeft;
+
+				if (scrollJump) {
+					if (page && repositionJumpsCallback) {
+						page.removeEventListener("pageshow", repositionJumpsCallback, false);
+					}
+					if (jumpTop && jumpTopCallback) {
+						jumpTop.firstChild.removeEventListener("vclick", jumpTopCallback, false);
+					}
+					if (jumpLeft && jumpLeftCallback) {
+						jumpLeft.firstChild.removeEventListener("vclick", jumpLeftCallback, false);
+					}
+				}
+
+				if (self.options.scrollIndicator) {
+					element.removeEventListener("scrollupdate", callbacks.scrollUpdate , false);
+				}
+
+				if (self._timers.scrollIndicatorHide) {
+					window.clearTimeout(self._timers.scrollIndicatorHide);
+				}
+
+			};
+
+			ns.widget.core.Scrollview = Scrollview;
+			}(window, window.document, ns));
+
+/*global window, define, ns */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+/**
+ * @class ns.widget.mobile.Tab
+ * @extends ns.widget.BaseWidget
+ */
+(function (document, ns) {
+	"use strict";
+				var BaseWidget = ns.widget.BaseWidget,
+				engine = ns.engine,
+				events = ns.event,
+				Tab = function () {
+				},
+				/**
+				 * Object with class dictionary
+				 * @property {Object} classes
+				 * @static
+				 * @member ns.widget.mobile.Tab
+				 * @readonly
+				 */
+				classes = {
+				},
+				CustomEvent = {
+					TAB_CHANGE: "tabchange"
+				},
+				prototype = new BaseWidget();
+
+			Tab.prototype = prototype;
+			Tab.classes = classes;
+
+			/**
+			 * Set the active tab
+			 * @method setActive
+			 * @param {number} index of the tab
+			 * @public
+			 * @member ns.widget.mobile.Tab
+			 */
+			prototype._setActive = function(index) {
+				var element = this.element;
+				events.trigger(element, CustomEvent.TAB_CHANGE, {
+					active: index
+				});
+			};
+			/**
+			 * Set the active tab
+			 * @method setActive
+			 * @param {number} index of the tab
+			 * @public
+			 * @member ns.widget.mobile.Tab
+			 */
+			prototype.setActive = function(index) {
+				this._setActive(index);
+			};
+
+			/**
+			 * Get the active tab
+			 * @method setActive
+			 * @param {number} index of the tab
+			 * @public
+			 * @member ns.widget.mobile.Tab
+			 */
+			prototype._getActive = function() {
+				return this.options.active;
+			};
+
+			/**
+			 * Get the active tab
+			 * @method setActive
+			 * @param {number} index of the tab
+			 * @public
+			 * @member ns.widget.mobile.Tab
+			 */
+			prototype.getActive = function() {
+				return this._getActive();
+			};
+
+			ns.widget.core.Tab = Tab;
+			engine.defineWidget(
+				"Tab",
+				"",
+				["setActive", "getActive"],
+				Tab,
+				"tizen"
+			);
+			}(window.document, ns));
+
+/*global window, define, Event, console */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+/**
+ * #TabIndicator Widget
+ * Widget create tabs indicator.
+ * @class ns.widget.core.TabIndicator
+ * @since 2.3
+ * @extends ns.widget.BaseWidget
+ */
+(function (document, ns) {
+	"use strict";
+				var Tab = ns.widget.core.Tab,
+				engine = ns.engine,
+				object = ns.util.object,
+
+				TabIndicator = function() {
+					this.tabSize = 0;
+					this.width = 0;
+				},
+
+				TabPrototype = Tab.prototype,
+				prototype = new Tab();
+
+			TabIndicator.prototype = prototype;
+
+			prototype._init = function(element) {
+				var o = this.options;
+
+				this.width = element.offsetWidth;
+				element.classList.add( o.wrapperClass );
+			};
+
+			prototype._configure = function( ) {
+				/**
+				 * @property {Object} options Options for widget
+				 * @property {number} [options.margin=2]
+				 * @property {boolean} [options.triggerEvent=false]
+				 * @property {string} [options.wrapperClass="ui-tab-indicator]
+				 * @property {string} [options.itemClass="ui-tab-item"]
+				 * @property {string} [options.activeClass="ui-tab-active"]
+				 * @member ns.widget.core.TabIndicator
+				 */
+				object.merge(this.options, {
+					margin: 4,
+					triggerEvent: false,
+					wrapperClass: "ui-tab-indicator",
+					itemClass: "ui-tab-item",
+					activeClass: "ui-tab-active",
+					active: 0
+				});
+			};
+
+			prototype._createIndicator = function() {
+				var o = this.options,
+					wrap = document.createDocumentFragment(),
+					widthTable = [],
+					margin = o.margin,
+					i = 0,
+					len = this.tabSize,
+					width = this.width-margin*(len-1),
+					std = Math.floor(width / len),
+					remain = width % len,
+					span, offset=0;
+
+				for (i=0; i < len; i++) {
+					widthTable[i] = std;
+				}
+
+				for ( i= Math.floor((len-remain)/2); remain > 0; i++, remain-- ) {
+					widthTable[i] += 1;
+				}
+
+				for (i=0; i < len; i++) {
+					span = document.createElement("span");
+					span.classList.add( o.itemClass );
+					span.style.width = widthTable[i] + "px";
+					span.style.left = offset + "px";
+					offset += widthTable[i] + margin;
+
+					if ( i === o.active ) {
+						span.classList.add( o.activeClass );
+					}
+					wrap.appendChild(span);
+				}
+
+				this.element.appendChild( wrap );
+			};
+
+			prototype._removeIndicator = function() {
+				this.element.innerHTML = "";
+			};
+
+			prototype._fireEvent = function(eventName, detail) {
+				ns.fireEvent( this.element, eventName, detail );
+			};
+
+			prototype._refresh = function() {
+				this._removeIndicator();
+				this._createIndicator();
+			};
+
+			/**
+			 * @method setActive
+			 * @param index
+			 * @member ns.widget.core.TabIndicator
+			 */
+			prototype._setActive = function ( index ) {
+				var o = this.options,
+					nodes = this.element.children;
+
+				o.active = index;
+
+				[].forEach.call(nodes, function( element ) {
+					element.classList.remove( o.activeClass );
+				});
+
+				if ( index < nodes.length ) {
+					nodes[index].classList.add( o.activeClass );
+
+					TabPrototype._setActive.call(this, index);
+				}
+			};
+
+			/**
+			 * @method setSize
+			 * @param size
+			 * @member ns.widget.core.TabIndicator
+			 */
+			prototype.setSize = function( size ) {
+				var needRefresh = this.tabSize !== size;
+
+				this.tabSize = size;
+				if ( needRefresh ) {
+					this.refresh();
+				}
+			};
+
+			prototype._destroy = function() {
+				var o = this.options;
+
+				this._removeIndicator();
+
+				this.element.classList.remove( o.wrapperClass );
+			};
+
+			ns.widget.core.TabIndicator = TabIndicator;
+
+			engine.defineWidget(
+				"TabIndicator",
+				".ui-tab",
+				["setActive", "getActive", "setSize"],
+				TabIndicator
+			);
+			}(window.document, ns));
+
+/*global window, define, ns*/
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*jslint nomen: true, plusplus: true */
+/**
+ * # SectionChanger Widget
+ * Shows a control that you can use to scroll through multiple *section*
+ * elements.
+ *
+ * The section changer widget provides an application architecture, which has
+ * multiple sections on a page and enables scrolling through the *section* elements.
+ *
+ * ## Manual constructor
+ *
+ *      @example
+ *         <div id="hasSectionchangerPage" class="ui-page">
+ *             <header class="ui-header">
+ *                 <h2 class="ui-title">SectionChanger</h2>
+ *             </header>
+ *             <div id="sectionchanger" class="ui-content">
+ *                 <!--Section changer has only one child-->
+ *                 <div>
+ *                     <section>
+ *                         <h3>LEFT1 PAGE</h3>
+ *                     </section>
+ *                     <section class="ui-section-active">
+ *                         <h3>MAIN PAGE</h3>
+ *                     </section>
+ *                     <section>
+ *                         <h3>RIGHT1 PAGE</h3>
+ *                     </section>
+ *                 </div>
+ *             </div>
+ *         </div>
+ *         <script>
+ *             (function () {
+ *                 var page = document.getElementById("hasSectionchangerPage"),
+ *                     element = document.getElementById("sectionchanger"),
+ *                     sectionChanger;
+ *
+ *                 page.addEventListener("pageshow", function () {
+ *                     // Create the SectionChanger object
+ *                     sectionChanger = new tau.SectionChanger(element, {
+ *                         circular: true,
+ *                         orientation: "horizontal",
+ *                         useBouncingEffect: true
+ *                     });
+ *                 });
+ *
+ *                 page.addEventListener("pagehide", function () {
+ *                     // Release the object
+ *                     sectionChanger.destroy();
+ *                 });
+ *             })();
+ *         </script>
+ *
+ * ## Handling Events
+ *
+ * To handle section changer events, use the following code:
+ *
+ *      @example
+ *         <script>
+ *             (function () {
+ *                 var changer = document.getElementById("sectionchanger");
+ *                 changer.addEventListener("sectionchange", function (event) {
+ *                     console.debug(event.detail.active + " section is active.");
+ *                 });
+ *             })();
+ *         </script>
+ *
+ * @class ns.widget.core.SectionChanger
+ * @since 2.2
+ * @extends ns.widget.BaseWidget
+ */
+(function (document, ns) {
+	"use strict";
+				var Scroller = ns.widget.core.scroller.Scroller,
+				Gesture = ns.event.gesture,
+				engine = ns.engine,
+				utilsObject = ns.util.object,
+				utilsEvents = ns.event,
+				eventType = ns.util.object.merge({
+					/**
+					 * Triggered when the section is changed.
+					 * @event sectionchange
+					 * @member ns.widget.core.SectionChanger
+					 */
+					CHANGE: "sectionchange"
+				}, Scroller.EventType),
+				classes = {
+					uiSectionChanger: "ui-section-changer"
+				};
+
+			function SectionChanger() {
+				this.options = {};
+			}
+
+			function calculateCustomLayout(direction, elements, lastIndex) {
+				var len = lastIndex !== undefined ? lastIndex : elements.length,
+					result = 0,
+					i;
+				for (i = 0; i < len; i++) {
+					result += direction === Scroller.Orientation.HORIZONTAL ? elements[i].offsetWidth : elements[i].offsetHeight;
+				}
+				return result;
+			}
+			function calculateCenter(direction, elements, index) {
+				var result = calculateCustomLayout(direction, elements, index + 1);
+				result -= direction === Scroller.Orientation.HORIZONTAL ? elements[index].offsetWidth / 2 : elements[index].offsetHeight / 2;
+				return result;
+			}
+			utilsObject.inherit(SectionChanger, Scroller, {
+				_build: function (element) {
+
+					this.tabIndicatorElement = null;
+					this.tabIndicator = null;
+
+					this.sections = null;
+					this.sectionPositions = [];
+
+					this.activeIndex = 0;
+					this.beforeIndex = 0;
+
+					this._super(element);
+					element.classList.add(classes.uiSectionChanger);
+					return element;
+				},
+
+				_configure : function () {
+					this._super();
+					/**
+					 * Options for widget
+					 * @property {Object} options
+					 * @property {"horizontal"|"vertical"} [options.orientation="horizontal"] Sets the section changer orientation:
+					 * @property {boolean} [options.circular=false] Presents the sections in a circular scroll fashion.
+					 * @property {boolean} [options.useBouncingEffect=false] Shows a scroll end effect on the scroll edge.
+					 * @property {string} [options.items="section"] Defines the section element selector.
+					 * @property {string} [options.activeClass="ui-section-active"] Specifies the CSS classes which define the active section element. Add the specified class (ui-section-active) to a *section* element to indicate which section must be shown first. By default, the first section is shown first.
+					 * @property {boolean} [options.fillContent=true] declare to section tag width to fill content or not.
+					 * @member ns.widget.core.SectionChanger
+					 */
+					this.options = utilsObject.merge(this.options, {
+						items: "section",
+						activeClass: "ui-section-active",
+						circular: false,
+						animate: true,
+						animateDuration: 100,
+						orientation: "horizontal",
+						changeThreshold: -1,
+						useTab: false,
+						fillContent: true
+					});
+				},
+
+				_init: function (element) {
+					var o = this.options,
+						scroller = this.scroller,
+						offsetHeight,
+						sectionLength, i, className;
+
+					scroller.style.position = "absolute";
+					offsetHeight = element.offsetHeight;
+					if (offsetHeight === 0) {
+						offsetHeight = element.parentNode.offsetHeight;
+						element.style.height = offsetHeight + "px";
+					}
+					this._sectionChangerWidth = element.offsetWidth;
+					this._sectionChangerHeight = offsetHeight;
+					this._sectionChangerHalfWidth = this._sectionChangerWidth / 2;
+					this._sectionChangerHalfHeight = this._sectionChangerHeight / 2;
+					this.orientation = o.orientation === "horizontal" ? Scroller.Orientation.HORIZONTAL : Scroller.Orientation.VERTICAL;
+
+					if (o.scrollbar === "tab") {
+						o.scrollbar = false;
+						o.useTab = true;
+					}
+
+					this.sections = typeof o.items === "string" ?
+						scroller.querySelectorAll(o.items) :
+						o.items;
+					sectionLength = this.sections.length;
+
+					if (o.circular && sectionLength < 3) {
+						throw "if you use circular option, you must have at least three sections.";
+					}
+
+					if (this.activeIndex >= sectionLength) {
+						this.activeIndex = sectionLength - 1;
+					}
+
+					for (i = 0; i < sectionLength; i++) {
+						className = this.sections[i].className;
+						if (className && className.indexOf(o.activeClass) > -1) {
+							this.activeIndex = i;
+						}
+
+						this.sectionPositions[i] = i;
+					}
+
+					this._prepareLayout();
+					this._initLayout();
+					this._super();
+					this._repositionSections(true);
+					this.setActiveSection(this.activeIndex);
+
+					// set corret options values.
+					if (!o.animate) {
+						o.animateDuration = 0;
+					}
+					if (o.changeThreshold < 0) {
+						o.changeThreshold = this._sectionChangerHalfWidth;
+					}
+
+					return element;
+				},
+
+				_prepareLayout: function () {
+					var o = this.options,
+						sectionLength = this.sections.length,
+						width = this._sectionChangerWidth,
+						height = this._sectionChangerHeight,
+						orientation = this.orientation,
+						scrollerStyle = this.scroller.style,
+						tabHeight;
+
+					if (o.useTab) {
+						this._initTabIndicator();
+						tabHeight = this.tabIndicatorElement.offsetHeight;
+						height -= tabHeight;
+						this._sectionChangerHalfHeight = height / 2;
+						this.element.style.height = height + "px";
+						this._sectionChangerHeight = height;
+					}
+
+					if (orientation === Scroller.Orientation.HORIZONTAL) {
+						scrollerStyle.width = (o.fillContent ? width * sectionLength : calculateCustomLayout(orientation, this.sections)) + "px";
+						scrollerStyle.height = height + "px"; //set Scroller width
+					} else {
+						scrollerStyle.width = width + "px"; //set Scroller width
+						scrollerStyle.height = (o.fillContent ? height * sectionLength : calculateCustomLayout(orientation, this.sections)) + "px";
+					}
+
+				},
+
+				_initLayout: function () {
+					var sectionStyle = this.sections.style,
+						left = 0,
+						top = 0,
+						i, sectionLength;
+
+					//section element has absolute position
+					for (i = 0, sectionLength = this.sections.length; i < sectionLength; i++) {
+						//Each section set initialize left position
+						sectionStyle = this.sections[i].style;
+						sectionStyle.position = "absolute";
+						if (this.options.fillContent) {
+							sectionStyle.width = this._sectionChangerWidth + "px";
+							sectionStyle.height = this._sectionChangerHeight + "px";
+						}
+
+						if (this.orientation === Scroller.Orientation.HORIZONTAL) {
+							top = 0;
+							left = calculateCustomLayout(this.orientation, this.sections, i);
+						} else {
+							top = calculateCustomLayout(this.orientation, this.sections, i);
+							left = 0;
+						}
+
+						sectionStyle.top = top + "px";
+						sectionStyle.left = left + "px";
+					}
+
+				},
+
+				_initBouncingEffect: function () {
+					var o = this.options;
+					if (!o.circular) {
+						this._super();
+					}
+				},
+
+				_translateScrollbar: function (x, y, duration, autoHidden) {
+					var offset;
+
+					if (!this.scrollbar) {
+						return;
+					}
+
+					if (this.orientation === Scroller.Orientation.HORIZONTAL) {
+						offset = (-x + this.minScrollX);
+					} else {
+						offset = (-y + this.minScrollY);
+					}
+
+					this.scrollbar.translate(offset, duration, autoHidden);
+				},
+
+				_translateScrollbarWithPageIndex: function (pageIndex, duration) {
+					var offset;
+
+					if (!this.scrollbar) {
+						return;
+					}
+
+					offset = calculateCustomLayout(this.orientation, this.sections, this.activeIndex);
+
+					this.scrollbar.translate(offset, duration);
+				},
+
+				_initTabIndicator: function () {
+					var elem = this.tabIndicatorElement = document.createElement("div");
+					this.element.parentNode.insertBefore(elem, this.element);
+
+					this.tabIndicator = new engine.instanceWidget(elem, "TabIndicator");
+					this.tabIndicator.setSize(this.sections.length);
+					this.tabIndicator.setActive(this.activeIndex);
+					this.tabIndicatorHandler = function (e) {
+						this.tabIndicator.setActive(e.detail.active);
+					}.bind(this);
+					this.element.addEventListener(eventType.CHANGE, this.tabIndicatorHandler, false);
+				},
+
+				_clearTabIndicator: function () {
+					if (this.tabIndicator) {
+						this.element.parentNode.removeChild(this.tabIndicatorElement);
+						this.element.removeEventListener(eventType.CHANGE, this.tabIndicatorHandler, false);
+						this.tabIndicator.destroy();
+						this.tabIndicator = null;
+						this.tabIndicatorElement = null;
+						this.tabIndicatorHandler = null;
+					}
+				},
+
+				_resetLayout: function () {
+					var //scrollerStyle = this.scroller.style,
+						sectionStyle = this.sections.style,
+						i, sectionLength;
+
+					//scrollerStyle.width = "";
+					//scrollerStyle.height = "";
+					//this.scroller || this.scroller._resetLayout();
+
+					for (i = 0, sectionLength = this.sections.length; i < sectionLength; i++) {
+						sectionStyle = this.sections[i].style;
+
+						sectionStyle.position = "";
+						sectionStyle.width = "";
+						sectionStyle.height = "";
+						sectionStyle.top = "";
+						sectionStyle.left = "";
+					}
+
+					this._super();
+				},
+
+				_bindEvents: function () {
+					this._super();
+
+					ns.event.enableGesture(
+						this.scroller,
+
+						new ns.event.gesture.Swipe({
+							orientation: this.orientation === Scroller.Orientation.HORIZONTAL ?
+								Gesture.Orientation.HORIZONTAL :
+								Gesture.Orientation.VERTICAL
+						})
+					);
+
+					utilsEvents.on(this.scroller,
+							"swipe transitionEnd webkitTransitionEnd mozTransitionEnd msTransitionEnd oTransitionEnd", this);
+				},
+
+				_unbindEvents: function () {
+					this._super();
+
+					if (this.scroller) {
+						ns.event.disableGesture(this.scroller);
+						utilsEvents.off(this.scroller,
+							"swipe transitionEnd webkitTransitionEnd mozTransitionEnd msTransitionEnd oTransitionEnd", this);
+					}
+				},
+
+				/**
+				 * This method manages events.
+				 * @method handleEvent
+				 * @returns {Event} event
+				 * @member ns.widget.core.SectionChanger
+				 */
+				handleEvent: function (event) {
+					this._super(event);
+
+					switch (event.type) {
+						case "swipe":
+							this._swipe(event);
+							break;
+						case "webkitTransitionEnd":
+						case "mozTransitionEnd":
+						case "msTransitionEnd":
+						case "oTransitionEnd":
+						case "transitionEnd":
+							if (event.target === this.scroller) {
+								this._endScroll();
+							}
+							break;
+					}
+				},
+
+				_notifyChanagedSection: function (index) {
+					var activeClass = this.options.activeClass,
+						sectionLength = this.sections.length,
+						i=0, section;
+
+					for (i=0; i < sectionLength; i++) {
+						section = this.sections[i];
+						section.classList.remove(activeClass);
+						if (i === this.activeIndex) {
+							section.classList.add(activeClass);
+						}
+					}
+
+					this._fireEvent(eventType.CHANGE, {
+						active: index
+					});
+				},
+
+				/**
+				 * Changes the currently active section element.
+				 * @method setActiveSection
+				 * @param {number} index
+				 * @param {number} duration For smooth scrolling,
+				 * the duration parameter must be in milliseconds.
+				 * @member ns.widget.core.SectionChanger
+				 */
+				setActiveSection: function (index, duration, direct) {
+					var position = this.sectionPositions[ index ],
+						scrollbarDuration = duration,
+						oldActiveIndex = this.activeIndex,
+						newX=0,
+						newY= 0,
+						centerX = 0,
+						centerY = 0;
+
+					if (this.orientation === Scroller.Orientation.HORIZONTAL) {
+						newX = this._sectionChangerHalfWidth - calculateCenter(this.orientation, this.sections, position);
+
+					} else {
+						newY = this._sectionChangerHalfHeight - calculateCenter(this.orientation, this.sections, position);
+					}
+
+					if (this.beforeIndex - index > 1 || this.beforeIndex - index < -1) {
+						scrollbarDuration = 0;
+					}
+
+					this.activeIndex = index;
+					this.beforeIndex = this.activeIndex;
+
+					if (newX !== this.scrollerOffsetX || newY !== this.scrollerOffsetY) {
+						if (direct !== false) {
+							this._fireEvent( eventType.START );
+							this.scrolled = true;
+						}
+
+						this._translate(newX, newY, duration);
+						this._translateScrollbarWithPageIndex(index, scrollbarDuration);
+					} else {
+						this._endScroll();
+					}
+
+					// notify changed section.
+					if (this.activeIndex !== oldActiveIndex) {
+						this._notifyChanagedSection(this.activeIndex);
+					}
+				},
+
+				/**
+				 * Gets the currently active section element's index.
+				 * @method getActiveSectionIndex
+				 * @returns {number}
+				 * @member ns.widget.core.SectionChanger
+				 */
+				getActiveSectionIndex: function () {
+					return this.activeIndex;
+				},
+
+				_start: function (e) {
+					this._super(e);
+
+					this.beforeIndex = this.activeIndex;
+				},
+
+				_move: function (e) {
+					var changeThreshold = this.options.changeThreshold,
+						delta = this.orientation === Scroller.Orientation.HORIZONTAL ? e.detail.deltaX : e.detail.deltaY,
+						oldActiveIndex = this.activeIndex;
+
+					this._super(e);
+
+					if (!this.scrolled) {
+						return;
+					}
+
+					if (delta > changeThreshold) {
+						this.activeIndex = this._calculateIndex(this.beforeIndex - 1);
+					} else if (delta < -changeThreshold) {
+						this.activeIndex = this._calculateIndex(this.beforeIndex + 1);
+					} else {
+						this.activeIndex = this.beforeIndex;
+					}
+
+					// notify changed section.
+					if (this.activeIndex !== oldActiveIndex) {
+						this._notifyChanagedSection(this.activeIndex);
+					}
+				},
+
+				_end: function (/* e */) {
+					if ( this.scrollbar ) {
+						this.scrollbar.end();
+					}
+
+					if (!this.enabled || this.scrollCanceled || !this.dragging) {
+						return;
+					}
+
+					// bouncing effect
+					if (this.bouncingEffect) {
+						this.bouncingEffect.dragEnd();
+					}
+
+					this.setActiveSection(this.activeIndex, this.options.animateDuration, false);
+					this.dragging = false;
+				},
+
+				_swipe: function (e) {
+					var offset = e.detail.direction === Gesture.Direction.UP || e.detail.direction === Gesture.Direction.LEFT ? 1 : -1,
+						newIndex = this._calculateIndex(this.beforeIndex + offset);
+
+					if (!this.enabled || this.scrollCanceled || !this.dragging) {
+						return;
+					}
+
+					// bouncing effect
+					if (this.bouncingEffect) {
+						this.bouncingEffect.dragEnd();
+					}
+
+					if (this.activeIndex !== newIndex) {
+						this.activeIndex = newIndex;
+						this._notifyChanagedSection(newIndex);
+					}
+
+					this.setActiveSection(newIndex, this.options.animateDuration, false);
+					this.dragging = false;
+				},
+
+				_endScroll: function () {
+					if (!this.enabled || !this.scrolled || this.scrollCanceled) {
+						return;
+					}
+
+					this._repositionSections();
+					this._super();
+				},
+
+				_repositionSections: function (init) {
+					// if developer set circular option is true, this method used when webkitTransitionEnd event fired
+					var sectionLength = this.sections.length,
+						curPosition = this.sectionPositions[this.activeIndex],
+						centerPosition = window.parseInt(sectionLength/2, 10),
+						circular = this.options.circular,
+						centerX = 0,
+						centerY = 0,
+						i, sectionStyle, sIdx, top, left, newX, newY;
+
+					if (this.orientation === Scroller.Orientation.HORIZONTAL) {
+						newX = -(calculateCenter(this.orientation, this.sections, (circular ? centerPosition : this.activeIndex)));
+						newY = 0;
+					} else {
+						newX = 0;
+						newY = -(calculateCenter(this.orientation, this.sections, (circular ? centerPosition : this.activeIndex)));
+					}
+
+					this._translateScrollbarWithPageIndex(this.activeIndex);
+
+					if (init || (curPosition === 0 || curPosition === sectionLength - 1)) {
+
+						if (this.orientation === Scroller.Orientation.HORIZONTAL) {
+							centerX = this._sectionChangerHalfWidth + newX;
+						} else {
+							centerY = this._sectionChangerHalfHeight + newY;
+						}
+						this._translate(centerX, centerY);
+
+						if (circular) {
+							for (i = 0; i < sectionLength; i++) {
+								sIdx = (sectionLength + this.activeIndex - centerPosition + i) % sectionLength;
+								sectionStyle = this.sections[ sIdx ].style;
+
+								this.sectionPositions[sIdx] = i;
+
+								if (this.orientation === Scroller.Orientation.HORIZONTAL) {
+									top = 0;
+									left = calculateCustomLayout(this.orientation, this.sections, i);
+								} else {
+									top = calculateCustomLayout(this.orientation, this.sections, i);
+									left = 0;
+								}
+
+								sectionStyle.top = top + "px";
+								sectionStyle.left = left + "px";
+							}
+						}
+					}
+				},
+
+				_calculateIndex: function (newIndex) {
+					var sectionLength = this.sections.length;
+
+					if (this.options.circular) {
+						newIndex = (sectionLength + newIndex) % sectionLength;
+					} else {
+						newIndex = newIndex < 0 ? 0 : (newIndex > sectionLength - 1 ? sectionLength - 1 : newIndex);
+					}
+
+					return newIndex;
+				},
+
+				_clear: function () {
+					this._clearTabIndicator();
+					this._super();
+					this.sectionPositions.length = 0;
+				}
+			});
+
+			ns.widget.core.SectionChanger = SectionChanger;
+
+			engine.defineWidget(
+				"SectionChanger",
+				"[data-role='section-changer'], .ui-section-changer",
+				["getActiveSectionIndex", "setActiveSection"],
+				SectionChanger
+			);
+			}(window.document, ns));
+
 /*global window, define, NodeList, HTMLCollection */
 /*jslint plusplus: true */
 /*
@@ -10523,7 +15493,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 	
 			/**
 			 * @property {DocumentFragment} fragment
@@ -10761,7 +15731,7 @@ ns.version = '0.10.29-14';
  * @author Maciej Urbanski <m.urbanski@samsung.com>
  */
 (function (window, ns) {
-	
+	"use strict";
 				ns.widget.wearable = ns.widget.wearable || {};
 			}(window, ns));
 
@@ -10984,7 +15954,7 @@ ns.version = '0.10.29-14';
  * @author hyunkook cho <hk0713.cho@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				/**
 			 * Alias for {@link ns.widget.BaseWidget}
 			 * @property {Object} BaseWidget
@@ -11214,7 +16184,7 @@ ns.version = '0.10.29-14';
  * @class ns.util.callbacks
  */
 (function (window, document, ns) {
-	
+	"use strict";
 				ns.util.callbacks = function (orgOptions) {
 
 				var object = ns.util.object,
@@ -11538,7 +16508,7 @@ ns.version = '0.10.29-14';
  * @author Maciej Urbanski <m.urbanski@samsung.com>
  * @author Piotr Karny <p.karny@samsung.com>
  */(function (window, document, ns) {
-	
+	"use strict";
 	
 			var Deferred = function (callback) {
 				var callbacks = ns.util.callbacks,
@@ -11699,7 +16669,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.Popup
  */
 (function (ns) {
-	
+	"use strict";
 					/**
 				 * Alias for {@link ns.widget.BaseWidget}
 				 * @property {Function} BaseWidget
@@ -12397,10 +17367,11 @@ ns.version = '0.10.29-14';
 				var self = this,
 					overlay = self._ui.overlay;
 
+				self._setActive(false);
+
 				if (overlay) {
 					overlay.style.display = "";
 				}
-				self._setActive(false);
 				self._restoreOpenOptions();
 				self.trigger(events.hide);
 			};
@@ -12529,6 +17500,7 @@ ns.version = '0.10.29-14';
 					transitionClass = transition + options.ext,
 					element = self.element,
 					elementClassList = element.classList,
+					overlayClassList = self._ui.overlay.classList,
 					deferred,
 					animationEndCallback;
 
@@ -12550,6 +17522,7 @@ ns.version = '0.10.29-14';
 						currentClass = currentClass.trim();
 						if (currentClass.length > 0) {
 							elementClassList.add(currentClass);
+							overlayClassList.add(currentClass);
 						}
 					});
 				} else {
@@ -12609,7 +17582,7 @@ ns.version = '0.10.29-14';
 
 /*global window, define */
 /*
-* Copyright (c) 2015 Samsung Electronics Co., Ltd
+* Copyright (c) 2013 - 2014 Samsung Electronics Co., Ltd
 *
 * Licensed under the Flora License, Version 1.1 (the "License");
 * you may not use this file except in compliance with the License.
@@ -12888,7 +17861,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.core.BasePopup
  */
 (function (window, document, ns) {
-	
+	"use strict";
 	
 			var Popup = ns.widget.core.Popup,
 
@@ -12951,6 +17924,7 @@ ns.version = '0.10.29-14';
 				CLASSES_PREFIX = "ui-popup",
 				classes = objectUtils.merge({}, Popup.classes, {
 					context: "ui-ctxpopup",
+					contextOverlay: "ui-ctxpopup-overlay",
 					arrow: "ui-arrow",
 					arrowDir: CLASSES_PREFIX + "-arrow-"
 				}),
@@ -13045,6 +18019,7 @@ ns.version = '0.10.29-14';
 			prototype._reposition = function(options) {
 				var self = this,
 					element = self.element,
+					ui = self._ui,
 					elementClassList = element.classList;
 
 				options = objectUtils.merge({}, self.options, options);
@@ -13055,6 +18030,11 @@ ns.version = '0.10.29-14';
 
 				// set height of content
 				self._setContentHeight();
+
+				// set class for contextpopup
+				if ((options.positionTo === "origin") && ui.overlay) {
+					ui.overlay.classList.add(classes.contextOverlay);
+				}
 
 				// set position of popup
 				self._placementCoords(options);
@@ -13263,9 +18243,11 @@ ns.version = '0.10.29-14';
 			prototype._placementCoordsWindow = function(element) {
 				var elementStyle = element.style,
 					elementWidth = element.offsetWidth,
-					elementHeight = element.offsetHeight;
+					elementHeight = element.offsetHeight,
+					elementMarginTop = domUtils.getCSSProperty(element, "margin-top", 0, "float"),
+					elementTop = window.innerHeight - elementHeight - elementMarginTop;
 
-				elementStyle.top = (window.innerHeight - elementHeight) + "px";
+				elementStyle.top = elementTop + "px";
 				elementStyle.left = "50%";
 				elementStyle.marginLeft = -(elementWidth / 2) + "px";
 			};
@@ -13880,7 +18862,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.core.ContextPopup
  */
 (function (window, document, ns) {
-	
+	"use strict";
 	
 			var CorePopup = ns.widget.core.ContextPopup,
 
@@ -14045,7 +19027,7 @@ ns.version = '0.10.29-14';
  * @class ns.router
  */
 (function (ns) {
-	
+	"use strict";
 				ns.router = ns.router || {};
 			}(ns));
 
@@ -14073,7 +19055,7 @@ ns.version = '0.10.29-14';
  * @author Maciej Urbanski <m.urbanski@samsung.com>
  */
 (function (window, ns) {
-	
+	"use strict";
 				var historyVolatileMode,
 				object = ns.util.object,
 				historyUid = 0,
@@ -14220,7 +19202,7 @@ ns.version = '0.10.29-14';
  * @author Hyeoncheol Choi <hc7.choi@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				/**
 			 * @property {Object} Widget Alias for {@link ns.widget.BaseWidget}
 			 * @member ns.widget.core.Drawer
@@ -15120,7 +20102,7 @@ ns.version = '0.10.29-14';
  * @author Hyeoncheol Choi <hc7.choi@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				var CoreDrawer = ns.widget.core.Drawer,
 				engine = ns.engine,
 				object = ns.util.object,
@@ -15318,6 +20300,488 @@ ns.version = '0.10.29-14';
 
 			}(window.document, ns));
 
+/*global window, define, ns */
+/*jslint nomen: true */
+/*
+ * Copyright (c) 2015 Samsung Electronics Co., Ltd
+ *
+ * Licensed under the Flora License, Version 1.1 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://floralicense.org/license/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+ * #Slider
+ * The slider component changes the range-type browser input to sliders.
+ *
+ * ##Default selectors
+ * In default all **INPUT** tags with type equals _range_  and _data-role=slider_ are changed to TAU sliders.
+ *
+ * ###HTML Examples
+ *
+ *         @example
+ *              <input type="range" name="slider-1" id="slider" value="60" min="0" max="100">
+ *
+ * ###Manual constructor
+ * For manual creation of slider widget you can use constructor of widget
+ *
+ *         @example
+ *              <input id="slider">
+ *              <script>
+ *                  var sliderElement = document.getElementById("slider"),
+ *                      slider;
+ *
+ *                  slider = tau.widget.Slider(sliderElement);
+ *
+ *                  // You can make slider component for TizenSlider component name,
+ *                  // for example, tau.widget.TizenSlider(sliderElement).
+ *                  // But, TizenSlider component name will be deprecated since tizen 2.4
+ *                  // because we don't recommend this method.
+ *              </script>
+ *
+ * @class ns.widget.core.Slider
+ * @extends ns.widget.BaseWidget
+ * @author Hyeoncheol Choi <hc7.choi@samsung.com>
+ */
+(function (document, ns) {
+	"use strict";
+				/**
+			 * @property {Object} Widget Alias for {@link ns.widget.BaseWidget}
+			 * @member ns.widget.core.Drawer
+			 * @private
+			 * @static
+			 */
+			var BaseWidget = ns.widget.BaseWidget,
+				engine = ns.engine,
+				selectors = ns.util.selectors,
+				utilDOM = ns.util.DOM,
+				events = ns.event,
+				Gesture = ns.event.gesture,
+				DEFAULT = {
+					HORIZONTAL: "horizontal"
+				},
+				Slider = function () {
+					var self = this;
+					/**
+					 * Widget options
+					 * @property {boolean} [options.type="normal"] Slider type. 'normal', 'center' or 'circle'
+					 * @property {string} [options.orientation="horizontal"] Slider orientation. horizontal or vertical
+					 * @property {boolean} [options.expand=false] Slider expand mode. true or false
+					 **/
+					self.options = {
+						type: "normal",
+						orientation: DEFAULT.HORIZONTAL,
+						expand: false
+					};
+					self._ui = {};
+				},
+				classes = {
+					SLIDER: "ui-slider",
+					SLIDER_HORIZONTAL: "ui-slider-horizontal",
+					SLIDER_VERTICAL: "ui-slider-vertical",
+					SLIDER_VALUE: "ui-slider-value",
+					SLIDER_HANDLER: "ui-slider-handler",
+					SLIDER_HANDLER_EXPAND: "ui-slider-handler-expand",
+					SLIDER_CENTER: "ui-slider-center",
+					SLIDER_HANDLER_ACTIVE: "ui-slider-handler-active"
+				},
+				prototype = new BaseWidget();
+
+			Slider.prototype = prototype;
+			Slider.classes = classes;
+
+			/**
+			 * Bind events
+			 * @method bindEvents
+			 * @param {Object} self
+			 * @member ns.widget.core.Slider
+			 * @private
+			 * @static
+			 */
+			function bindEvents(self) {
+				var element = self._ui.barElement;
+
+				events.enableGesture(
+					element,
+
+					new Gesture.Drag({
+						orientation: self.options.orientation,
+						threshold: 0
+					})
+				);
+				events.on(element, "dragstart drag dragend dragcancel", self, false);
+			}
+
+			/**
+			 * unBind events
+			 * @method unbindEvents
+			 * @param {Object} self
+			 * @member ns.widget.core.Slider
+			 * @private
+			 * @static
+			 */
+			function unbindEvents(self) {
+				var element = self._ui.barElement;
+
+				events.disableGesture(element);
+				events.off(element, "dragstart drag dragend dragcancel", self, false);
+			}
+
+			/**
+			 * Build structure of Slider component
+			 * @method _build
+			 * @param {HTMLElement} element
+			 * @return {HTMLElement} Returns built element
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._build = function(element) {
+				var self = this,
+					ui = self._ui,
+					barElement = document.createElement("div"),
+					valueElement = document.createElement("div"),
+					handlerElement = document.createElement("div");
+
+				element.style.display = "none";
+				barElement.classList.add(classes.SLIDER);
+
+				valueElement.classList.add(classes.SLIDER_VALUE);
+				barElement.appendChild(valueElement);
+				handlerElement.classList.add(classes.SLIDER_HANDLER);
+
+				barElement.appendChild(handlerElement);
+				element.parentNode.appendChild(barElement);
+				ui.valueElement = valueElement;
+				ui.handlerElement = handlerElement;
+				ui.barElement = barElement;
+				return element;
+			};
+
+			/**
+			 * init Slider component
+			 * @method _init
+			 * @param {HTMLElement} element
+			 * @return {HTMLElement} Returns built element
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._init = function(element) {
+				var self = this,
+					attrMin = parseInt(element.getAttribute("min"), 10),
+					attrMax = parseInt(element.getAttribute("max"), 10),
+					attrValue = parseInt(element.getAttribute("value"), 10);
+
+				self._min = attrMin ? attrMin : 0;
+				self._max = attrMax ? attrMax : 100;
+				self._value = attrValue ? attrValue : self.element.value;
+				self._interval = self._max - self._min;
+				self._previousValue = self._value;
+
+				self._initLayout();
+				return element;
+			};
+
+			/**
+			 * init layout of Slider component
+			 * @method _initLayout
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._initLayout = function() {
+				var self = this,
+					options = self.options,
+					ui = self._ui,
+					barElement = ui.barElement,
+					handlerElement = ui.handlerElement;
+
+				if (options.orientation === DEFAULT.HORIZONTAL) {
+					barElement.classList.remove(classes.SLIDER_VERTICAL);
+					barElement.classList.add(classes.SLIDER_HORIZONTAL);
+				} else {
+					barElement.classList.remove(classes.SLIDER_HORIZONTAL);
+					barElement.classList.add(classes.SLIDER_VERTICAL);
+				}
+
+				options.type === "center" ? barElement.classList.add(classes.SLIDER_CENTER) : barElement.classList.remove(classes.SLIDER_CENTER);
+
+				options.expand ? handlerElement.classList.add(classes.SLIDER_HANDLER_EXPAND) : handlerElement.classList.remove(classes.SLIDER_HANDLER_EXPAND);
+
+
+				self._barElementWidth = ui.barElement.offsetWidth;
+				if (self.options.orientation !== DEFAULT.HORIZONTAL) {
+					self._barElementHeight = ui.barElement.offsetHeight;
+				}
+				self._setValue(self._value);
+			};
+
+			/**
+			 * Set value of Slider center mode
+			 * @method _setCenterValue
+			 * @param {number} value
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._setCenterValue = function(value) {
+				var self = this,
+					ui = self._ui,
+					validValue,
+					valueElementValidStyle,
+					handlerElementValidStyle,
+					center, validStyle, inValidStyle;
+
+				if (self.options.orientation === DEFAULT.HORIZONTAL) {
+					center = self._barElementWidth / 2;
+					validValue =  self._barElementWidth * (value - self._min) / self._interval;
+					validStyle = validValue < center ? "right" : "left";
+					inValidStyle = validValue < center ? "left" : "right";
+					valueElementValidStyle = "width";
+					handlerElementValidStyle = "left";
+				} else {
+					center = self._barElementHeight / 2;
+					validValue =  self._barElementHeight * (value - self._min) / self._interval;
+					validStyle = validValue < center ? "bottom" : "top";
+					inValidStyle = validValue < center ? "top" : "bottom";
+					valueElementValidStyle = "height";
+					handlerElementValidStyle = "top";
+				}
+
+				ui.valueElement.style[validStyle] = "50%";
+				ui.valueElement.style[inValidStyle] = "initial";
+
+				ui.valueElement.style[valueElementValidStyle] = Math.abs(center - validValue) + "px";
+				ui.handlerElement.style[handlerElementValidStyle] = validValue + "px";
+			};
+
+			/**
+			 * Set value of Slider normal mode
+			 * @method _setNormalValue
+			 * @param {number} value
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._setNormalValue = function(value) {
+				var self = this,
+					ui = self._ui,
+					options = self.options,
+					barElementLength,
+					valueElementValidStyle,
+					handlerElementValidStyle,
+					validValue;
+
+				if (options.orientation === DEFAULT.HORIZONTAL) {
+					barElementLength = self._barElementWidth;
+					valueElementValidStyle = "width";
+					handlerElementValidStyle = "left";
+				} else {
+					barElementLength = self._barElementHeight;
+					valueElementValidStyle = "height";
+					handlerElementValidStyle = "top";
+				}
+
+				validValue = barElementLength * (value - self._min) / self._interval;
+				ui.valueElement.style[valueElementValidStyle] = validValue + "px";
+				ui.handlerElement.style[handlerElementValidStyle] = validValue + "px";
+			};
+
+			/**
+			 * Set value of Slider
+			 * @method _setValue
+			 * @param {number} value
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._setValue = function(value) {
+				var self = this,
+					ui = self._ui,
+					options = self.options,
+					element = self.element,
+					intValue;
+
+				if (value < self._min) {
+					value = self._min;
+				} else if (value > self._max) {
+					value = self._max;
+				}
+
+				intValue = parseInt(value, 10);
+
+				if (options.type === "center") {
+					self._setCenterValue(value);
+				} else if (options.type === "normal") {
+					self._setNormalValue(value);
+				}
+
+				if (element.value - 0 !== intValue) {
+					element.setAttribute("value", intValue);
+					element.value = intValue;
+					self._value = intValue;
+					if (self.options.expand) {
+						ui.handlerElement.innerText = intValue;
+					}
+					events.trigger(element, "input");
+				}
+			};
+
+			/**
+			 * Bind events to Slider
+			 * @method _bindEvents
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._bindEvents = function() {
+				bindEvents(this);
+			};
+
+			/**
+			 * Bind event handlers
+			 * @method handleEvent
+			 * @param {Event} event
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype.handleEvent = function(event) {
+				var self = this;
+				switch (event.type) {
+					case "dragstart":
+						self._onDragstart(event);
+						break;
+					case "dragend":
+					case "dragcancel":
+						self._onDragend(event);
+						break;
+					case "drag":
+						self._onDrag(event);
+						break;
+				}
+			};
+
+			/**
+			 * Drag event handler
+			 * @method _onDrag
+			 * @param {Event} event
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._onDrag = function(event) {
+				var self = this,
+					ui = self._ui,
+					validPosition,
+					value;
+				if (self._active) {
+					validPosition = self.options.orientation === DEFAULT.HORIZONTAL ?
+						event.detail.estimatedX - ui.barElement.offsetLeft :
+						event.detail.estimatedY - utilDOM.getElementOffset(ui.barElement).top + selectors.getScrollableParent(self.element).scrollTop;
+
+					value = self.options.orientation === DEFAULT.HORIZONTAL ?
+						self._interval * validPosition / self._barElementWidth :
+						self._interval * validPosition / self._barElementHeight;
+
+					value += self._min;
+					self._setValue(value);
+				}
+			};
+
+			/**
+			 * DragStart event handler
+			 * @method _onDragstart
+			 * @param {Event} event
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._onDragstart = function(event) {
+				var self = this,
+					ui = self._ui,
+					validPosition = self.options.orientation === DEFAULT.HORIZONTAL ?
+						event.detail.estimatedX - ui.barElement.offsetLeft :
+						event.detail.estimatedY - utilDOM.getElementOffset(ui.barElement).top + selectors.getScrollableParent(self.element).scrollTop,
+					value = self.options.orientation === DEFAULT.HORIZONTAL ?
+						self._interval * validPosition / self._barElementWidth :
+						self._interval * validPosition / self._barElementHeight;
+
+				ui.handlerElement.classList.add(classes.SLIDER_HANDLER_ACTIVE);
+				value += self._min;
+				self._setValue(value);
+				self._active = true;
+			};
+
+			/**
+			 * DragEnd event handler
+			 * @method _onDragend
+			 * @param {Event} event
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._onDragend = function() {
+				var self = this,
+					ui = self._ui;
+				ui.handlerElement.classList.remove(classes.SLIDER_HANDLER_ACTIVE);
+				self._active = false;
+				if (self._previousValue !== self.element.value) {
+					events.trigger(self.element, "change");
+				}
+				self._previousValue = self.element.value;
+			};
+
+			/**
+			 * Get or Set value of Slider
+			 * @method value
+			 * @param {Number} value
+			 * @return {Number} value
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype.value = function(value) {
+				var self = this;
+				if (value !== undefined) {
+					self._setValue(value);
+				}
+				self._previousValue = self.element.value;
+				return self.element.getAttribute("value");
+			};
+
+			/**
+			 * Refresh to Slider component
+			 * @method refresh
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype.refresh = function() {
+				this._initLayout();
+			};
+
+			/**
+			 * Destroy Slider component
+			 * @method _destroy
+			 * @member ns.widget.core.Slider
+			 * @protected
+			 */
+			prototype._destroy = function() {
+				var self = this,
+					barElement = self._ui.barElement;
+				unbindEvents(self);
+				barElement.parentNode.removeChild(barElement);
+				self._ui = null;
+				self._options = null;
+			};
+			ns.widget.core.Slider = Slider;
+			engine.defineWidget(
+				"Slider",
+				"input[data-role='slider'], input[type='range'], input[data-type='range']",
+				[
+					"value"
+				],
+				Slider,
+				"core"
+			);
+			}(window.document, ns));
+
 /*global window, ns, define */
 /*
  * Copyright (c) 2015 Samsung Electronics Co., Ltd
@@ -15379,7 +20843,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				engine = ns.engine,
 				utilEvent = ns.event,
@@ -15723,6 +21187,232 @@ ns.version = '0.10.29-14';
 			}(window.document, ns));
 
 /*global window, define */
+/*jslint nomen: true */
+/**
+ * # Slider Widget
+ * Wearable Slider component has two types, first is normal slider type another is circle slider type.
+ * Circle slider type has provided to rotary event handling in component side.
+ * Normal slider type is default type.
+ *
+ * ## Default selectors
+ *
+ * To add a slider component to the application, use the following code:
+ *
+ *      @example
+ *      // Normal type
+ *      <input id="circle" data-type="normal" name="circleSlider" type="range" value="20" min="0" max="100" />
+ *
+ *      // OR Circle type
+ *      <input id="circle" data-type="circle" name="circleSlider" type="range" value="20" min="0" max="100" />
+ *
+ * ## JavaScript API
+ *
+ * Slider widget hasn't JavaScript API.
+ * @class ns.widget.wearable.Slider
+ */
+(function (document, ns) {
+	"use strict";
+				var CoreSlider = ns.widget.core.Slider,
+				CoreSliderPrototype = CoreSlider.prototype,
+				engine = ns.engine,
+				events = ns.event,
+				CirclePB = ns.widget.wearable.CircleProgressBar,
+				CirclePBPrototype = new CirclePB(),
+				Slider = function () {
+					var self = this;
+					CoreSlider.call(self);
+				},
+				prototype = new CoreSlider();
+
+			Slider.prototype = prototype;
+
+			function bindCircleEvents(self) {
+				events.on(document, "rotarydetent", self, false);
+			}
+
+			function unbindCircleEvents(self) {
+				events.off(document, "rotarydetent", self, false);
+			}
+
+			/**
+			 * Configure Slider widget
+			 * @method _configure
+			 * @protected
+			 * @member ns.widget.wearable.Slider
+			 */
+			prototype._configure = function() {
+				var self = this,
+					options = self.options;
+
+				options.size = "full";
+			};
+
+			/**
+			 * Build Slider widget
+			 * @method _build
+			 * @protected
+			 * @param {HTMLElement} element
+			 * @member ns.widget.wearable.Slider
+			 */
+			prototype._build = function(element) {
+				var self = this,
+					options = self.options;
+
+				if (options.type === "circle") {
+					element.style.display = "none";
+					CirclePBPrototype._build.call(self, element);
+				} else {
+					CoreSliderPrototype._build.call(self, element);
+				}
+				return element;
+			};
+
+			/**
+			 * Init Slider widget
+			 * @method _init
+			 * @protected
+			 * @param {HTMLElement} element
+			 * @member ns.widget.wearable.Slider
+			 */
+			prototype._init = function(element) {
+				var self = this,
+					options = self.options;
+
+				if (options.type === "circle") {
+					CirclePBPrototype._init.call(self, element);
+				} else {
+					CoreSliderPrototype._init.call(self, element);
+				}
+				return element;
+			};
+
+			/**
+			 * Bind events Slider widget
+			 * @method _bindEvents
+			 * @protected
+			 * @member ns.widget.wearable.Slider
+			 */
+			prototype._bindEvents = function() {
+				var self = this,
+					options = self.options;
+
+				if (options.type === "circle") {
+					bindCircleEvents(self);
+				} else {
+					CoreSliderPrototype._bindEvents.call(self);
+				}
+			};
+
+			/**
+			 * Bind event handlers
+			 * @method handleEvent
+			 * @param {Event} event
+			 * @member ns.widget.wearable.Slider
+			 * @protected
+			 */
+			prototype.handleEvent = function(event) {
+				var self = this,
+					options = self.options;
+
+				if (options.type === "circle") {
+					switch (event.type) {
+						case "rotarydetent":
+							self._onRotary(event);
+							break;
+					}
+				} else {
+					CoreSliderPrototype.handleEvent.call(self, event);
+				}
+			};
+
+			/**
+			 * Rotarydetent event handler
+			 * @method _onRotary
+			 * @param {Event} event
+			 * @member ns.widget.wearable.Slider
+			 * @protected
+			 */
+			prototype._onRotary = function(event) {
+				var self = this,
+					direction = event.detail.direction,
+					value = CirclePBPrototype._getValue.call(self);
+
+				if (direction === "CW") {
+					if (value < self._maxValue) {
+						value++;
+					} else {
+						value = self._maxValue;
+					}
+				} else if (direction === "CCW") {
+					if (value > 0) {
+						value--;
+					} else {
+						value = 0;
+					}
+				}
+				CirclePBPrototype._setValue.call(self, value);
+			};
+
+			/**
+			 * Get/set slider value
+			 * @method value
+			 * @param {Number} value
+			 * @member ns.widget.wearable.Slider
+			 * @public
+			 */
+			prototype.value = function(value) {
+				var self = this,
+					options = self.options,
+					result;
+
+				if (options.type === "circle") {
+					if (value) {
+						CirclePBPrototype._setValue.call(self, value);
+					} else {
+						result = CirclePBPrototype._getValue.call(self);
+					}
+				} else {
+					result = CoreSliderPrototype.value.call(self, value);
+				}
+				if (result) {
+					return result;
+				}
+			};
+
+			/**
+			 * Destroy Slider component
+			 * @method _destroy
+			 * @member ns.widget.wearable.Slider
+			 * @protected
+			 */
+			prototype._destroy = function () {
+				var self = this,
+					options = self.options;
+
+				if (options.type === "circle") {
+					unbindCircleEvents(self);
+					self._ui = null;
+					self._options = null;
+				} else {
+					CoreSliderPrototype._destroy.call(self);
+				}
+			};
+
+			ns.widget.wearable.Slider = Slider;
+			engine.defineWidget(
+				"Slider",
+				"input[data-role='slider'], input[type='range'], input[data-type='range']",
+				[
+					"value"
+				],
+				Slider,
+				"wearable",
+				true
+			);
+
+			}(window.document, ns));
+
+/*global window, define */
 /*
  * Copyright (c) 2015 Samsung Electronics Co., Ltd
  *
@@ -15795,7 +21485,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				engine = ns.engine,
 				Listview = function () {
@@ -15863,572 +21553,6 @@ ns.version = '0.10.29-14';
 			);
 			}(window.document, ns));
 
-/*global CustomEvent, define, window, ns */
-/*jslint plusplus: true, nomen: true, bitwise: true */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/**
- * #Virtual Mouse Events
- * Reimplementation of jQuery Mobile virtual mouse events.
- *
- * ##Purpose
- * It will let for users to register callbacks to the standard events like bellow,
- * without knowing if device support touch or mouse events
- * @class ns.event.vmouse
- */
-/**
- * Triggered after mouse-down or touch-started.
- * @event vmousedown
- * @member ns.event.vmouse
- */
-/**
- * Triggered when mouse-click or touch-end when touch-move didn't occur
- * @event vclick
- * @member ns.event.vmouse
- */
-/**
- * Triggered when mouse-up or touch-end
- * @event vmouseup
- * @member ns.event.vmouse
- */
-/**
- * Triggered when mouse-move or touch-move
- * @event vmousemove
- * @member ns.event.vmouse
- */
-/**
- * Triggered when mouse-over or touch-start if went over coordinates
- * @event vmouseover
- * @member ns.event.vmouse
- */
-/**
- * Triggered when mouse-out or touch-end
- * @event vmouseout
- * @member ns.event.vmouse
- */
-/**
- * Triggered when mouse-cancel or touch-cancel and when scroll occur during touchmove
- * @event vmousecancel
- * @member ns.event.vmouse
- */
-(function (window, document, ns) {
-	
-				/**
-			 * Object with default options
-			 * @property {Object} vmouse
-			 * @member ns.event.vmouse
-			 * @static
-			 * @private
-			 **/
-			var vmouse,
-				/**
-				 * @property {Object} eventProps Contains the properties which are copied from the original event to custom v-events
-				 * @member ns.event.vmouse
-				 * @static
-				 * @private
-				 **/
-				eventProps,
-				/**
-				 * Indicates if the browser support touch events
-				 * @property {boolean} touchSupport
-				 * @member ns.event.vmouse
-				 * @static
-				 **/
-				touchSupport = window.hasOwnProperty("ontouchstart"),
-				/**
-				 * @property {boolean} didScroll The flag tell us if the scroll event was triggered
-				 * @member ns.event.vmouse
-				 * @static
-				 * @private
-				 **/
-				didScroll,
-				/** @property {HTMLElement} lastOver holds reference to last element that touch was over
-				 * @member ns.event.vmouse
-				 * @private
-				 */
-				lastOver = null,
-				/**
-				 * @property {Number} [startX=0] Initial data for touchstart event
-				 * @member ns.event.vmouse
-				 * @static
-				 * @private
-				 **/
-				startX = 0,
-				/**
-				 * @property {Number} [startY=0] Initial data for touchstart event
-				 * @member ns.event.vmouse
-				 * @private
-				 * @static
-				 **/
-				startY = 0,
-				touchEventProps = ["clientX", "clientY", "pageX", "pageY", "screenX", "screenY"],
-				KEY_CODES = {
-					enter: 13
-				};
-
-			/**
-			 * Extends objects with other objects
-			 * @method copyProps
-			 * @param {Object} from Sets the original event
-			 * @param {Object} to Sets the new event
-			 * @param {Object} properties Sets the special properties for position
-			 * @param {Object} propertiesNames Describe parameters which will be copied from Original to To event
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function copyProps(from, to, properties, propertiesNames) {
-				var i,
-					length,
-					descriptor,
-					property;
-
-				for (i = 0, length = propertiesNames.length; i < length; ++i) {
-					property = propertiesNames[i];
-					if (property !== "detail" && (isNaN(properties[property]) === false || isNaN(from[property]) === false)) {
-						descriptor = Object.getOwnPropertyDescriptor(to, property);
-						if (!descriptor || descriptor.writable) {
-							to[property] = properties[property] || from[property];
-						}
-					}
-				}
-			}
-
-			/**
-			 * Create custom event
-			 * @method createEvent
-			 * @param {string} newType gives a name for the new Type of event
-			 * @param {Event} original Event which trigger the new event
-			 * @param {Object} properties Sets the special properties for position
-			 * @return {Event}
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function createEvent(newType, original, properties) {
-				var evt = new CustomEvent(newType, {
-						"bubbles": original.bubbles,
-						"cancelable": original.cancelable,
-						"detail": original.detail
-					}),
-					orginalType = original.type,
-					changeTouches,
-					touch,
-					j = 0,
-					len,
-					prop;
-
-				copyProps(original, evt, properties, eventProps);
-				evt._originalEvent = original;
-
-				if (orginalType.indexOf("touch") !== -1) {
-					orginalType = original.touches;
-					changeTouches = original.changedTouches;
-
-					if (orginalType && orginalType.length) {
-						touch = orginalType[0];
-					} else {
-						touch = (changeTouches && changeTouches.length) ? changeTouches[0] : null;
-					}
-
-					if (touch) {
-						for (len = touchEventProps.length; j < len; j++) {
-							prop = touchEventProps[j];
-							evt[prop] = touch[prop];
-						}
-					}
-				}
-
-				return evt;
-			}
-
-			/**
-			 * Dispatch Events
-			 * @method fireEvent
-			 * @param {string} eventName event name
-			 * @param {Event} evt original event
-			 * @param {Object} [properties] Sets the special properties for position
-			 * @return {boolean}
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function fireEvent(eventName, evt, properties) {
-				return evt.target.dispatchEvent(createEvent(eventName, evt, properties || {}));
-			}
-
-			eventProps = [
-				"currentTarget",
-				"detail",
-				"button",
-				"buttons",
-				"clientX",
-				"clientY",
-				"offsetX",
-				"offsetY",
-				"pageX",
-				"pageY",
-				"screenX",
-				"screenY",
-				"toElement",
-				"which"
-			];
-
-			vmouse = {
-				/**
-				 * Sets the distance of pixels after which the scroll event will be successful
-				 * @property {number} [eventDistanceThreshold=10]
-				 * @member ns.event.vmouse
-				 * @static
-				 */
-				eventDistanceThreshold: 10,
-
-				touchSupport: touchSupport
-			};
-
-			/**
-			 * Handle click down
-			 * @method handleDown
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleDown(evt) {
-				fireEvent("vmousedown", evt);
-			}
-
-			/**
-			 * Prepare position of event for keyboard events.
-			 * @method preparePositionForClick
-			 * @param {Event} event
-			 * @return {?Object} options
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function preparePositionForClick(event) {
-				var x = event.clientX,
-					y = event.clientY;
-				// event comes from keyboard
-				if (!x && !y) {
-					return preparePositionForEvent(event);
-				}
-			}
-
-			/**
-			 * Handle click
-			 * @method handleClick
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleClick(evt) {
-				fireEvent("vclick", evt, preparePositionForClick(evt));
-			}
-
-			/**
-			 * Handle click up
-			 * @method handleUp
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleUp(evt) {
-				fireEvent("vmouseup", evt);
-			}
-
-			/**
-			 * Handle click move
-			 * @method handleMove
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleMove(evt) {
-				fireEvent("vmousemove", evt);
-			}
-
-			/**
-			 * Handle click over
-			 * @method handleOver
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleOver(evt) {
-				fireEvent("vmouseover", evt);
-			}
-
-			/**
-			 * Handle click out
-			 * @method handleOut
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleOut(evt) {
-				fireEvent("vmouseout", evt);
-			}
-
-			/**
-			 * Handle touch start
-			 * @method handleTouchStart
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleTouchStart(evt) {
-				var touches = evt.touches,
-					firstTouch,
-					over;
-				//if touches are registered and we have only one touch
-				if (touches && touches.length === 1) {
-					didScroll = false;
-					firstTouch = touches[0];
-					startX = firstTouch.pageX;
-					startY = firstTouch.pageY;
-
-					// Check if we have touched something on our page
-					// @TODO refactor for multi touch
-					over = document.elementFromPoint(startX, startY);
-					if (over) {
-						lastOver = over;
-						fireEvent("vmouseover", evt);
-					}
-					fireEvent("vmousedown", evt);
-				}
-
-			}
-
-			/**
-			 * Handle touch end
-			 * @method handleTouchEnd
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleTouchEnd(evt) {
-				var touches = evt.touches;
-				if (touches && touches.length === 0) {
-					fireEvent("vmouseup", evt);
-					fireEvent("vmouseout", evt);
-					// Reset flag for last over element
-					lastOver = null;
-				}
-			}
-
-			/**
-			 * Handle touch move
-			 * @method handleTouchMove
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleTouchMove(evt) {
-				var over,
-					firstTouch = evt.touches && evt.touches[0],
-					didCancel = didScroll,
-				//sets the threshold, based on which we consider if it was the touch-move event
-					moveThreshold = vmouse.eventDistanceThreshold;
-
-				/**
-				 * Ignore the touch which has identifier other than 0.
-				 * Only first touch has control others are ignored.
-				 * Patch for webkit behaviour where touchmove event
-				 * is triggered between touchend events
-				 * if there is multi touch.
-				 */
-				if (firstTouch.identifier > 0) {
-					evt.preventDefault();
-					evt.stopPropagation();
-					return;
-				}
-
-				didScroll = didScroll ||
-					//check in both axes X,Y if the touch-move event occur
-					(Math.abs(firstTouch.pageX - startX) > moveThreshold ||
-						Math.abs(firstTouch.pageY - startY) > moveThreshold);
-
-				// detect over event
-				// for compatibility with mouseover because "touchenter" fires only once
-				// @TODO Handle many touches
-				over = document.elementFromPoint(firstTouch.pageX, firstTouch.pageY);
-				if (over && lastOver !== over) {
-					lastOver = over;
-					fireEvent("vmouseover", evt);
-				}
-
-				//if didscroll occur and wasn't canceled then trigger touchend otherwise just touchmove
-				if (didScroll && !didCancel) {
-					fireEvent("vmousecancel", evt);
-					lastOver = null;
-				}
-				fireEvent("vmousemove", evt);
-			}
-
-			/**
-			 * Handle Scroll
-			 * @method handleScroll
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleScroll(evt) {
-				if (!didScroll) {
-					fireEvent("vmousecancel", evt);
-				}
-				didScroll = true;
-			}
-
-			/**
-			 * Handle touch cancel
-			 * @method handleTouchCancel
-			 * @param {Event} evt
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleTouchCancel(evt) {
-				fireEvent("vmousecancel", evt);
-				lastOver = null;
-			}
-
-			/**
-			 * Prepare position of event for keyboard events.
-			 * @method preparePositionForEvent
-			 * @param {Event} event
-			 * @return {Object} properties
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function preparePositionForEvent(event) {
-				var targetRect = event.target && event.target.getBoundingClientRect(),
-					properties = {};
-				if (targetRect) {
-					properties = {
-						"clientX": targetRect.left + targetRect.width / 2,
-						"clientY": targetRect.top + targetRect.height / 2,
-						"which": 1
-					};
-				}
-				return properties;
-			}
-
-			/**
-			 * Handle key up
-			 * @method handleKeyUp
-			 * @param {Event} event
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleKeyUp(event) {
-				var properties;
-				if (event.keyCode === KEY_CODES.enter) {
-					properties = preparePositionForEvent(event);
-					fireEvent("vmouseup", event, properties);
-					fireEvent("vclick", event, properties);
-				}
-			}
-
-			/**
-			 * Handle key down
-			 * @method handleKeyDown
-			 * @param {Event} event
-			 * @private
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			function handleKeyDown(event) {
-				if (event.keyCode === KEY_CODES.enter) {
-					fireEvent("vmousedown", event, preparePositionForEvent(event));
-				}
-			}
-
-			/**
-			 * Binds events common to mouse and touch to support virtual mouse.
-			 * @method bindCommonEvents
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			vmouse.bindCommonEvents = function () {
-				document.addEventListener("keyup", handleKeyUp, true);
-				document.addEventListener("keydown", handleKeyDown, true);
-				document.addEventListener("scroll", handleScroll, true);
-				document.addEventListener("click", handleClick, true);
-			};
-
-			// @TODO delete touchSupport flag and attach touch and mouse listeners,
-			// @TODO check if v-events are not duplicated if so then called only once
-
-			/**
-			 * Binds touch events to support virtual mouse.
-			 * @method bindTouch
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			vmouse.bindTouch = function () {
-				document.addEventListener("touchstart", handleTouchStart, true);
-				document.addEventListener("touchend", handleTouchEnd, true);
-				document.addEventListener("touchmove", handleTouchMove, true);
-				document.addEventListener("touchcancel", handleTouchCancel, true);
-
-				// touchenter and touchleave are removed from W3C spec
-				// No need to listen to touchover as it has never exited
-				// document.addEventListener("touchenter", handleTouchOver, true);
-				// document.addEventListener("touchleave", callbacks.out, true);
-				document.addEventListener("touchcancel", handleTouchCancel, true);
-			};
-
-			/**
-			 * Binds mouse events to support virtual mouse.
-			 * @method bindMouse
-			 * @static
-			 * @member ns.event.vmouse
-			 */
-			vmouse.bindMouse = function () {
-				document.addEventListener("mousedown", handleDown, true);
-
-				document.addEventListener("mouseup", handleUp, true);
-				document.addEventListener("mousemove", handleMove, true);
-				document.addEventListener("mouseover", handleOver, true);
-				document.addEventListener("mouseout", handleOut, true);
-			};
-
-			ns.event.vmouse = vmouse;
-
-			if (touchSupport) {
-				vmouse.bindTouch();
-			} else {
-				vmouse.bindMouse();
-			}
-			vmouse.bindCommonEvents();
-
-			}(window, window.document, ns));
 /*global window, define, ns */
 /*
  * Copyright (c) 2015 Samsung Electronics Co., Ltd
@@ -16449,7 +21573,7 @@ ns.version = '0.10.29-14';
  * @author Maciej Urbanski <m.urbanski@samsung.com>
  */
 (function (ns) {
-	
+	"use strict";
 				/** @namespace ns.widget.wearable */
 			ns.widget.core.indexscrollbar = ns.widget.core.indexscrollbar || {};
 			}(ns));
@@ -16479,7 +21603,7 @@ ns.version = '0.10.29-14';
  * @class ns.widget.wearable.indexscrollbar.IndexBar
  */
 (function (document, ns) {
-	
+	"use strict";
 				var utilsObject = ns.util.object,
 				utilsDOM = ns.util.DOM;
 
@@ -16504,6 +21628,7 @@ ns.version = '0.10.29-14';
 					index: [],
 					verticalCenter: false,
 					moreChar: "*",
+					moreCharLineHeight: 9,
 					indexHeight: 41,
 					selectedClass: "ui-state-selected",
 					ulClass: null,
@@ -16625,12 +21750,9 @@ ns.version = '0.10.29-14';
 					var origIndices = this.indices.original,
 						indices = this.indices.merged,
 						indexLen = indices.length,
-					//container = this.container,
-					//containerHeight = container.offsetHeight,
 						indexHeight = this.options.indexHeight,
-					//maxIndexLen = Math.min(this.maxIndexLen, indices.length),
 						moreChar = this.options.moreChar,
-						addMoreCharLineHeight = 9,
+						addMoreCharLineHeight = this.options.moreCharLineHeight,
 						text,
 						frag,
 						li,
@@ -16850,7 +21972,7 @@ ns.version = '0.10.29-14';
  * @class ns.widget.wearable.indexscrollbar.IndexIndicator
  */
 (function (document, ns) {
-	
+	"use strict";
 				var utilsObject = ns.util.object,
 				events = ns.event;
 
@@ -16905,10 +22027,8 @@ ns.version = '0.10.29-14';
 					element.style.width = container.offsetWidth + "px";
 					element.style.height = container.offsetHeight + "px";
 
-					if ( containerPosition !== "absolute" && containerPosition !== "relative" ) {
-						element.style.top = container.offsetTop + "px";
-						element.style.left = container.offsetLeft + "px";
-					}
+					element.style.top = container.offsetTop + "px";
+					element.style.left = container.offsetLeft + "px";
 				},
 
 				/**
@@ -17245,7 +22365,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var IndexScrollbar = function() {
 				// Support calling without 'new' keyword
 				this.element = null;
@@ -17355,7 +22475,9 @@ ns.version = '0.10.29-14';
 						keepSelectEventDelay: 50,
 						container: null,
 						supplementaryIndex: null,
-						supplementaryIndexMargin: 1
+						supplementaryIndexMargin: 1,
+						moreCharLineHeight: 9,
+						verticalCenter: true
 					};
 				},
 
@@ -17453,9 +22575,10 @@ ns.version = '0.10.29-14';
 						container: element,
 						offsetLeft: 0,
 						index: options.index,
-						verticalCenter: true,
+						verticalCenter: options.verticalCenter,
 						indexHeight: options.indexHeight,
-						maxIndexLen: options.maxIndexLen
+						maxIndexLen: options.maxIndexLen,
+						moreCharLineHeight: options.moreCharLineHeight
 					});
 
 					// indexBar2
@@ -18012,7 +23135,7 @@ ns.version = '0.10.29-14';
  * @since 2.0
  */
 (function (document, ns) {
-	
+	"use strict";
 	
 			var engine = ns.engine,
 				CoreIndexScrollbar = ns.widget.core.IndexScrollbar,
@@ -18165,7 +23288,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				engine = ns.engine,
 				utilsEvents = ns.event,
@@ -18632,7 +23755,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				engine = ns.engine,
 
@@ -18736,7 +23859,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				engine = ns.engine,
 				Progressing = function () {
@@ -18848,7 +23971,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				engine = ns.engine,
 
@@ -18972,7 +24095,7 @@ ns.version = '0.10.29-14';
  */
 /*jslint nomen: true, white: true, plusplus: true*/
 (function (document, ns) {
-	
+	"use strict";
 				/**
 			 * @property {Object} Widget Alias for {@link ns.widget.BaseWidget}
 			 * @member ns.widget.core.VirtualListview
@@ -19152,7 +24275,7 @@ ns.version = '0.10.29-14';
 					 * without excessive loading time. It's recomended to set bufferSize at least 3 times bigger than number
 					 * of visible elements.
 					 * @property {number} [options.dataLength=0] Total number of items.
-					 * @property {string} [options.orientation="y"] Scrolling orientation. Default vertical scrolling enabled.
+					 * @property {string} [options.orientation=VERTICAL] Scrolling orientation. Default VERTICAL scrolling enabled.
 					 * @property {Object} options.listItemUpdater Holds reference to method which modifies list item, depended
 					 * at specified index from database. **Method should be overridden by developer using
 					 * {@link ns.widget.core.VirtualListview#setListItemUpdater} method.** or defined as a config
@@ -19186,9 +24309,9 @@ ns.version = '0.10.29-14';
 
 					return self;
 				},
-				POINTER_START = 'vmousedown',
-				POINTER_MOVE = 'vmousemove',
-				POINTER_END = 'vmouseup',
+				POINTER_START = "vmousedown",
+				POINTER_MOVE = "vmousemove",
+				POINTER_END = "vmouseup",
 
 			// Cached prototype for better minification
 				prototype = new BaseWidget();
@@ -19698,7 +24821,6 @@ ns.version = '0.10.29-14';
 					options = self.options,
 					orientation,
 					scrollview,
-					scrollviewStyle,
 					spacer,
 					spacerStyle;
 
@@ -20080,7 +25202,7 @@ ns.version = '0.10.29-14';
  * @author Tomasz Lukawski <t.lukawski@samsung.com>
  */
 (function(document, ns) {
-	
+	"use strict";
 					var VirtualListview = ns.widget.core.VirtualListview,
 					prototype = new VirtualListview(),
 					parent_init = prototype._init;
@@ -20097,1686 +25219,6 @@ ns.version = '0.10.29-14';
 						"wearable"
 						);
 				}(window.document, ns));
-
-/*global window, define, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/**
- * #Scroller namespace
- * Namespace contains classes and objects connected with scroller widget.
- * @class ns.widget.wearable.scroller
- * @author Maciej Urbanski <m.urbanski@samsung.com>
- */
-(function (window, ns) {
-	
-				ns.widget.wearable.scroller = ns.widget.wearable.scroller || {};
-			}(window, ns));
-
-/*global window, define, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
- * #Effect namespace
- * Namespace with effects for scroller widget.
- * @author Maciej Urbanski <m.urbanski@samsung.com>
- * @class ns.widget.wearable.scroller.effect
- */
-(function (window, ns) {
-	
-				ns.widget.wearable.scroller.effect = ns.widget.wearable.scroller.effect || {};
-			}(window, ns));
-
-/*global window, define, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*jslint nomen: true, plusplus: true */
-/**
- * # Bouncing effect
- * Bouncing effect for scroller widget.
- * @class ns.widget.wearable.scroller.effect.Bouncing
- * @since 2.3
- */
-(function (document, ns) {
-	
-				// scroller.start event trigger when user try to move scroller
-			var utilsObject = ns.util.object,
-				selectors = ns.util.selectors,
-				Bouncing = function (scrollerElement, options) {
-					var self = this;
-					self._orientation = null;
-					self._maxValue = null;
-
-					self._container = null;
-					self._minEffectElement = null;
-					self._maxEffectElement = null;
-
-					self.options = utilsObject.merge({}, Bouncing.defaults, {scrollEndEffectArea: ns.getConfig("scrollEndEffectArea", Bouncing.defaults.scrollEndEffectArea)});
-				/**
-				 * target element for bouncing effect
-				 * @property {HTMLElement} targetElement
-				 * @member ns.widget.wearable.scroller.effect.Bouncing
-				 */
-					self._targetElement = null;
-
-					self._isShow = false;
-					self._isDrag = false;
-					self._isShowAnimating = false;
-					self._isHideAnimating = false;
-
-					self._create(scrollerElement, options);
-				},
-				endEffectAreaType = {
-					content: "content",
-					screen: "screen"
-				},
-				defaults = {
-					duration: 500,
-					scrollEndEffectArea : "content"
-				},
-				classes = {
-					bouncingEffect: "ui-scrollbar-bouncing-effect",
-					page: "ui-page",
-					left: "ui-left",
-					right: "ui-right",
-					top: "ui-top",
-					bottom: "ui-bottom",
-					hide: "ui-hide",
-					show: "ui-show"
-				};
-
-			Bouncing.defaults = defaults;
-
-			Bouncing.prototype = {
-				_create: function (scrollerElement, options) {
-					var self = this;
-					if( self.options.scrollEndEffectArea === endEffectAreaType.content ){
-						self._container = scrollerElement;
-					} else {
-						self._container = selectors.getClosestByClass(scrollerElement, classes.page);
-					}
-
-					self._orientation = options.orientation;
-					self._maxValue = self._getValue( options.maxScrollX, options.maxScrollY );
-
-					self._initLayout();
-				},
-
-				_initLayout: function() {
-					var self = this,
-						minElement = self._minEffectElement = document.createElement("DIV"),
-						maxElement = self._maxEffectElement = document.createElement("DIV"),
-						className = classes.bouncingEffect;
-
-					if ( self._orientation === ns.widget.wearable.scroller.Scroller.Orientation.HORIZONTAL ) {
-						minElement.className = className + " " + classes.left;
-						maxElement.className = className + " " + classes.right;
-					} else {
-						minElement.className = className + " " + classes.top;
-						maxElement.className = className + " " + classes.bottom;
-					}
-
-					self._container.appendChild( minElement );
-					self._container.appendChild( maxElement );
-
-					minElement.addEventListener("animationEnd", this);
-					minElement.addEventListener("webkitAnimationEnd", this);
-					minElement.addEventListener("mozAnimationEnd", this);
-					minElement.addEventListener("msAnimationEnd", this);
-					minElement.addEventListener("oAnimationEnd", this);
-
-					maxElement.addEventListener("animationEnd", this);
-					maxElement.addEventListener("webkitAnimationEnd", this);
-					maxElement.addEventListener("mozAnimationEnd", this);
-					maxElement.addEventListener("msAnimationEnd", this);
-					maxElement.addEventListener("oAnimationEnd", this);
-				},
-
-				/**
-				 * ...
-				 * @method drag
-				 * @param x
-				 * @param y
-				 * @member ns.widget.wearable.scroller.effect.Bouncing
-				 */
-				drag: function( x, y ) {
-					this._isDrag = true;
-					this._checkAndShow( x, y );
-				},
-
-				/**
-				 * ...
-				 * @method dragEnd
-				 * @member ns.widget.wearable.scroller.effect.Bouncing
-				 */
-				dragEnd: function() {
-					var self = this;
-					if ( self._isShow && !self._isShowAnimating && !self._isHideAnimating ) {
-						self._beginHide();
-					}
-
-					self._isDrag = false;
-				},
-
-				/**
-				 * Shows effect.
-				 * @method show
-				 * @member ns.widget.wearable.scroller.effect.Bouncing
-				 */
-				show: function() {
-					var self = this;
-					if ( self._targetElement ) {
-						self._isShow = true;
-						self._beginShow();
-					}
-				},
-
-				/**
-				 * Hides effect.
-				 * @method hide
-				 * @member ns.widget.wearable.scroller.effect.Bouncing
-				 */
-				hide: function() {
-					var self = this;
-					if ( self._isShow ) {
-						self._minEffectElement.style.display = "none";
-						self._maxEffectElement.style.display = "none";
-						self._targetElement.classList.remove(classes.hide);
-						self._targetElement.classList.remove(classes.show);
-					}
-					self._isShow = false;
-					self._isShowAnimating = false;
-					self._isHideAnimating = false;
-					self._targetElement = null;
-				},
-
-				_checkAndShow: function( x, y ) {
-					var self = this,
-						val = self._getValue(x, y);
-					if ( !self._isShow ) {
-						if ( val >= 0 ) {
-							self._targetElement = self._minEffectElement;
-							self.show();
-						} else if ( val <= self._maxValue ) {
-							self._targetElement = self._maxEffectElement;
-							self.show();
-						}
-
-					} else if ( self._isShow && !self._isDrag && !self._isShowAnimating && !self._isHideAnimating ) {
-						self._beginHide();
-					}
-				},
-
-				_getValue: function(x, y) {
-					return this._orientation === ns.widget.wearable.scroller.Scroller.Orientation.HORIZONTAL ? x : y;
-				},
-
-				_beginShow: function() {
-					var self = this;
-					if ( !self._targetElement || self._isShowAnimating ) {
-						return;
-					}
-
-					self._targetElement.style.display = "block";
-
-					self._targetElement.classList.remove(classes.hide);
-					self._targetElement.classList.add(classes.show);
-
-					self._isShowAnimating = true;
-					self._isHideAnimating = false;
-				},
-
-				_finishShow: function() {
-					var self = this;
-					self._isShowAnimating = false;
-					if ( !self._isDrag ) {
-						self._targetElement.classList.remove(classes.show);
-						self._beginHide();
-					}
-				},
-
-				_beginHide: function() {
-					var self = this;
-					if ( self._isHideAnimating ) {
-						return;
-					}
-
-					self._targetElement.classList.remove(classes.show);
-					self._targetElement.classList.add(classes.hide);
-
-					self._isHideAnimating = true;
-					self._isShowAnimating = false;
-				},
-
-				_finishHide: function() {
-					var self = this;
-					self._isHideAnimating = false;
-					self._targetElement.classList.remove(classes.hide);
-					self.hide();
-					self._checkAndShow();
-				},
-
-				/**
-				 * Supports events.
-				 * @method handleEvent
-				 * @member ns.widget.wearable.scroller.effect.Bouncing
-				 */
-				handleEvent: function( event ) {
-					if (event.type.toLowerCase().indexOf("animationend") > -1) {
-						if ( this._isShowAnimating ) {
-							this._finishShow();
-						} else if ( this._isHideAnimating ) {
-							this._finishHide();
-						}
-					}
-				},
-
-				/**
-				 * Destroys effect.
-				 * @method destroy
-				 * @member ns.widget.wearable.scroller.effect.Bouncing
-				 */
-				destroy: function() {
-					var self = this,
-						maxEffectElement = this._maxEffectElement,
-						minEffectElement = this._minEffectElement;
-
-					minEffectElement.removeEventListener("animationEnd", this);
-					minEffectElement.removeEventListener("webkitAnimationEnd", this);
-					minEffectElement.removeEventListener("mozAnimationEnd", this);
-					minEffectElement.removeEventListener("msAnimationEnd", this);
-					minEffectElement.removeEventListener("oAnimationEnd", this);
-
-					maxEffectElement.removeEventListener("animationEnd", this);
-					maxEffectElement.removeEventListener("webkitAnimationEnd", this);
-					maxEffectElement.removeEventListener("mozAnimationEnd", this);
-					maxEffectElement.removeEventListener("msAnimationEnd", this);
-					maxEffectElement.removeEventListener("oAnimationEnd", this);
-
-					self._container.removeChild( minEffectElement );
-					self._container.removeChild( maxEffectElement );
-
-					self._container = null;
-					self._minEffectElement = null;
-					self._maxEffectElement = null;
-					self._targetElement = null;
-
-					self._isShow = null;
-					self._orientation = null;
-					self._maxValue = null;
-				}
-			};
-
-			ns.widget.wearable.scroller.effect.Bouncing = Bouncing;
-			}(window.document, ns));
-
-/*global window, define, Event, console, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*jslint nomen: true, plusplus: true */
-/**
- * # Scroller Widget
- * Widget creates scroller on content.
- * @class ns.widget.wearable.scroller.Scroller
- * @since 2.3
- * @extends ns.widget.BaseWidget
- */
-(function (document, ns) {
-	
-				// scroller.start event trigger when user try to move scroller
-			var BaseWidget = ns.widget.BaseWidget,
-				Gesture = ns.event.gesture,
-				engine = ns.engine,
-				utilsObject = ns.util.object,
-				utilsEvents = ns.event,
-				eventTrigger = utilsEvents.trigger,
-				prototype = new BaseWidget(),
-				EffectBouncing = ns.widget.wearable.scroller.effect.Bouncing,
-				eventType = {
-					/**
-					 * event trigger when scroller start
-					 * @event scrollstart
-					 */
-					START: "scrollstart",
-					/**
-					 * event trigger when scroller move
-					 * @event scrollmove
-					 */
-					MOVE: "scrollmove",
-					/**
-					 * event trigger when scroller end
-					 * @event scrollend
-					 */
-					END: "scrollend",
-					/**
-					 * event trigger when scroll is cancel
-					 * @event scrollcancel
-					 */
-					CANCEL: "scrollcancel"
-				},
-
-				/*
-				 * this option is related operation of scroll bar.
-				 * the value is true, scroll bar is shown during touching screen even if content doesn't scroll.
-				 * the value is false, scroll bar disappear when there is no movement of the scroll bar.
-				 */
-				_keepShowingScrollbarOnTouch = false,
-
-				Scroller = function () {
-				};
-
-			Scroller.Orientation = {
-				VERTICAL: "vertical",
-				HORIZONTAL: "horizontal"
-			};
-
-			Scroller.eventType = eventType;
-
-			prototype._build = function (element) {
-				if (element.children.length !== 1) {
-					throw "scroller has only one child.";
-				}
-
-				this.scroller = element.children[0];
-				this.scrollerStyle = this.scroller.style;
-
-				this.bouncingEffect = null;
-				this.scrollbar = null;
-
-				this.scrollerWidth = 0;
-				this.scrollerHeight = 0;
-				this.scrollerOffsetX = 0;
-				this.scrollerOffsetY = 0;
-
-				this.maxScrollX = 0;
-				this.maxScrollY = 0;
-
-				this.startScrollerOffsetX = 0;
-				this.startScrollerOffsetY = 0;
-
-				this.orientation = null;
-
-				this.enabled = true;
-				this.scrolled = false;
-				this.dragging = false;
-				this.scrollCanceled = false;
-
-				return element;
-			};
-
-			prototype._configure = function () {
-				/**
-				 * @property {Object} options Options for widget
-				 * @property {number} [options.scrollDelay=0]
-				 * @property {number} [options.threshold=10]
-				 * @property {""|"bar"|"tab"} [options.scrollbar=""]
-				 * @property {boolean} [options.useBouncingEffect=false]
-				 * @property {"vertical"|"horizontal"} [options.orientation="vertical"]
-				 * @member ns.widget.wearable.Scroller
-				 */
-				this.options = utilsObject.merge({}, this.options, {
-					scrollDelay: 0,
-					threshold: 30,
-					scrollbar: "",
-					useBouncingEffect: false,
-					orientation: "vertical"	// vertical or horizontal,
-				});
-			};
-
-			prototype._init = function () {
-				var options = this.options,
-					scrollerChildren = this.scroller.children,
-					elementStyle = this.element.style,
-					scrollerStyle = this.scroller.style,
-					elementHalfWidth =  this.element.offsetWidth / 2,
-					elementHalfHeight = this.element.offsetHeight / 2;
-
-				this.orientation = this.orientation ? this.orientation :
-					(options.orientation === "horizontal" ? Scroller.Orientation.HORIZONTAL : Scroller.Orientation.VERTICAL);
-				this.scrollerWidth = this.scroller.offsetWidth;
-				this.scrollerHeight = this.scroller.offsetHeight;
-
-				this.maxScrollX = elementHalfWidth - this.scrollerWidth + scrollerChildren[scrollerChildren.length - 1].offsetWidth / 2;
-				this.maxScrollY = elementHalfHeight - this.scrollerHeight + scrollerChildren[scrollerChildren.length - 1].offsetHeight / 2;
-				this.minScrollX = elementHalfWidth - scrollerChildren[0].offsetWidth / 2;
-				this.minScrollY = elementHalfHeight - scrollerChildren[0].offsetHeight / 2;
-
-				this.scrolled = false;
-				this.touching = true;
-				this.scrollCanceled = false;
-
-				if ( this.orientation === Scroller.Orientation.HORIZONTAL ) {
-					this.maxScrollY = 0;
-				} else {
-					this.maxScrollX = 0;
-				}
-				elementStyle.overflow = "hidden";
-				elementStyle.position = "relative";
-				scrollerStyle.position = "absolute";
-				scrollerStyle.top = "0px";
-				scrollerStyle.left = "0px";
-				scrollerStyle.width = this.scrollerWidth + "px";
-				scrollerStyle.height = this.scrollerHeight + "px";
-				this._initScrollbar();
-				this._initBouncingEffect();
-			};
-
-			prototype._initScrollbar = function () {
-				var type = this.options.scrollbar,
-					scrollbarType;
-
-				if ( type ) {
-					scrollbarType = ns.widget.wearable.scroller.scrollbar.type[type];
-					if ( scrollbarType ) {
-						this.scrollbar = engine.instanceWidget(this.element, "ScrollBar", {
-							type: scrollbarType,
-							orientation: this.orientation
-						});
-					}
-				}
-			};
-
-			prototype._initBouncingEffect = function () {
-				var o = this.options;
-				if ( o.useBouncingEffect ) {
-					this.bouncingEffect = new EffectBouncing(this.element, {
-						maxScrollX: this.maxScrollX,
-						maxScrollY: this.maxScrollY,
-						orientation: this.orientation
-					});
-				}
-			};
-
-			prototype._resetLayout = function () {
-				var elementStyle = this.element.style,
-					scrollerStyle = this.scrollerStyle;
-
-				elementStyle.overflow = "";
-				elementStyle.position = "";
-
-				elementStyle.overflow = "hidden";
-				elementStyle.position = "relative";
-
-				if (scrollerStyle) {
-					scrollerStyle.position = "";
-					scrollerStyle.top = "";
-					scrollerStyle.left = "";
-					scrollerStyle.width = "";
-					scrollerStyle.height = "";
-
-					scrollerStyle["-webkit-transform"] = "";
-					scrollerStyle["-moz-transition"] = "";
-					scrollerStyle["-ms-transition"] = "";
-					scrollerStyle["-o-transition"] = "";
-					scrollerStyle["transition"] = "";
-				}
-			};
-
-			prototype._bindEvents = function () {
-				ns.event.enableGesture(
-					this.scroller,
-
-					new ns.event.gesture.Drag({
-						threshold: this.options.threshold,
-						delay: this.options.scrollDelay,
-						blockVertical: this.orientation === Scroller.Orientation.HORIZONTAL,
-						blockHorizontal: this.orientation === Scroller.Orientation.VERTICAL
-					})
-				);
-
-				utilsEvents.on( this.scroller, "drag dragstart dragend dragcancel", this );
-				window.addEventListener("resize", this);
-			};
-
-			prototype._unbindEvents = function () {
-				if (this.scroller) {
-					ns.event.disableGesture( this.scroller );
-					utilsEvents.off( this.scroller, "drag dragstart dragend dragcancel", this );
-					window.removeEventListener("resize", this);
-				}
-			};
-
-			/* jshint -W086 */
-			prototype.handleEvent = function (event) {
-				switch (event.type) {
-					case "dragstart":
-						this._start( event );
-						break;
-					case "drag":
-						this._move( event );
-						break;
-					case "dragend":
-						this._end( event );
-						break;
-					case "dragcancel":
-						this.cancel( event );
-						break;
-					case "resize":
-						this.refresh();
-						break;
-				}
-			};
-
-			/**
-			 * Set options for widget.
-			 * @method setOptions
-			 * @param {Object} options
-			 * @member ns.widget.wearable.scroller.Scroller
-			 */
-			prototype.setOptions = function (options) {
-				var name;
-				for ( name in options ) {
-					if ( options.hasOwnProperty(name) && !!options[name] ) {
-						this.options[name] = options[name];
-					}
-				}
-			};
-
-			prototype._refresh = function () {
-				this._clear();
-				this._unbindEvents();
-				this._init();
-				this._bindEvents();
-			};
-
-			/**
-			 * Scrolls to new position.
-			 * @method scrollTo
-			 * @param x
-			 * @param y
-			 * @param duration
-			 * @member ns.widget.wearable.scroller.Scroller
-			 */
-			prototype.scrollTo = function (x, y, duration) {
-				this._translate(x, y, duration);
-				this._translateScrollbar(x, y, duration);
-			};
-
-			prototype._translate = function (x, y, duration) {
-				var translate,
-					transition = {
-						normal: "none",
-						webkit: "none",
-						moz: "none",
-						ms: "none",
-						o: "none"
-					},
-					scrollerStyle = this.scrollerStyle;
-
-				if (duration) {
-					transition.normal = "transform " + duration / 1000 + "s ease-out";
-					transition.webkit = "-webkit-transform " + duration / 1000 + "s ease-out";
-					transition.moz = "-moz-transform " + duration / 1000 + "s ease-out";
-					transition.ms = "-ms-transform " + duration / 1000 + "s ease-out";
-					transition.o = "-o-transform " + duration / 1000 + "s ease-out";
-				}
-				translate = "translate3d(" + x + "px," + y + "px, 0)";
-
-				scrollerStyle["-webkit-transform"] =
-						scrollerStyle["-moz-transform"] =
-						scrollerStyle["-ms-transform"] =
-						scrollerStyle["-o-transform"] =
-						scrollerStyle.transform = translate;
-				scrollerStyle.transition = transition.normal;
-				scrollerStyle["-webkit-transition"] = transition.webkit;
-				scrollerStyle["-moz-transition"] = transition.moz;
-				scrollerStyle["-ms-transition"] = transition.ms;
-				scrollerStyle["-o-transition"] = transition.o;
-
-				this.scrollerOffsetX = window.parseInt(x, 10);
-				this.scrollerOffsetY = window.parseInt(y, 10);
-			};
-
-			prototype._translateScrollbar = function (x, y, duration, autoHidden) {
-				if (!this.scrollbar) {
-					return;
-				}
-
-				this.scrollbar.translate(this.orientation === Scroller.Orientation.HORIZONTAL ? -x : -y, duration, autoHidden);
-			};
-
-			prototype._start = function(/* e */) {
-				this.scrolled = false;
-				this.dragging = true;
-				this.scrollCanceled = false;
-				this.startScrollerOffsetX = this.scrollerOffsetX;
-				this.startScrollerOffsetY = this.scrollerOffsetY;
-			};
-
-			prototype._move = function (e, pos) {
-				var newX = this.startScrollerOffsetX,
-					newY = this.startScrollerOffsetY,
-					autoHide = !_keepShowingScrollbarOnTouch;
-
-				if ( !this.enabled || this.scrollCanceled || !this.dragging ) {
-					return;
-				}
-
-				if ( this.orientation === Scroller.Orientation.HORIZONTAL ) {
-					newX += e.detail.estimatedDeltaX;
-				} else {
-					newY += e.detail.estimatedDeltaY;
-				}
-
-				if ( newX > this.minScrollX || newX < this.maxScrollX ) {
-					newX = newX > this.minScrollX ? this.minScrollX : this.maxScrollX;
-				}
-				if ( newY > this.minScrollY || newY < this.maxScrollY ) {
-					newY = newY > this.minScrollY ? this.minScrollY : this.maxScrollY;
-				}
-
-				if ( newX !== this.scrollerOffsetX || newY !== this.scrollerOffsetY ) {
-					if ( !this.scrolled ) {
-						this._fireEvent( eventType.START );
-					}
-					this.scrolled = true;
-
-					this._translate( newX, newY );
-					this._translateScrollbar( newX, newY, 0, autoHide );
-					// TODO to dispatch move event is too expansive. it is better to use callback.
-					this._fireEvent( eventType.MOVE );
-
-					if ( this.bouncingEffect ) {
-						this.bouncingEffect.hide();
-					}
-				} else {
-					if ( this.bouncingEffect ) {
-						this.bouncingEffect.drag( newX, newY );
-					}
-					this._translateScrollbar( newX, newY, 0, autoHide );
-				}
-			};
-
-			prototype._end = function (/* e */) {
-				if ( !this.dragging ) {
-					return;
-				}
-
-				// bouncing effect
-				if ( this.bouncingEffect ) {
-					this.bouncingEffect.dragEnd();
-				}
-
-				if ( this.scrollbar ) {
-					this.scrollbar.end();
-				}
-
-				this._endScroll();
-				this.dragging = false;
-			};
-
-			prototype._endScroll = function () {
-				if (this.scrolled) {
-					this._fireEvent(eventType.END);
-				}
-
-				this.scrolled = false;
-			};
-
-			/**
-			 * Cancels scroll.
-			 * @method cancel
-			 * @member ns.widget.wearable.scroller.Scroller
-			 */
-			prototype.cancel = function () {
-				this.scrollCanceled = true;
-
-				if ( this.scrolled ) {
-					this._translate( this.startScrollerOffsetX, this.startScrollerOffsetY );
-					this._translateScrollbar( this.startScrollerOffsetX, this.startScrollerOffsetY );
-					this._fireEvent( eventType.CANCEL );
-				}
-
-				if ( this.scrollbar ) {
-					this.scrollbar.end();
-				}
-
-				this.scrolled = false;
-				this.dragging = false;
-			};
-
-			prototype._fireEvent = function (eventName, detail) {
-				eventTrigger( this.element, eventName, detail );
-			};
-
-			prototype._clear = function () {
-				this.scrolled = false;
-				this.scrollCanceled = false;
-
-				this._resetLayout();
-				this._clearScrollbar();
-				this._clearBouncingEffect();
-			};
-
-			prototype._clearScrollbar = function () {
-				if ( this.scrollbar ) {
-					this.scrollbar.destroy();
-				}
-				this.scrollbar = null;
-			};
-
-			prototype._clearBouncingEffect = function () {
-				if (this.bouncingEffect) {
-					this.bouncingEffect.destroy();
-				}
-				this.bouncingEffect = null;
-			};
-
-			prototype._disable = function () {
-				this.enabled = false;
-			};
-
-			prototype._enable = function () {
-				this.enabled = true;
-			};
-
-			prototype._destroy = function () {
-				this._clear();
-				this._unbindEvents();
-				this.scrollerStyle = null;
-				this.scroller = null;
-			};
-
-			Scroller.prototype = prototype;
-
-			ns.widget.wearable.scroller.Scroller = Scroller;
-
-			engine.defineWidget(
-				"Scroller",
-				".scroller",
-				["scrollTo", "cancel"],
-				Scroller
-			);
-			}(window.document, ns));
-
-/*global window, define, Event, console */
-/*
-* Copyright (c) 2015 Samsung Electronics Co., Ltd
-*
-* Licensed under the Flora License, Version 1.1 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://floralicense.org/license/
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-/*jslint nomen: true, plusplus: true */
-/**
- * #TabIndicator Widget
- * Widget create tabs indicator.
- * @class ns.widget.wearable.TabIndicator
- * @since 2.3
- * @extends ns.widget.BaseWidget
- */
-(function (document, ns) {
-	
-				var engine = ns.engine,
-				object = ns.util.object,
-				TabIndicator = function() {
-				this.tabSize = 0;
-				this.activeIndex = 0;
-				this.width = 0;
-			};
-
-			TabIndicator.EventType = {
-				/**
-				 * Triggered when tab is changing
-				 * @event tabchange
-				 * @member ns.widget.wearable.TabIndicator
-				 */
-				change: "tabchange"
-			};
-
-			TabIndicator.prototype = new ns.widget.BaseWidget();
-
-			object.fastMerge(TabIndicator.prototype, {
-				_init: function(element) {
-					var o = this.options;
-
-					this.width = element.offsetWidth;
-					element.classList.add( o.wrapperClass );
-				},
-
-				_configure: function( ) {
-					/**
-					 * @property {Object} options Options for widget
-					 * @property {number} [options.margin=2]
-					 * @property {boolean} [options.triggerEvent=false]
-					 * @property {string} [options.wrapperClass="ui-tab-indicator]
-					 * @property {string} [options.itemClass="ui-tab-item"]
-					 * @property {string} [options.activeClass="ui-tab-active"]
-					 * @member ns.widget.wearable.TabIndicator
-					 */
-					this.options = {
-						margin: 4,
-						triggerEvent: false,
-						wrapperClass: "ui-tab-indicator",
-						itemClass: "ui-tab-item",
-						activeClass: "ui-tab-active"
-					};
-				},
-
-				_createIndicator: function() {
-					var o = this.options,
-						activeIndex = this.activeIndex,
-						wrap = document.createDocumentFragment(),
-						widthTable = [],
-						margin = o.margin,
-						i = 0,
-						len = this.tabSize,
-						width = this.width-margin*(len-1),
-						std = Math.floor(width / len),
-						remain = width % len,
-						span, offset=0;
-
-					for (i=0; i < len; i++) {
-						widthTable[i] = std;
-					}
-
-					for ( i= Math.floor((len-remain)/2); remain > 0; i++, remain-- ) {
-						widthTable[i] += 1;
-					}
-
-					for (i=0; i < len; i++) {
-						span = document.createElement("span");
-						span.classList.add( o.itemClass );
-						span.style.width = widthTable[i] + "px";
-						span.style.left = offset + "px";
-						offset += widthTable[i] + margin;
-
-						if ( i === activeIndex ) {
-							span.classList.add( o.activeClass );
-						}
-						wrap.appendChild(span);
-					}
-
-					this.element.appendChild( wrap );
-				},
-
-				_removeIndicator: function() {
-					this.element.innerHTML = "";
-				},
-
-				_fireEvent: function(eventName, detail) {
-					ns.fireEvent( this.element, eventName, detail );
-				},
-
-				_refresh: function() {
-					this._removeIndicator();
-					this._createIndicator();
-				},
-
-				/**
-				 * @method setActive
-				 * @param position
-				 * @member ns.widget.wearable.TabIndicator
-				 */
-				setActive: function ( position ) {
-					var o = this.options,
-						nodes = this.element.children;
-
-					this.activeIndex = position;
-
-					[].forEach.call(nodes, function( element ) {
-						element.classList.remove( o.activeClass );
-					});
-
-					if ( position < nodes.length ) {
-						nodes[position].classList.add( o.activeClass );
-
-						if ( o.triggerEvent ) {
-							this._fireEvent(TabIndicator.EventType.change, {
-								active: position
-							});
-						}
-					}
-				},
-
-				/**
-				 * @method setSize
-				 * @param size
-				 * @member ns.widget.wearable.TabIndicator
-				 */
-				setSize: function( size ) {
-					var needRefresh = this.tabSize !== size;
-
-					this.tabSize = size;
-					if ( needRefresh ) {
-						this.refresh();
-					}
-				},
-
-				_destroy: function() {
-					var o = this.options;
-
-					this._removeIndicator();
-
-					this.element.classList.remove( o.wrapperClass );
-				}
-			});
-
-			ns.widget.wearable.TabIndicator = TabIndicator;
-
-			engine.defineWidget(
-				"TabIndicator",
-				".ui-tab",
-				["setActive", "setSize"],
-				TabIndicator
-			);
-			}(window.document, ns));
-
-/*global window, define, Event, console */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*jslint nomen: true, plusplus: true */
-/**
- * # SectionChanger Widget
- * Shows a control that you can use to scroll through multiple *section*
- * elements.
- *
- * The section changer widget provides an application architecture, which has
- * multiple sections on a page and enables scrolling through the *section* elements.
- *
- * ## Manual constructor
- *
- *      @example
- *         <div id="hasSectionchangerPage" class="ui-page">
- *             <header class="ui-header">
- *                 <h2 class="ui-title">SectionChanger</h2>
- *             </header>
- *             <div id="sectionchanger" class="ui-content">
- *                 <!--Section changer has only one child-->
- *                 <div>
- *                     <section>
- *                         <h3>LEFT1 PAGE</h3>
- *                     </section>
- *                     <section class="ui-section-active">
- *                         <h3>MAIN PAGE</h3>
- *                     </section>
- *                     <section>
- *                         <h3>RIGHT1 PAGE</h3>
- *                     </section>
- *                 </div>
- *             </div>
- *         </div>
- *         <script>
- *             (function () {
- *                 var page = document.getElementById("hasSectionchangerPage"),
- *                     element = document.getElementById("sectionchanger"),
- *                     sectionChanger;
- *
- *                 page.addEventListener("pageshow", function () {
- *                     // Create the SectionChanger object
- *                     sectionChanger = new tau.SectionChanger(element, {
- *                         circular: true,
- *                         orientation: "horizontal",
- *                         useBouncingEffect: true
- *                     });
- *                 });
- *
- *                 page.addEventListener("pagehide", function () {
- *                     // Release the object
- *                     sectionChanger.destroy();
- *                 });
- *             })();
- *         </script>
- *
- * ## Handling Events
- *
- * To handle section changer events, use the following code:
- *
- *      @example
- *         <script>
- *             (function () {
- *                 var changer = document.getElementById("sectionchanger");
- *                 changer.addEventListener("sectionchange", function (event) {
- *                     console.debug(event.detail.active + " section is active.");
- *                 });
- *             })();
- *         </script>
- *
- * @class ns.widget.wearable.SectionChanger
- * @since 2.2
- * @extends ns.widget.BaseWidget
- */
-(function (document, ns) {
-	
-				var Scroller = ns.widget.wearable.scroller.Scroller,
-				Gesture = ns.event.gesture,
-				engine = ns.engine,
-				utilsObject = ns.util.object,
-				utilsEvents = ns.event,
-				eventType = ns.util.object.merge({
-					/**
-					 * Triggered when the section is changed.
-					 * @event sectionchange
-					 * @member ns.widget.wearable.SectionChanger
-					 */
-					CHANGE: "sectionchange"
-				}, Scroller.eventType),
-				classes = {
-					uiSectionChanger: "ui-section-changer"
-				};
-
-
-			function SectionChanger() {
-				this.options = {};
-			}
-
-			function calculateCustomLayout(direction, elements, lastIndex) {
-				var len = lastIndex !== undefined ? lastIndex : elements.length,
-					result = 0,
-					i;
-				for (i = 0; i < len; i++) {
-					result += direction === Scroller.Orientation.HORIZONTAL ? elements[i].offsetWidth : elements[i].offsetHeight;
-				}
-				return result;
-			}
-			function calculateCenter(direction, elements, index) {
-				var result = calculateCustomLayout(direction, elements, index + 1);
-				result -= direction === Scroller.Orientation.HORIZONTAL ? elements[index].offsetWidth / 2 : elements[index].offsetHeight / 2;
-				return result;
-			}
-			utilsObject.inherit(SectionChanger, Scroller, {
-				_build: function (element) {
-
-					this.tabIndicatorElement = null;
-					this.tabIndicator = null;
-
-					this.sections = null;
-					this.sectionPositions = [];
-
-					this.activeIndex = 0;
-					this.beforeIndex = 0;
-
-					this._super(element);
-					element.classList.add(classes.uiSectionChanger);
-					return element;
-				},
-
-				_configure : function () {
-					this._super();
-					/**
-					 * Options for widget
-					 * @property {Object} options
-					 * @property {"horizontal"|"vertical"} [options.orientation="horizontal"] Sets the section changer orientation:
-					 * @property {boolean} [options.circular=false] Presents the sections in a circular scroll fashion.
-					 * @property {boolean} [options.useBouncingEffect=false] Shows a scroll end effect on the scroll edge.
-					 * @property {string} [options.items="section"] Defines the section element selector.
-					 * @property {string} [options.activeClass="ui-section-active"] Specifies the CSS classes which define the active section element. Add the specified class (ui-section-active) to a *section* element to indicate which section must be shown first. By default, the first section is shown first.
-					 * @property {boolean} [options.fillContent=true] declare to section tag width to fill content or not.
-					 * @member ns.widget.wearable.SectionChanger
-					 */
-					this.options = utilsObject.merge(this.options, {
-						items: "section",
-						activeClass: "ui-section-active",
-						circular: false,
-						animate: true,
-						animateDuration: 100,
-						orientation: "horizontal",
-						changeThreshold: -1,
-						useTab: false,
-						fillContent: true
-					});
-				},
-
-				_init: function (element) {
-					var o = this.options,
-						scroller = this.scroller,
-						sectionLength, i, className;
-
-					scroller.style.position = "absolute";
-					this._sectionChangerWidth = element.offsetWidth;
-					this._sectionChangerHeight = element.offsetHeight;
-					this._sectionChangerHalfWidth = this._sectionChangerWidth / 2;
-					this._sectionChangerHalfHeight = this._sectionChangerHeight / 2;
-					this.orientation = o.orientation === "horizontal" ? Scroller.Orientation.HORIZONTAL : Scroller.Orientation.VERTICAL;
-
-					if (o.scrollbar === "tab") {
-						o.scrollbar = false;
-						o.useTab = true;
-					}
-
-					this.sections = typeof o.items === "string" ?
-						scroller.querySelectorAll(o.items) :
-						o.items;
-					sectionLength = this.sections.length;
-
-					if (o.circular && sectionLength < 3) {
-						throw "if you use circular option, you must have at least three sections.";
-					}
-
-					if (this.activeIndex >= sectionLength) {
-						this.activeIndex = sectionLength - 1;
-					}
-
-					for (i = 0; i < sectionLength; i++) {
-						className = this.sections[i].className;
-						if (className && className.indexOf(o.activeClass) > -1) {
-							this.activeIndex = i;
-						}
-
-						this.sectionPositions[i] = i;
-					}
-
-					this._prepareLayout();
-					this._initLayout();
-					this._super();
-					this._repositionSections(true);
-					this.setActiveSection(this.activeIndex);
-
-					// set corret options values.
-					if (!o.animate) {
-						o.animateDuration = 0;
-					}
-					if (o.changeThreshold < 0) {
-						o.changeThreshold = this._sectionChangerHalfWidth;
-					}
-
-					if (this.enabled && sectionLength > 1) {
-						this.enable();
-					} else {
-						this.disable();
-					}
-					return element;
-				},
-
-				_prepareLayout: function () {
-					var o = this.options,
-						sectionLength = this.sections.length,
-						width = this._sectionChangerWidth,
-						height = this._sectionChangerHeight,
-						orientation = this.orientation,
-						scrollerStyle = this.scroller.style,
-						tabHeight;
-
-					if (o.useTab) {
-						this._initTabIndicator();
-						tabHeight = this.tabIndicatorElement.offsetHeight;
-						height -= tabHeight;
-						this._sectionChangerHalfHeight = height / 2;
-						this.element.style.height = height + "px";
-						this._sectionChangerHeight = height;
-					}
-
-					if (orientation === Scroller.Orientation.HORIZONTAL) {
-						scrollerStyle.width = (o.fillContent ? width * sectionLength : calculateCustomLayout(orientation, this.sections)) + "px";
-						scrollerStyle.height = height + "px"; //set Scroller width
-					} else {
-						scrollerStyle.width = width + "px"; //set Scroller width
-						scrollerStyle.height = (o.fillContent ? height * sectionLength : calculateCustomLayout(orientation, this.sections)) + "px";
-					}
-
-				},
-
-				_initLayout: function () {
-					var sectionStyle = this.sections.style,
-						left = 0,
-						top = 0,
-						i, sectionLength;
-
-					//section element has absolute position
-					for (i = 0, sectionLength = this.sections.length; i < sectionLength; i++) {
-						//Each section set initialize left position
-						sectionStyle = this.sections[i].style;
-						sectionStyle.position = "absolute";
-						if (this.options.fillContent) {
-							sectionStyle.width = this._sectionChangerWidth + "px";
-							sectionStyle.height = this._sectionChangerHeight + "px";
-						}
-
-						if (this.orientation === Scroller.Orientation.HORIZONTAL) {
-							top = 0;
-							left = calculateCustomLayout(this.orientation, this.sections, i);
-						} else {
-							top = calculateCustomLayout(this.orientation, this.sections, i);
-							left = 0;
-						}
-
-						sectionStyle.top = top + "px";
-						sectionStyle.left = left + "px";
-					}
-
-				},
-
-				_initBouncingEffect: function () {
-					var o = this.options;
-					if (!o.circular) {
-						this._super();
-					}
-				},
-
-				_translateScrollbar: function (x, y, duration, autoHidden) {
-					var offset;
-
-					if (!this.scrollbar) {
-						return;
-					}
-
-					if (this.orientation === Scroller.Orientation.HORIZONTAL) {
-						offset = (-x + this.minScrollX);
-					} else {
-						offset = (-y + this.minScrollY);
-					}
-
-					this.scrollbar.translate(offset, duration, autoHidden);
-				},
-
-				_translateScrollbarWithPageIndex: function (pageIndex, duration) {
-					var offset;
-
-					if (!this.scrollbar) {
-						return;
-					}
-
-					offset = calculateCustomLayout(this.orientation, this.sections, this.activeIndex);
-
-					this.scrollbar.translate(offset, duration);
-				},
-
-				_initTabIndicator: function () {
-					var elem = this.tabIndicatorElement = document.createElement("div");
-					this.element.parentNode.insertBefore(elem, this.element);
-
-					this.tabIndicator = new engine.instanceWidget(elem, "TabIndicator");
-					this.tabIndicator.setSize(this.sections.length);
-					this.tabIndicator.setActive(this.activeIndex);
-					this.tabIndicatorHandler = function (e) {
-						this.tabIndicator.setActive(e.detail.active);
-					}.bind(this);
-					this.element.addEventListener(eventType.CHANGE, this.tabIndicatorHandler, false);
-				},
-
-				_clearTabIndicator: function () {
-					if (this.tabIndicator) {
-						this.element.parentNode.removeChild(this.tabIndicatorElement);
-						this.element.removeEventListener(eventType.CHANGE, this.tabIndicatorHandler, false);
-						this.tabIndicator.destroy();
-						this.tabIndicator = null;
-						this.tabIndicatorElement = null;
-						this.tabIndicatorHandler = null;
-					}
-				},
-
-				_resetLayout: function () {
-					var //scrollerStyle = this.scroller.style,
-						sectionStyle = this.sections.style,
-						i, sectionLength;
-
-					//scrollerStyle.width = "";
-					//scrollerStyle.height = "";
-					//this.scroller || this.scroller._resetLayout();
-
-					for (i = 0, sectionLength = this.sections.length; i < sectionLength; i++) {
-						sectionStyle = this.sections[i].style;
-
-						sectionStyle.position = "";
-						sectionStyle.width = "";
-						sectionStyle.height = "";
-						sectionStyle.top = "";
-						sectionStyle.left = "";
-					}
-
-					this._super();
-				},
-
-				_bindEvents: function () {
-					this._super();
-
-					ns.event.enableGesture(
-						this.scroller,
-
-						new ns.event.gesture.Swipe({
-							orientation: this.orientation === Scroller.Orientation.HORIZONTAL ?
-								Gesture.Orientation.HORIZONTAL :
-								Gesture.Orientation.VERTICAL
-						})
-					);
-
-					utilsEvents.on(this.scroller,
-							"swipe transitionEnd webkitTransitionEnd mozTransitionEnd msTransitionEnd oTransitionEnd", this);
-				},
-
-				_unbindEvents: function () {
-					this._super();
-
-					if (this.scroller) {
-						ns.event.disableGesture(this.scroller);
-						utilsEvents.off(this.scroller,
-							"swipe transitionEnd webkitTransitionEnd mozTransitionEnd msTransitionEnd oTransitionEnd", this);
-					}
-				},
-
-				/**
-				 * This method manages events.
-				 * @method handleEvent
-				 * @returns {Event} event
-				 * @member ns.widget.wearable.SectionChanger
-				 */
-				handleEvent: function (event) {
-					this._super(event);
-
-					switch (event.type) {
-						case "swipe":
-							this._swipe(event);
-							break;
-						case "webkitTransitionEnd":
-						case "mozTransitionEnd":
-						case "msTransitionEnd":
-						case "oTransitionEnd":
-						case "transitionEnd":
-							if (event.target === this.scroller) {
-								this._endScroll();
-							}
-							break;
-					}
-				},
-
-				_notifyChanagedSection: function (index) {
-					var activeClass = this.options.activeClass,
-						sectionLength = this.sections.length,
-						i=0, section;
-
-					for (i=0; i < sectionLength; i++) {
-						section = this.sections[i];
-						section.classList.remove(activeClass);
-						if (i === this.activeIndex) {
-							section.classList.add(activeClass);
-						}
-					}
-
-					this._fireEvent(eventType.CHANGE, {
-						active: index
-					});
-				},
-
-				/**
-				 * Changes the currently active section element.
-				 * @method setActiveSection
-				 * @param {number} index
-				 * @param {number} duration For smooth scrolling,
-				 * the duration parameter must be in milliseconds.
-				 * @member ns.widget.wearable.SectionChanger
-				 */
-				setActiveSection: function (index, duration, direct) {
-					var position = this.sectionPositions[ index ],
-						scrollbarDuration = duration,
-						oldActiveIndex = this.activeIndex,
-						newX=0,
-						newY= 0,
-						centerX = 0,
-						centerY = 0;
-
-					if (this.orientation === Scroller.Orientation.HORIZONTAL) {
-						newX = this._sectionChangerHalfWidth - calculateCenter(this.orientation, this.sections, position);
-					} else {
-						newY = this._sectionChangerHalfHeight - calculateCenter(this.orientation, this.sections, position);
-					}
-
-					if (this.beforeIndex - index > 1 || this.beforeIndex - index < -1) {
-						scrollbarDuration = 0;
-					}
-
-					this.activeIndex = index;
-					this.beforeIndex = this.activeIndex;
-
-					if (newX !== this.scrollerOffsetX || newY !== this.scrollerOffsetY) {
-						
-						if (direct !== false) {
-							this._fireEvent( eventType.START );
-							this.scrolled = true;
-						}
-
-						this._translate(newX, newY, duration);
-						this._translateScrollbarWithPageIndex(index, scrollbarDuration);
-					} else {
-						this._endScroll();
-					}
-
-					// notify changed section.
-					if (this.activeIndex !== oldActiveIndex) {
-						this._notifyChanagedSection(this.activeIndex);
-					}
-				},
-
-				/**
-				 * Gets the currently active section element's index.
-				 * @method getActiveSectionIndex
-				 * @returns {number}
-				 * @member ns.widget.wearable.SectionChanger
-				 */
-				getActiveSectionIndex: function () {
-					return this.activeIndex;
-				},
-
-				_start: function (e) {
-					this._super(e);
-
-					this.beforeIndex = this.activeIndex;
-				},
-
-				_move: function (e) {
-					var changeThreshold = this.options.changeThreshold,
-						delta = this.orientation === Scroller.Orientation.HORIZONTAL ? e.detail.deltaX : e.detail.deltaY,
-						oldActiveIndex = this.activeIndex;
-
-					this._super(e);
-
-					if (!this.scrolled) {
-						return;
-					}
-
-					if (delta > changeThreshold) {
-						this.activeIndex = this._calculateIndex(this.beforeIndex - 1);
-					} else if (delta < -changeThreshold) {
-						this.activeIndex = this._calculateIndex(this.beforeIndex + 1);
-					} else {
-						this.activeIndex = this.beforeIndex;
-					}
-
-					// notify changed section.
-					if (this.activeIndex !== oldActiveIndex) {
-						this._notifyChanagedSection(this.activeIndex);
-					}
-				},
-
-				_end: function (/* e */) {
-					if ( this.scrollbar ) {
-						this.scrollbar.end();
-					}
-
-					if (!this.enabled || this.scrollCanceled || !this.dragging) {
-						return;
-					}
-
-					// bouncing effect
-					if (this.bouncingEffect) {
-						this.bouncingEffect.dragEnd();
-					}
-
-					this.setActiveSection(this.activeIndex, this.options.animateDuration, false);
-					this.dragging = false;
-				},
-
-				_swipe: function (e) {
-					var offset = e.detail.direction === Gesture.Direction.UP || e.detail.direction === Gesture.Direction.LEFT ? 1 : -1,
-						newIndex = this._calculateIndex(this.beforeIndex + offset);
-
-					if (!this.enabled || this.scrollCanceled || !this.dragging) {
-						return;
-					}
-
-					// bouncing effect
-					if (this.bouncingEffect) {
-						this.bouncingEffect.dragEnd();
-					}
-
-					if (this.activeIndex !== newIndex) {
-						this.activeIndex = newIndex;
-						this._notifyChanagedSection(newIndex);
-					}
-
-					this.setActiveSection(newIndex, this.options.animateDuration, false);
-					this.dragging = false;
-				},
-
-				_endScroll: function () {
-					if (!this.enabled || !this.scrolled || this.scrollCanceled) {
-						return;
-					}
-
-					this._repositionSections();
-					this._super();
-				},
-
-				_repositionSections: function (init) {
-					// if developer set circular option is true, this method used when webkitTransitionEnd event fired
-					var sectionLength = this.sections.length,
-						curPosition = this.sectionPositions[this.activeIndex],
-						centerPosition = window.parseInt(sectionLength/2, 10),
-						circular = this.options.circular,
-						centerX = 0,
-						centerY = 0,
-						i, sectionStyle, sIdx, top, left, newX, newY;
-
-					if (this.orientation === Scroller.Orientation.HORIZONTAL) {
-						newX = -(calculateCenter(this.orientation, this.sections, (circular ? centerPosition : this.activeIndex)));
-						newY = 0;
-					} else {
-						newX = 0;
-						newY = -(calculateCenter(this.orientation, this.sections, (circular ? centerPosition : this.activeIndex)));
-					}
-
-					this._translateScrollbarWithPageIndex(this.activeIndex);
-
-					if (init || (curPosition === 0 || curPosition === sectionLength - 1)) {
-
-						if (this.orientation === Scroller.Orientation.HORIZONTAL) {
-							centerX = this._sectionChangerHalfWidth + newX;
-						} else {
-							centerY = this._sectionChangerHalfHeight + newY;
-						}
-						this._translate(centerX, centerY);
-
-						if (circular) {
-							for (i = 0; i < sectionLength; i++) {
-								sIdx = (sectionLength + this.activeIndex - centerPosition + i) % sectionLength;
-								sectionStyle = this.sections[ sIdx ].style;
-
-								this.sectionPositions[sIdx] = i;
-
-								if (this.orientation === Scroller.Orientation.HORIZONTAL) {
-									top = 0;
-									left = calculateCustomLayout(this.orientation, this.sections, i);
-								} else {
-									top = calculateCustomLayout(this.orientation, this.sections, i);
-									left = 0;
-								}
-
-								sectionStyle.top = top + "px";
-								sectionStyle.left = left + "px";
-							}
-						}
-					}
-				},
-
-				_calculateIndex: function (newIndex) {
-					var sectionLength = this.sections.length;
-
-					if (this.options.circular) {
-						newIndex = (sectionLength + newIndex) % sectionLength;
-					} else {
-						newIndex = newIndex < 0 ? 0 : (newIndex > sectionLength - 1 ? sectionLength - 1 : newIndex);
-					}
-
-					return newIndex;
-				},
-
-				_clear: function () {
-					this._clearTabIndicator();
-					this._super();
-					this.sectionPositions.length = 0;
-				}
-			});
-
-			ns.widget.wearable.SectionChanger = SectionChanger;
-
-			engine.defineWidget(
-				"SectionChanger",
-				".scroller",
-				["getActiveSectionIndex", "setActiveSection"],
-				SectionChanger
-			);
-			}(window.document, ns));
 
 /*global window, define */
 /*jslint nomen: true, plusplus: true */
@@ -21807,7 +25249,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 				/**
 			 * Alias for {@link ns.widget.wearable.VirtualListview}
 			 * @property {Object} VirtualList
@@ -22142,7 +25584,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function(document, ns) {
-	
+	"use strict";
 				var BaseWidget = ns.widget.BaseWidget,
 				/**
 				 * Alias for class ns.engine
@@ -22205,7 +25647,7 @@ ns.version = '0.10.29-14';
 						selector: "li:not(.ui-listview-divider)",
 						animate: "none",
 						scale: {
-							from: 0.5,
+							from: 0.77,
 							to: 1
 						},
 						opacity: {
@@ -22602,7 +26044,7 @@ ns.version = '0.10.29-14';
 					window.cancelAnimationFrame(animationTimer);
 					animationTimer = null;
 				}
-				scrollAnimation(scrollableParent.element, scrollableParent.element.scrollTop, dest, 450);
+				scrollAnimation(scrollableParent.element, scrollableParent.element.scrollTop, dest, 200);
 			};
 
 			function cubicBezier (x1, y1, x2, y2) {
@@ -22723,7 +26165,7 @@ ns.version = '0.10.29-14';
  * @extends ns.widget.BaseWidget
  */
 (function (document, ns) {
-	
+	"use strict";
 				var Gesture = ns.event.gesture,
 				utilsEvents = ns.event,
 				engine = ns.engine,
@@ -23222,806 +26664,6 @@ ns.version = '0.10.29-14';
 			);
 			}(window.document, ns));
 
-/*global window, define, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
- * #Scrollbar namespace
- * Namespace with scrollbar for scroller widget.
- * @author Maciej Urbanski <m.urbanski@samsung.com>
- * @class ns.widget.wearable.scroller.scrollbar
- */
-(function (window, ns) {
-	
-				ns.widget.wearable.scroller.scrollbar = ns.widget.wearable.scroller.scrollbar || {};
-			}(window, ns));
-
-/*global window, define, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*
- * #type namespace
- * Namespace with types of scroll bars..
- * @author Maciej Urbanski <m.urbanski@samsung.com>
- * @class ns.widget.wearable.scroller.scrollbar.type
- */
-(function (window, ns) {
-	
-				/** @namespace ns.widget.wearable */
-			ns.widget.wearable.scroller.scrollbar.type = ns.widget.wearable.scroller.scrollbar.type || {};
-			}(window, ns));
-
-/*global window, define, Event, console, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*jslint nomen: true, plusplus: true */
-/**
- * #Type Interface
- * Interface for types used in scroll bar widget.
- * @class ns.widget.wearable.scroller.scrollbar.type.interface
- */
-(function (document, ns) {
-	
-				// scroller.start event trigger when user try to move scroller
-
-			ns.widget.wearable.scroller.scrollbar.type.interface = {
-				/**
-				 * Inserts elements end decorate.
-				 * @method insertAndDecorate
-				 * @param options
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.interface
-				 */
-				setScrollbarLayout: function (/* options */) {
-				},
-				/**
-				 * Removes element.
-				 * @method remove
-				 * @param options
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.interface
-				 */
-				remove: function (/* options */) {
-				},
-				/**
-				 * ...
-				 * @method start
-				 * @param scrollbarElement
-				 * @param barElement
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.interface
-				 */
-				start: function (/* scrollbarElement, barElement */) {
-				},
-				/**
-				 * ...
-				 * @method end
-				 * @param scrollbarElement
-				 * @param barElement
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.interface
-				 */
-				end: function (/* scrollbarElement, barElement */) {
-				},
-				/**
-				 * ...
-				 * @method offset
-				 * @param orientation
-				 * @param offset
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.interface
-				 */
-				offset: function (/* orientation, offset  */) {
-				}
-			};
-			}(window.document, ns));
-
-/*global window, define, Event, console, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*jslint nomen: true, plusplus: true */
-/**
- * #Bar Type
- * Bar type support for scroll bar widget.
- * @class ns.widget.wearable.scroller.scrollbar.type.bar
- * @extends ns.widget.wearable.scroller.scrollbar.type.interface
- */
-(function (document, ns) {
-	
-				// scroller.start event trigger when user try to move scroller
-			var utilsObject = ns.util.object,
-				type = ns.widget.wearable.scroller.scrollbar.type,
-				typeInterface = type.interface,
-				Scroller = ns.widget.wearable.scroller.Scroller;
-
-			type.bar = utilsObject.merge({}, typeInterface, {
-				options: {
-					animationDuration: 500
-				},
-
-				/**
-				 * @method setScrollbar
-				 * @param viewLayout
-				 * @param firstChildLayout
-				 * @param clipLayout
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.bar
-				 */
-
-				setScrollbar: function(viewLayout, firstChildLayout, clipLayout) {
-					this._viewLayout = viewLayout;
-					this._clipLayout = clipLayout;
-					this._firstChildLayout = firstChildLayout;
-					this._ratio = clipLayout / firstChildLayout;
-				},
-
-				/**
-				 * @method getScrollbarSize
-				 * @return scrollbar size
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.bar
-				 */
-				getScrollbarSize: function() {
-					return this._firstChildLayout / this._viewLayout * this._firstChildLayout * this._ratio;
-				},
-				/**
-				 * @method offset
-				 * @param orientation
-				 * @param offset
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.bar
-				 */
-				offset: function( orientation, offset ) {
-					var x, y;
-
-					offset = offset * this._clipLayout / this._viewLayout;
-
-					if ( orientation === Scroller.Orientation.VERTICAL ) {
-						x = 0;
-						y = offset;
-					} else {
-						x = offset;
-						y = 0;
-					}
-
-					return {
-						x: x,
-						y: y
-					};
-				},
-
-				/**
-				 * @method start
-				 * @param scrollbarElement
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.bar
-				 */
-				start: function( scrollbarElement/*, barElement */) {
-					var style = scrollbarElement.style,
-						duration = this.options.animationDuration;
-					style["-webkit-transition"] =
-							style["-moz-transition"] =
-							style["-ms-transition"] =
-							style["-o-transition"] =
-							style.transition = "opacity " + duration / 1000 + "s ease";
-					style.opacity = 1;
-				},
-
-				/**
-				 * @method end
-				 * @param scrollbarElement
-				 * @static
-				 * @member ns.widget.wearable.scroller.scrollbar.type.bar
-				 */
-				end: function( scrollbarElement/*, barElement */) {
-					var style = scrollbarElement.style,
-						duration = this.options.animationDuration;
-					style["-webkit-transition"] =
-							style["-moz-transition"] =
-							style["-ms-transition"] =
-							style["-o-transition"] =
-							style.transition = "opacity " + duration / 1000 + "s ease";
-					style.opacity = 0;
-				}
-			});
-
-			}(window.document, ns));
-
-/*global window, define, Event, console, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/*jslint nomen: true, plusplus: true */
-/**
- * #Scroll Bar Widget
- * Widget creates scroll bar.
- * @class ns.widget.wearable.scroller.scrollbar.ScrollBar
- * @extends ns.widget.BaseWidget
- */
-(function (document, ns) {
-	
-				// scroller.start event trigger when user try to move scroller
-			var BaseWidget = ns.widget.BaseWidget,
-				engine = ns.engine,
-				prototype = new BaseWidget(),
-				utilsObject = ns.util.object,
-				selectors = ns.util.selectors,
-				scrollbarType = ns.widget.wearable.scroller.scrollbar.type,
-				Classes = {
-					wrapperClass: "ui-scrollbar-bar-type",
-					barClass: "ui-scrollbar-indicator",
-					orientationClass: "ui-scrollbar-"
-				},
-
-				Scroller = ns.widget.wearable.scroller.Scroller,
-				ScrollerScrollBar = function () {
-
-					this.wrapper = null;
-					this.barElement = null;
-
-					this.container = null;
-					this.view = null;
-
-					this.options = {};
-					this.type = null;
-
-					this.maxScroll = null;
-					this.started = false;
-					this.displayDelayTimeoutId = null;
-
-					this.lastScrollPosition = 0;
-				};
-
-			prototype._build = function (scrollElement) {
-				this.clip = scrollElement;
-				this.view = scrollElement.children[0];
-				this.firstChild = this.view.children[0];
-				return scrollElement;
-			};
-
-			prototype._configure = function () {
-				/**
-				 * @property {Object} options Options for widget
-				 * @property {boolean} [options.type=false]
-				 * @property {number} [options.displayDelay=700]
-				 * @property {"vertical"|"horizontal"} [options.orientation="vertical"]
-				 * @member ns.widget.wearable.scroller.scrollbar.ScrollBar
-				 */
-				this.options = utilsObject.merge({}, this.options, {
-					type: false,
-					displayDelay: 700,
-					orientation: Scroller.Orientation.VERTICAL
-				});
-			};
-
-			prototype._init = function () {
-				this.type = this.options.type;
-
-				if ( !this.type ) {
-					return;
-				}
-				this._createScrollbar();
-			};
-
-			prototype._bindEvents = function() {
-				document.addEventListener("visibilitychange", this);
-			};
-
-			prototype._createScrollbar = function () {
-				var orientation = this.options.orientation,
-					wrapper = document.createElement("DIV"),
-					bar = document.createElement("span"),
-					view = this.view,
-					clip = this.clip,
-					firstChild = this.firstChild,
-					type = this.type;
-
-				clip.appendChild(wrapper);
-				wrapper.appendChild(bar);
-				wrapper.classList.add(Classes.wrapperClass);
-				bar.className = Classes.barClass;
-
-				if (orientation === Scroller.Orientation.HORIZONTAL) {
-					type.setScrollbar(view.offsetWidth, firstChild.offsetWidth, clip.offsetWidth);
-					bar.style.width = type.getScrollbarSize() + "px";
-					wrapper.classList.add(Classes.orientationClass + "horizontal");
-				} else {
-					type.setScrollbar(view.offsetHeight, firstChild.offsetHeight, clip.offsetHeight);
-					bar.style.height = type.getScrollbarSize() + "px";
-					wrapper.classList.add(Classes.orientationClass + "vertical");
-				}
-
-				this.wrapper = wrapper;
-				this.barElement = bar;
-			};
-
-			prototype._removeScrollbar = function () {
-				this.clip.removeChild(this.wrapper);
-
-				this.wrapper = null;
-				this.barElement = null;
-			};
-
-			prototype._refresh = function () {
-				var self = this;
-				self._clear();
-				self._init();
-				self.translate(self.lastScrollPosition);
-			};
-
-			/**
-			 * Translates widget.
-			 * @method translate
-			 * @param offset
-			 * @param duration
-			 * @member ns.widget.wearable.scroller.scrollbar.ScrollBar
-			 */
-			prototype.translate = function (offset, duration, autoHidden) {
-				var orientation = this.options.orientation,
-					translate,
-					transition = {
-						normal: "none",
-						webkit: "none",
-						moz: "none",
-						ms: "none",
-						o: "none"
-					},
-					barStyle,
-					endDelay;
-
-				if ( !this.wrapper || !this.type || this.lastScrollPosition === offset ) {
-					return;
-				}
-
-				autoHidden = autoHidden !== false;
-
-				this.lastScrollPosition = offset;
-
-				offset = this.type.offset( orientation, offset );
-
-				barStyle = this.barElement.style;
-				if (duration) {
-					transition.normal = "transform " + duration / 1000 + "s ease-out";
-					transition.webkit = "-webkit-transform " + duration / 1000 + "s ease-out";
-					transition.moz = "-moz-transform " + duration / 1000 + "s ease-out";
-					transition.ms = "-ms-transform " + duration / 1000 + "s ease-out";
-					transition.o = "-o-transform " + duration / 1000 + "s ease-out";
-				}
-
-				translate = "translate3d(" + offset.x + "px," + offset.y + "px, 0)";
-
-				barStyle["-webkit-transform"] =
-					barStyle["-moz-transform"] =
-					barStyle["-ms-transform"] =
-					barStyle["-o-transform"] =
-					barStyle.transform = translate;
-				barStyle["-webkit-transition"] = transition.webkit;
-				barStyle["-moz-transition"] = transition.moz;
-				barStyle["-ms-transition"] = transition.ms;
-				barStyle["-o-transition"] = transition.o;
-				barStyle.transition = transition.normal;
-
-				if ( !this.started ) {
-					this._start();
-				}
-
-				if ( this.displayDelayTimeoutId !== null ) {
-					window.clearTimeout( this.displayDelayTimeoutId );
-					this.displayDelayTimeoutId = null;
-				}
-
-				if ( autoHidden ) {
-					endDelay = ( duration || 0 ) + this.options.displayDelay;
-					this.displayDelayTimeoutId = window.setTimeout(this._end.bind(this), endDelay);
-				}
-			};
-
-			prototype.end = function () {
-				if ( !this.displayDelayTimeoutId ) {
-					this.displayDelayTimeoutId = window.setTimeout(this._end.bind(this), this.options.displayDelay);
-				}
-			};
-
-			prototype._start = function () {
-				this.type.start(this.wrapper, this.barElement);
-				this.started = true;
-			};
-
-			prototype._end = function () {
-				this.started = false;
-				this.displayDelayTimeoutId = null;
-
-				if ( this.type ) {
-					this.type.end(this.wrapper, this.barElement);
-				}
-			};
-
-			/**
-			 * Supports events.
-			 * @method handleEvent
-			 * @param event
-			 * @member ns.widget.wearable.scroller.scrollbar.ScrollBar
-			 */
-			prototype.handleEvent = function(event) {
-				var page;
-
-				switch(event.type) {
-				case "visibilitychange":
-					page = selectors.getClosestBySelector(this.container, "." + ns.widget.core.Page.classes.uiPage);
-					if (document.visibilityState === "visible" && page === ns.activePage) {
-						this.refresh();
-					}
-					break;
-				}
-			};
-
-			prototype._clear = function () {
-				this._removeScrollbar();
-
-				this.started = false;
-				this.type = null;
-				this.barElement = null;
-				this.displayDelayTimeoutId = null;
-			};
-
-			prototype._destroy = function () {
-				this._clear();
-				document.removeEventListener("visibilitychange", this);
-
-				this.options = null;
-				this.clip = null;
-				this.view = null;
-			};
-
-			ScrollerScrollBar.prototype = prototype;
-
-			ns.widget.wearable.scroller.scrollbar.ScrollBar = ScrollerScrollBar;
-
-			engine.defineWidget(
-				"ScrollBar",
-				"",
-				["translate"],
-				ScrollerScrollBar
-			);
-			}(window.document, ns));
-
-/*global window, define, ns */
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd
- *
- * Licensed under the Flora License, Version 1.1 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://floralicense.org/license/
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/**
- * #PageIndicator Widget
- * Widget create dots page indicator.
- * @class ns.widget.wearable.PageIndicator
- * @extends ns.widget.BaseWidget
- */
-(function (document, ns) {
-	
-				var BaseWidget = ns.widget.BaseWidget,
-				engine = ns.engine,
-
-				PageIndicator = function () {
-					var self = this;
-					self._activeIndex = null;
-					self.options = {};
-				},
-				classes = {
-					indicator: "ui-page-indicator",
-					indicatorActive: "ui-page-indicator-active",
-					indicatorItem: "ui-page-indicator-item",
-					linearIndicator: "ui-page-indicator-linear",
-					circularIndicator: "ui-page-indicator-circular"
-				},
-				maxDots = {
-					IN_CIRCLE: 60,
-					IN_LINEAR: 5
-				},
-				layoutType = {
-					LINEAR: "linear",
-					CIRCULAR: "circular"
-				},
-				DISTANCE_FROM_EDGE = 15,
-
-				prototype = new BaseWidget();
-
-			PageIndicator.classes = classes;
-
-			prototype._configure = function () {
-				/**
-				 * Options for widget.
-				 * @property {Object} options
-				 * @property {number} [options.maxPage=null] Maximum number of dots(pages) in indicator.
-				 * @property {number} [options.numberOfPages=null] Number of pages to be linked to PageIndicator.
-				 * @property {string} [options.layout="linear"] Layout type of page indicator.
-				 * @property {number} [options.intervalAngle=6] angle between each dot in page indicator.
-				 * @member ns.widget.wearable.PageIndicator
-				 */
-				this.options = {
-					maxPage: null,
-					numberOfPages: null,
-					layout: "linear",
-					intervalAngle: 6
-				};
-			};
-
-			/**
-			 * Build PageIndicator
-			 * @method _build
-			 * @param {HTMLElement} element
-			 * @return {HTMLElement}
-			 * @protected
-			 * @member ns.widget.wearable.PageIndicator
-			 */
-			prototype._build = function (element) {
-				var self = this;
-				self._createIndicator(element);
-				if (self.options.layout === layoutType.CIRCULAR) {
-					self._circularPositioning(element);
-				}
-				return element;
-			};
-
-			/**
-			 * Create HTML elements for PageIndicator
-			 * @method _createIndicator
-			 * @param {HTMLElement} element
-			 * @protected
-			 * @member ns.widget.wearable.PageIndicator
-			 */
-			prototype._createIndicator = function (element) {
-				var self = this,
-					i,
-					len,
-					maxPage,
-					span,
-					numberOfPages = self.options.numberOfPages;
-
-				if(numberOfPages === null) {
-					ns.error("build error: numberOfPages is null");
-					return;
-				}
-
-				self.options.layout = self.options.layout.toLowerCase();
-
-				if (self.options.layout === layoutType.CIRCULAR) {
-					element.classList.remove(classes.linearIndicator);
-					element.classList.add(classes.circularIndicator);
-				} else {
-					element.classList.remove(classes.circularIndicator);
-					element.classList.add(classes.linearIndicator);
-				}
-
-				maxPage = self._getMaxPage();
-
-				len = numberOfPages < maxPage ? numberOfPages : maxPage;
-
-				for(i = 0; i < len; i++) {
-					span = document.createElement("span");
-					span.classList.add(classes.indicatorItem);
-
-					element.appendChild(span);
-				}
-			};
-
-			/**
-			 * Make circular positioned indicator
-			 * @method _circularPositioning
-			 * @param {HTMLElement} element
-			 * @protected
-			 * @member ns.widget.wearable.PageIndicator
-			 */
-			prototype._circularPositioning = function (element) {
-				var self = this,
-					items = element.children,
-					numberOfDots = items.length,
-					intervalAngle = self.options.intervalAngle - "0",
-					translatePixel,
-					style,
-					i;
-
-				translatePixel = element.offsetWidth / 2 - DISTANCE_FROM_EDGE;
-
-				for(i=0;i<numberOfDots;i++) {
-					style = "rotate(" + (i * intervalAngle - 90 - (numberOfDots-1) * intervalAngle * 0.5) + "deg) translate(" +
-						translatePixel + "px) ";
-
-					items[i].style.transform = style;
-				}
-
-			};
-
-			/**
-			 * Return maximum number of dots(pages) in indicator
-			 * @method _getMaxPage
-			 * @protected
-			 * @member ns.widget.wearable.PageIndicator
-			 */
-			prototype._getMaxPage = function() {
-				var self = this,
-					options = self.options,
-					maxPage;
-				if (options.layout === layoutType.CIRCULAR) {
-					maxPage = options.maxPage || maxDots.IN_CIRCLE;
-				} else {
-					maxPage = options.maxPage || maxDots.IN_LINEAR;
-				}
-				return maxPage;
-			};
-
-			/**
-			 * Remove contents of HTML elements for PageIndicator
-			 * @method _removeIndicator
-			 * @param {HTMLElement} element
-			 * @protected
-			 * @member ns.widget.wearable.PageIndicator
-			 */
-			prototype._removeIndicator =  function (element) {
-				element.textContent = "";
-			};
-
-			/**
-			 * This method sets a dot to active state.
-			 * @method setActive
-			 * @param {number} position index to be active state.
-			 * @member ns.widget.wearable.PageIndicator
-			 */
-			prototype.setActive = function (position) {
-				var self = this,
-					dotIndex = position,
-					elPageIndicatorItems = self.element.children,
-					maxPage,
-					numberOfPages = self.options.numberOfPages,
-					middle,
-					numberOfCentralDotPages = 0,
-					indicatorActive = classes.indicatorActive,
-					previousActive;
-
-				if(position === null || position === undefined) {
-					return;
-				}
-
-				self._activeIndex = position;
-				maxPage = self._getMaxPage();
-				middle = window.parseInt(maxPage/2, 10);
-
-				if(numberOfPages > maxPage) {
-					numberOfCentralDotPages = numberOfPages - maxPage;
-				} else if(numberOfPages === null) {
-					ns.error("setActive error: numberOfPages is null");
-					return;
-				} else if(numberOfPages === 0) {
-					return;
-				}
-
-				previousActive = self.element.querySelector("." + indicatorActive);
-				if(previousActive) {
-					previousActive.classList.remove(indicatorActive);
-				}
-
-				if ((middle < position) && (position <= (middle + numberOfCentralDotPages))) {
-					dotIndex = middle;
-				} else if (position > (middle + numberOfCentralDotPages)) {
-					dotIndex = position - numberOfCentralDotPages;
-				}
-
-				elPageIndicatorItems[dotIndex].classList.add(indicatorActive);
-			};
-
-			/**
-			 * Refresh widget structure
-			 * @method _refresh
-			 * @protected
-			 * @member ns.widget.wearable.PageIndicator
-			 */
-			prototype._refresh = function () {
-				var self = this,
-					element = self.element;
-				self._removeIndicator(element);
-				self._createIndicator(element);
-				if (self.options.layout === layoutType.CIRCULAR) {
-					self._circularPositioning(element);
-				}
-			};
-
-			/**
-			 * Destroy widget
-			 * @method _destroy
-			 * @protected
-			 * @member ns.widget.wearable.PageIndicator
-			 */
-			prototype._destroy = function () {
-				this._removeIndicator(this.element);
-			};
-
-			PageIndicator.prototype = prototype;
-
-			// definition
-			ns.widget.wearable.PageIndicator = PageIndicator;
-			engine.defineWidget(
-				"PageIndicator",
-				".ui-page-indicator",
-				["setActive"],
-				PageIndicator,
-				"wearable"
-			);
-			}(window.document, ns));
-
 /*global window, define */
 /*
  * Copyright (c) 2015 Samsung Electronics Co., Ltd
@@ -24108,7 +26750,7 @@ ns.version = '0.10.29-14';
  * @author Hyeoncheol Choi <hc7.choi@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				var engine = ns.engine,
 				utilDom = ns.util.DOM,
 				Gesture = ns.event.gesture,
@@ -24148,7 +26790,7 @@ ns.version = '0.10.29-14';
 					ITEM_START_DEGREE: 30,
 					ITEM_END_DEGREE: 330,
 					ITEM_NORMAL_SCALE: "scale(1)",
-					ITEM_ACTIVE_SCALE: "scale(1.18)"
+					ITEM_ACTIVE_SCALE: "scale(1.21)"
 				},
 				EVENT_TYPE = {
 					/**
@@ -24963,7 +27605,7 @@ ns.version = '0.10.29-14';
  * @author Heeju Joo <heeju.joo@samsung.com>
  */
 (function (ns) {
-    
+    "use strict";
                 ns.helper = ns.helper || {};
             }(ns));
 /*global window, define, ns */
@@ -24989,7 +27631,7 @@ ns.version = '0.10.29-14';
  * @author Junyoung Park <jy-.park@samsung.com>
  */
 (function (document, window, ns) {
-	
+	"use strict";
 				var engine = ns.engine,
 				objectUtils = ns.util.object,
 				selectors = ns.util.selectors,
@@ -24997,6 +27639,7 @@ ns.version = '0.10.29-14';
 				SnapListStyle = function (listDomElement, options) {
 					var self = this;
 
+					self.accel = false;
 					self._snapListviewWidget = null;
 					self._callbacks = {};
 					self.init(listDomElement, options);
@@ -25004,6 +27647,25 @@ ns.version = '0.10.29-14';
 
 				prototype = SnapListStyle.prototype;
 
+			/**
+			 * 자이로 센서를 이용하여 리스트를 스크롤한다.
+			 */
+			function acceleratorHandler(e) {
+				var snapListviewWidget = this._snapListviewWidget,
+				selectedIndex = snapListviewWidget.getSelectedIndex(),
+				speed = e.acceleration.y;
+
+				if (!self.accel && speed >= 4) {
+					snapListviewWidget.scrollToPosition(++selectedIndex);
+					self.accel = true;
+				} else if (self.accel && Math.abs(speed) < 1) {
+					self.accel = false;
+				} else if (!self.accel && speed <= -4) {
+					snapListviewWidget.scrollToPosition(--selectedIndex);
+					self.accel = true;
+				}	
+			}
+			
 			function rotaryDetentHandler(e) {
 				var snapListviewWidget = this._snapListviewWidget,
 					selectedIndex = snapListviewWidget.getSelectedIndex(),
@@ -25026,21 +27688,27 @@ ns.version = '0.10.29-14';
 
 			prototype.bindEvents = function() {
 				var self = this,
-					rotaryDetentCallback;
+					rotaryDetentCallback,
+					acceleratorCallback;
 
 				rotaryDetentCallback = rotaryDetentHandler.bind(self);
+				acceleratorCallback = acceleratorHandler.bind(self);
 
 				self._callbacks.rotarydetent = rotaryDetentCallback;
-
+				self._callbacks.accelerator = acceleratorCallback;
+				
 				window.addEventListener("rotarydetent", rotaryDetentCallback);
+				window.addEventListener("devicemotion", acceleratorCallback);
 			};
 
 			prototype.unbindEvents = function() {
 				var self = this;
 
 				window.removeEventListener("rotarydetent", self._callbacks.rotarydetent);
+				window.removeEventListener("devicemotion", self._callbacks.accelerator);
 
 				self._callbacks.rotarydetent = null;
+				self._callbacks.accelerator = null;
 			};
 
 			prototype.destroy = function() {
@@ -25087,7 +27755,7 @@ ns.version = '0.10.29-14';
  * @author Heeju Joo <heeju.joo@samsung.com>
  */
 (function (document, window, ns) {
-	
+	"use strict";
 				var engine = ns.engine,
 				objectUtils = ns.util.object,
 				defaults = {
@@ -25159,7 +27827,7 @@ ns.version = '0.10.29-14';
 
 				self.bindEvents();
 				// create SnapListStyle helper
-				self._snapListStyleHelper = tau.helper.SnapListStyle.create(listDomElement, {animate:"scale"});
+				self._snapListStyleHelper = tau.helper.SnapListStyle.create(listDomElement);
 			};
 
 			prototype.bindEvents = function() {
@@ -25237,7 +27905,7 @@ ns.version = '0.10.29-14';
  * @author Hyeoncheol Choi <hc7.choi@samsung.com>
  */
 (function (document, window, ns) {
-	
+	"use strict";
 				var engine = ns.engine,
 				objectUtils = ns.util.object,
 				events = ns.event,
@@ -25376,7 +28044,7 @@ ns.version = '0.10.29-14';
  * @author Piotr Karny <p.karny@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 					/**
 				* Local alias for ns.engine
 				* @property {Object} engine Alias for {@link ns.engine}
@@ -26214,7 +28882,7 @@ ns.version = '0.10.29-14';
  * @author Maciej Urbanski <m.urbanski@samsung.com>
  */
 (function (ns) {
-	
+	"use strict";
 				ns.router.route = ns.router.route || {};
 			}(ns));
 
@@ -26245,7 +28913,7 @@ ns.version = '0.10.29-14';
  * @author Tomasz Lukawski <t.lukawski@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 					/**
 				 * Local alias for ns.util
 				 * @property {Object} util Alias for {@link ns.util}
@@ -26351,6 +29019,14 @@ ns.version = '0.10.29-14';
 				 */
 				_isLock = false,
 
+				ORDER_NUMBER = {
+					1: "page",
+					10: "panel",
+					100: "popup",
+					1000: "drawer",
+					2000: "circularindexscrollbar"
+				},
+
 				Page = ns.widget.core.Page,
 
 				Router = function () {
@@ -26452,15 +29128,18 @@ ns.version = '0.10.29-14';
 				var state = event.state,
 					prevState = history.activeState,
 					rules = routerMicro.route,
+					maxOrderNumber = 0,
+					orderNumberArray = [],
+					inTransition = router.getContainer().inTransition,
 					ruleKey,
 					options,
 					to,
 					url,
 					isContinue = true,
-					reverse,
+					reverse = state && history.getDirection(state) === "back",
 					transition;
 
-				if (_isLock) {
+				if (_isLock || (inTransition && reverse)) {
 					history.disableVolatileMode();
 					history.replace(prevState, prevState.stateTitle, prevState.stateUrl);
 					return;
@@ -26468,7 +29147,6 @@ ns.version = '0.10.29-14';
 
 				if (state) {
 					to = state.url;
-					reverse = history.getDirection(state) === "back";
 					transition = reverse ? ((prevState && prevState.transition) || "none") : state.transition;
 					options = object.merge({}, state, {
 						reverse: reverse,
@@ -26479,13 +29157,22 @@ ns.version = '0.10.29-14';
 					url = path.getLocation();
 
 					for (ruleKey in rules) {
-						if (rules.hasOwnProperty(ruleKey) && rules[ruleKey].onHashChange(url, options, prevState.stateUrl)) {
-							isContinue = false;
+						if (rules.hasOwnProperty(ruleKey)) {
+							if (rules[ruleKey].active) {
+								orderNumberArray.push(rules[ruleKey].orderNumber);
+							}
 						}
+					}
+					maxOrderNumber = Math.max.apply(null, orderNumberArray);
+					if (rules[ORDER_NUMBER[maxOrderNumber]] && rules[ORDER_NUMBER[maxOrderNumber]].onHashChange(url, options, prevState)) {
+						if (maxOrderNumber === 10) {
+							// rule is panel
+							return;
+						}
+						isContinue = false;
 					}
 
 					history.setActive(state);
-
 					if (isContinue) {
 						router.open(to, options);
 					}
@@ -26885,6 +29572,7 @@ ns.version = '0.10.29-14';
 				}
 
 				// Load the new content.
+				eventUtils.trigger(self.getContainer().element, options.rel + "beforeload");
 				request = new XMLHttpRequest();
 				request.responseType = "document";
 				request.overrideMimeType("text/html");
@@ -26895,6 +29583,7 @@ ns.version = '0.10.29-14';
 					if (request.readyState === 4) {
 						if (request.status === 200 || (request.status === 0 && request.responseXML)) {
 							self._loadSuccess(absUrl, options, rule, deferred, request.responseXML);
+							eventUtils.trigger(self.getContainer().element, options.rel + "load");
 						} else {
 							self._loadError(absUrl, options, deferred);
 						}
@@ -27091,7 +29780,7 @@ ns.version = '0.10.29-14';
  * @author Maciej Urbanski <m.urbanski@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				var util = ns.util,
 				path = util.path,
 				DOM = util.DOM,
@@ -27137,6 +29826,7 @@ ns.version = '0.10.29-14';
 				return page;
 			}
 
+			routePage.orderNumber = 1;
 			/**
 			 * Property containing default properties
 			 * @property {Object} defaults
@@ -27154,7 +29844,7 @@ ns.version = '0.10.29-14';
 			 * @member ns.router.route.page
 			 * @static
 			 */
-			routePage.filter = engine.getWidgetDefinition("Page").selector;
+			routePage.filter = engine.getWidgetDefinition("Page").selector.replace(/(\s*)/g, "" );
 
 			/**
 			 * Returns default route options used inside Router.
@@ -27225,7 +29915,9 @@ ns.version = '0.10.29-14';
 
 				//set page title
 				document.title = pageTitle;
+				this.active = true;
 				this.getContainer().change(toPage, options);
+
 			};
 
 			/**
@@ -27453,7 +30145,7 @@ ns.version = '0.10.29-14';
  * @author Damian Osipiuk <d.osipiuk@samsung.com>
  */
 (function (window, document, ns) {
-	
+	"use strict";
 				var
 			/**
 			 * @property {Object} Popup Alias for {@link ns.widget.Popup}
@@ -27599,6 +30291,7 @@ ns.version = '0.10.29-14';
 				return popup;
 			}
 
+			routePopup.orderNumber = 100;
 			/**
 			 * This method returns default options for popup router.
 			 * @method option
@@ -27633,12 +30326,14 @@ ns.version = '0.10.29-14';
 						url = path.addHashSearchParams(documentUrl, popupHashKey);
 						history.replace(options, "", url);
 					}
+					this.active = true;
 				} else if (pathLocation !== documentUrl) {
 					// If popup is being closed, the history.back() is called
 					// but only if url has special hash.
 					// Url is changed after opening animation and in some cases,
 					// the popup is closed before this animation and then the history.back
 					// could cause undesirable change of page.
+					this.active = false;
 					history.back();
 				}
 			};
@@ -27709,6 +30404,7 @@ ns.version = '0.10.29-14';
 				} else {
 					openPopup();
 				}
+				this.active = true;
 			};
 
 			/**
@@ -27776,6 +30472,7 @@ ns.version = '0.10.29-14';
 					// even if popup has been closed
 					// To prevent this onHashChange after closing popup we need to change
 					// disable volatile mode to allow pushing new history elements
+					this.active = false;
 					return true;
 				}
 				return false;
@@ -27916,7 +30613,7 @@ ns.version = '0.10.29-14';
  * @author Hyeoncheol Choi <hc7.choi@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				var CoreDrawer = ns.widget.core.Drawer,
 				path = ns.util.path,
 				history = ns.router.history,
@@ -27925,6 +30622,7 @@ ns.version = '0.10.29-14';
 				drawerHashKey = "drawer=true",
 				drawerHashKeyReg = /([&|\?]drawer=true)/;
 
+			routeDrawer.orderNumber = 1000;
 			/**
 			 * Property containing default properties
 			 * @property {Object} defaults
@@ -28014,6 +30712,7 @@ ns.version = '0.10.29-14';
 				if(activeDrawer) {
 					url = path.addHashSearchParams(documentUrl, drawerHashKey);
 					history.replace({}, "", url);
+					this.active = true;
 				} else if (pathLocation !== documentUrl) {
 					history.back();
 				}
@@ -28031,10 +30730,13 @@ ns.version = '0.10.29-14';
 			 */
 			routeDrawer.onHashChange = function (url, options, prev) {
 				var self = this,
-					activeDrawer = self._activeDrawer;
+					activeDrawer = self._activeDrawer,
+					stateUrl = prev.stateUrl;
 
-				if (activeDrawer && prev.search(drawerHashKey) > 0 && url.search(drawerHashKey) < 0) {
+				if (activeDrawer && stateUrl.search(drawerHashKey) > 0 && url.search(drawerHashKey) < 0) {
 					activeDrawer.close(options);
+					this.active = false;
+					return true;
 				}
 				return null;
 			};
@@ -28067,7 +30769,7 @@ ns.version = '0.10.29-14';
  * @author Junyoung Park <jy-.park@samsung.com>
  */
 (function (document, ns) {
-	
+	"use strict";
 				var CircularIndexScrollbar = ns.widget.wearable.CircularIndexScrollbar,
 				CircularIndexScrollbarPrototype = CircularIndexScrollbar.prototype,
 				util = ns.util,
@@ -28083,6 +30785,7 @@ ns.version = '0.10.29-14';
 				circularindexscrollbarHashKeyReg = /([&|\?]circularindexscrollbar=true)/,
 				INDEXSCROLLBAR_SELECTOR = ".ui-circularindexscrollbar";
 
+			routeCircularIndexScrollbar.orderNumber = 2000;
 			/**
 			 * Property defining selector for filtering only circularIndexScrollbar elements
 			 * @property {string} filter
@@ -28165,6 +30868,7 @@ ns.version = '0.10.29-14';
 				} else if (pathLocation !== documentUrl) {
 					history.back();
 				}
+				this.active = true;
 			};
 
 			/**
@@ -28178,10 +30882,13 @@ ns.version = '0.10.29-14';
 			 */
 			routeCircularIndexScrollbar.onHashChange = function (url, options, prev) {
 				var self = this,
-					activeWidget = self._activeWidget;
+					activeWidget = self._activeWidget,
+					stateUrl = prev.stateUrl;;
 
-				if (activeWidget && prev.search(circularindexscrollbarHashKey) > 0 && url.search(circularindexscrollbarHashKey) < 0) {
+				if (activeWidget && stateUrl.search(circularindexscrollbarHashKey) > 0 && url.search(circularindexscrollbarHashKey) < 0) {
 					activeWidget.hide(options);
+					self.active = false;
+					return true;
 				}
 				return null;
 			};
@@ -28213,7 +30920,7 @@ ns.version = '0.10.29-14';
  */
 //  * @TODO add support of $.mobile.buttonMarkup.hoverDelay
 (function (document, ns) {
-	
+	"use strict";
 	
 			document.addEventListener("beforerouterinit", function () {
 				ns.setConfig('autoInitializePage', ns.autoInitializePage);
@@ -28299,7 +31006,7 @@ ns.version = '0.10.29-14';
 			}(window.document, ns));
 
 (function (ns) {
-	
+	"use strict";
 	
 			var engine = ns.engine;
 
@@ -28324,6 +31031,7 @@ ns.version = '0.10.29-14';
 			};
 
 			}(ns));
+
 /*global define, window */
 /*
  * Copyright (c) 2015 Samsung Electronics Co., Ltd
@@ -28345,7 +31053,7 @@ ns.version = '0.10.29-14';
  * @author Krzysztof Antoszek <k.antoszek@samsung.com>
  */
 (function (ns) {
-	
+	"use strict";
 				if (ns.getConfig("autorun", true) === true) {
 				ns.engine.run();
 			}

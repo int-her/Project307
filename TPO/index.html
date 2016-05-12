@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -52,7 +52,7 @@
 	<!-- Bus Number Station List Page -->
 	<div class="ui-page" id="busNumberStationList">
 		<header class="ui-header">
-			<h2 class="ui-title" id="busNumber">노선번호</h2>
+			<h2 class="ui-title" id="busNumber">노선 번호</h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview" id="lvBusNumber">
@@ -61,7 +61,7 @@
 		</div>
 	</div>
 	
-	<!-- Bus Station Search Page -->
+	<!-- Search Bus Station Page -->
 	<div class="ui-page" id="searchBusStation">
 		<header class="ui-header">
 			<h2 class="ui-title">버스 정류장 검색</h2>
@@ -69,7 +69,7 @@
 		<div class="ui-content">
 			<ul class="ui-listview expand-list">
 				<li class="li-has-multiline" id="searchSurrounding">
-					<div>주변 정류장 찾기</div>
+					<div class="li-expand">주변 정류장 찾기</div>
 					<div class="ui-li-sub-text li-text-sub">1km 반경, 20개 이내</div>
 				</li>
 				<li><a href="#inputStationID">정류소 ID 검색</a></li>
@@ -77,16 +77,18 @@
 		</div>
 	</div>
 	
+	<!--  Input Bus Station ID Page -->
 	<div class="ui-page" id="inputStationID">
 		<div class="ui-content">
-			<input type="number" autofocus placeholder="ID 입력" class="input-number" id="txtStationID">
+			<input type="number" autofocus placeholder="정류장 ID 입력" class="input-number" id="txtStationID">
 		</div>
 	</div>
 	
+	<!-- Processing Page -->
 	<div class="ui-page" id="processing">
 		<div class="small-processing-container">
 			<div class="ui-processing" style="visibility: hidden;"></div>
-			<div class="ui-processing-text"></div>
+			<div class="ui-processing-text">잠시만  기다려주세요.</div>
 		</div>
 	</div>
 	
@@ -105,16 +107,24 @@
 	
 	<!-- Bus Arrival Time List Page -->
 	<div class="ui-page" id="busArrivalTime">
-		<header class="ui-header">
-			<h2 class="ui-title" id="stationName">이름</h2>
+		<header class="ui-header ui-has-more">
+			<h2 class="ui-title" id="stationName"></h2>
+			<button type="button" class="ui-more ui-icon-overflow">More Options</button>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview" id="lvBusArrivalTime">
-				
 			</ul>
+		</div>
+		
+		<!-- More Options -->
+		<div id="busArrivalTime_MoreOptions" class="ui-popup">
+			<div id="selector" class="ui-selector">
+				<div class="ui-item check-icon" data-title="즐겨찾기 등록"></div>
+			</div>
 		</div>
 	</div>
 	
+	<!-- Toast Popup Page -->
 	<div class = "ui-popup ui-popup-toast" id="toastPopup">
 		<div class="ui-popup-content">
 		</div>
@@ -122,6 +132,7 @@
 
 	<div class = "ui-popup ui-popup-toast ui-popup-toast-graphic" id="toastGraphicPopup">
 		<div class="ui-popup-content">
+			<div class="ui-popup-toast-check-icon"></div>
 		</div>
 	</div>
 
@@ -211,9 +222,10 @@
          <img src="images/width_3.98_50%.jpg">
 	</div>
 	
-	<script type="text/javascript" src="js/list.js"></script>
 	<script type="text/javascript" src="js/marqueeList.js"></script>
 	<script type="text/javascript" src="js/toastPopup.js"></script>
+	<script type="text/javascript" src="js/moreoption.js"></script>
+	<script type="text/javascript" src="js/list.js"></script>
 	<script type="text/javascript" src="js/bus.js"></script>
 	<script type="text/javascript" src="js/subway.js"></script>
 	<script type="text/javascript" src="js/image.js"></script>
