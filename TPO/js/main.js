@@ -25,6 +25,9 @@ function keyEventHandler(event) {
 }
 
 function init() {
+	var marqueeList = new MARQUEELIST(),
+		moreoption = new MOREOPTION();
+	
 	// 버스 정류장 ID 입력
 	document.getElementById('inputBusID').addEventListener('pagebeforeshow', function() {
 		document.getElementById('txtBusID').value = "";
@@ -60,17 +63,18 @@ function init() {
 		processing.style.visibility = "hidden";
 	});
 	
-	// Marquee list 초기화 
-	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
-		marqueeList.pageBeforeShowHandler('surroundingBusStation');
-	});
-	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
-
 	// More option 초기화
 	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
 		moreoption.pageBeforeShowHandler('busArrivalTime');
 	});
 	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', moreoption.pageBeforeHideHandler);
+	
+	
+	// Marquee list 초기화 
+	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
+		marqueeList.pageBeforeShowHandler('surroundingBusStation');
+	});
+	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
 	
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);

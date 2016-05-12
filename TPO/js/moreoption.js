@@ -1,41 +1,51 @@
 /*global tau*/
-var moreoption = (function() {
-	var moreoption = {},
-		page,
-		popup,
-		handler,
-		elSelector,
-		selector,
-		clickHandlerBound;
+function MOREOPTION() {
+	this.handler = null;
+	this.elSelector = null;
+	this.clickHandlerBound = null;
+	this.clicklHandlerBound = null;
+	this.selector = null;
+	this.popup = null;
+}
+
+MOREOPTION.prototype = new Object();
+
+MOREOPTION.prototype.clickHandler = function(event) {
+	tau.openPopup(this.popup);
+};
+
+MOREOPTION.prototype.clickElHandler = function(event) {
+	var target = event.target,
+		dataTitle;
 	
-	function clickHandler(event) {
-		tau.openPopup(popup);
+	if (target.classList.contains("ui-selector-indicator")) {
+		tau.closePopup(this.popup);
+	} else {
+		dataTitle = target.getAttribute("data-title");
+		if (dataTitle === "즐겨찾기 등록") {
+
+		} else {
+
+		}
 	}
-	
-	moreoption.pageBeforeShowHandler = function(pageId) {
-		var radius = window.innerHeight / 2 * 0.8;
+};
+
+MOREOPTION.prototype.pageBeforeShowHandler = function(pageId) {
+	var radius = window.innerHeight / 2 * 0.8,
 		page = document.getElementById(pageId);
-		handler = page.querySelector(".ui-more");
-		popup = page.querySelector("#" + pageId + "_MoreOptions");
-		elSelector = page.querySelector("#selector");
-
-		clickHandlerBound = clickHandler.bind(null);
-		handler.addEventListener("click", clickHandlerBound);
 		
-		selector = tau.widget.Selector(elSelector, {itemRadius: radius});
-		
-		elSelector.addEventListener("click", function(event) {
-			var target = event.target;
-			if (target.classList.contains("ui-selector-indicator")) {
-				tau.closePopup(popup);
-			}
-		});
-	};
+	this.popup = page.querySelector("#" + pageId + "_MoreOptions");
+	this.handler = page.querySelector(".ui-more");
+	this.elSelector = page.querySelector("#selector");
+	this.clickHandlerBound = this.clickHandler.bind(this);
+	this.clickElHandlerBound = this.clickElHandler.bind(this);
+	this.handler.addEventListener("click", this.clickHandlerBound);
+	this.elSelector.addEventListener("click", this.clickElHandlerBound);
+	this.selector = tau.widget.Selector(this.elSelector, {itemRadius: radius});
+};
 
-	moreoption.pageBeforeHideHandler = function() {
-		handler.removeEventListener("click", clickHandlerBound);
-		selector.destroy();
-	};
-	
-	return moreoption;
-}());
+MOREOPTION.prototype.pageBeforeHideHandler = function() {
+	this.handler.removeEventListener("click", this.clickHandlerBound);
+	this.elSelector.removeEventListener("click", this.clickElHandlerBound);
+	this.selector.destroy();
+};
