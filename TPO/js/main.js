@@ -8,6 +8,8 @@ function keyEventHandler(event) {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
+		} else if (pageid === "busNumberStationList") {
+			window.history.go(-3);
 		} else if (pageid === "busArrivalTime") {
 			window.history.go(-3);
 		} else {

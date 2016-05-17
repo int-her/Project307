@@ -7,17 +7,40 @@ var busNumber = (function() {
 		id.innerHTML = "";
 		var x = data.getElementsByTagName("itemList");
 		for (var i = 0; i < x.length; ++i) {
-			if (i >= 20) {
-				break;
-			}
-			id.innerHTML += "<li id=" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-							">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+			id.innerHTML += "<li id=" + x[i].getElementsByTagName("station")[0].childNodes[0].nodeValue + 
+							"><div class='ui-marquee'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</div></li>";
 		}
 		
 	};
 	
 	function busIdToStation(busRouteId){
 		tau.changePage("#processing");
+		/**
+		 *  요청변수(Request Parameter)
+			busRouteId - 노선 시스템 ID
+			
+			출력결과(Response Element)
+			busRouteId - 노선 ID
+      		busRouteNm - 노선명
+      		seq - 순번
+      		section - 구간 ID
+      		station - 정류소 ID
+      		stationNm	- 정류소 이름
+     		gpsX - X좌표 (WGS 84)
+      		gpsY - Y좌표 (WGS 84)
+      		direction - 진행방향
+      		fullSectDist - 정류소간 거리
+      		stationNo - 정류소 고유번호
+      		routeType - 노선 유형 (1:공항, 3:간선, 4:지선, 5:순환, 6:광역, 7:인천, 8:경기, 9:폐지, 0:공용)
+      		beginTm - 첫차 시간
+      		lastTm - 막차 시간
+      		trnstnid - 회차지 정류소ID
+      		posX - 좌표X (GRS80)
+      		posY - 좌표Y (GRS80)
+      		sectSpd - 구간속도
+      		arsId - 정류소 고유번호
+      		transYn - 회차지 여부 (Y:회차, N:회차지아님)
+		 */
 		
 		rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute',
 				null,
@@ -75,9 +98,15 @@ var busNumber = (function() {
 						window.history.go(-2);
 						toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
 					} else if (msg === "0"){
-						/** Success */
-						busIdToStation(data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue); 
-						tau.changePage("#busNumberStationList");						
+						var temp = data.getElementsByTagName("itemList");
+						if(temp[0].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue != strSch){
+							window.history.go(-2);
+							toastPopup.openPopup("toastGraphicPopup", "노선 번호를 찾지 못하였습니다.");
+						}
+						else{
+							busIdToStation(temp[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue); 
+							tau.changePage("#busNumberStationList");					
+						}
 					}
 				}, function(data, xhr) {
 					toastPopup.openPopup("toastPopup", "API를 불러오는데 실패하였습니다.");
@@ -96,7 +125,7 @@ var busStation = (function() {
 	function createBusArrivalTimeList(data) {
 		var lv = document.getElementById('lvBusArrivalTime');
 		lv.innerHTML = "";
-		var x = data.getElementsByTagName("items");
+		var x = data.getElementsByTagName("itemList");
 		for (var i = 0; i < x.length; ++i) {
 			if (i >= 20) {
 				break;
@@ -180,7 +209,7 @@ var busStation = (function() {
 					} else if (msg === "0"){
 						/** Success */
 						createBusArrivalTimeList(data);
-						document.getElementById('stationName').innerHTML = data.getElementsByTagName("items")[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue; 
+						document.getElementById('stationName').innerHTML = data.getElementsByTagName("itemList")[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue; 
 						tau.changePage("#busArrivalTime");						
 					}
 				}, function(data, xhr) {
