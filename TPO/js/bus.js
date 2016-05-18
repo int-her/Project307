@@ -317,7 +317,7 @@ BUS.prototype.showSurroundingStationsByGps = function () {
 	if (navigator.geolocation) {
 		tau.changePage("#processing");
 		navigator.geolocation.getCurrentPosition(succeedtoGetGPS, failtoGetGPS, {
-			timeout : 20000
+			maximumAge : 10000, timeout : 20000
 		});
 	} else {
 		toastPopup.openPopup("GPS를 지원하지 않는 기기입니다.");
