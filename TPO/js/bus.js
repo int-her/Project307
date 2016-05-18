@@ -78,8 +78,14 @@ BUS.prototype.busId = function(strSch){
 					/** No result */
 					toastPopup.openCheckPopup("노선 번호를 찾지 못하였습니다.", true, 2);
 				} else if (msg === "0"){
-					/** Success */
-					routeIdtoStation(data.getElementsByTagName("itemList")[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue); 
+					var temp = data.getElementsByTagName("itemList");
+					if(temp[0].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue != strSch){
+						toastPopup.openCheckPopup("노선 번호를 찾지 못하였습니다.", true, 2);
+					}
+					/** success*/
+					else{
+						routeIdtoStation(temp[0].getElementsByTagName("busRouteId")[0].childNodes[0].nodeValue); 
+					} 
 				}
 			}, function(data, xhr) {
 				toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
