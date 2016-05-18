@@ -12,15 +12,13 @@ TOASTPOPUP.prototype.openPopup = function(text, isBackAfterClose, back) {
 		if (typeof back === "undefined") {
 			back = 1;
 		}
-		popupPage.addEventListener("click", function() {
-			tau.closePopup();
-			setTimeout(function(){window.history.go(-back);}, 100);
-		});
-	} else {
-		popupPage.addEventListener("click", function() {
-			tau.closePopup();
+		popupPage.addEventListener("popuphide", function() {
+			setTimeout(function(){window.history.go(-back);}, 50);
 		});
 	}
+	popupPage.addEventListener("click", function() {
+		tau.closePopup();
+	});
 	
 	tau.openPopup(popupPage);
 };
@@ -34,15 +32,13 @@ TOASTPOPUP.prototype.openCheckPopup = function(text, isBackAfterClose, back) {
 		if (typeof back === "undefined") {
 			back = 1;
 		}
-		popupPage.addEventListener("click", function() {
-			tau.closePopup();
-			setTimeout(function(){window.history.go(-back);}, 100);
-		});
-	} else {
-		popupPage.addEventListener("click", function() {
-			tau.closePopup();
+		popupPage.addEventListener("popuphide", function() {
+			setTimeout(function(){window.history.go(-back);}, 50);
 		});
 	}
+	popupPage.addEventListener("click", function() {
+		tau.closePopup();
+	});
 	
 	tau.openPopup(popupPage);
 };
