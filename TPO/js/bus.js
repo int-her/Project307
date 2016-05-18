@@ -201,7 +201,8 @@ BUS.prototype.showBusArrivalTime = function(arsId) {
 function clickList(event)
 {
 	var target = event.target;
-	if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a')) {
+	if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a') ||
+			target.classList.contains('li-bus-station-sub')) {
 		bus.showBusArrivalTime(target.id);
 	}
 }
@@ -233,7 +234,7 @@ function createStationList(data) {
 		"><div class='ui-marquee ui-marquee-gradient'><a class='li-bus-station-a' id=" + 
 		x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
 		">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-		"</a></div><div class='ui-li-sub-text li-text-sub'>" + 
+		"</a></div><div class='ui-li-sub-text li-text-sub li-bus-station-sub'>" + 
 		x[i].getElementsByTagName("dist")[0].childNodes[0].nodeValue + "m" +
 		"(" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + ")" +
 		"</div></li>";
@@ -316,7 +317,7 @@ BUS.prototype.showSurroundingStationsByGps = function () {
 	if (navigator.geolocation) {
 		tau.changePage("#processing");
 		navigator.geolocation.getCurrentPosition(succeedtoGetGPS, failtoGetGPS, {
-			maximumAge : 10000, timeout : 20000
+			timeout : 20000
 		});
 	} else {
 		toastPopup.openPopup("GPS를 지원하지 않는 기기입니다.");
