@@ -12,11 +12,9 @@ function createBusStationList(data) {
 	var id = document.getElementById("lvBusNumber");
 	id.innerHTML = "";
 	var x = data.getElementsByTagName("itemList");
-	for (var i = 0; i < x.length; ++i) {
-		if (i >= 20) {
-			break;
-		}
-		id.innerHTML += "<li id=" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
+	for (var i = 0; i < x.length; i++) {
+		id.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue + 
+		"' onclick='bus.showBusArrivalTime(this.id);'"+
 		">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
 	}
 
@@ -105,7 +103,8 @@ function createBusArrivalTimeList(data) {
 		if (i >= 20) {
 			break;
 		}
-		lv.innerHTML += "<li class='li-has-multiline' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
+		"' onclick='bus.busId(this.id);'"+
 		"><div>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
 		"</div><div class='ui-li-sub-text li-text-sub'>" + 
 		x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
