@@ -1,4 +1,4 @@
-/*global tau, toastPopup, rest */
+﻿/*global tau, toastPopup, rest */
 function BUS() {
 	this.activeStationId = 1;
 	this.activeStationName = null;
@@ -56,7 +56,8 @@ function createBusStationList(data) {
 	id.innerHTML = "";
 	var x = data.getElementsByTagName("itemList");
 	for (var i = 0; i < x.length; ++i) {
-		id.innerHTML += "<li id=" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
+		id.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
+		"' onclick='bus.showBusArrivalTime(this.id);'"+
 		">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
 	}
 
@@ -145,7 +146,8 @@ function createBusArrivalTimeList(data) {
 	document.getElementById('stationName').innerHTML = x[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
 	
 	for (var i = 0; i < x.length; ++i) {
-		lv.innerHTML += "<li class='li-has-multiline' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
+		"' onclick='bus.busId(this.id);'"+
 		"><div>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
 		"</div><div class='ui-li-sub-text li-text-sub'>" + 
 		x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
