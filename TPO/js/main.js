@@ -10,7 +10,8 @@ function keyEventHandler(event) {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
-		} else if (pageid === "surroundingBusStation" || pageid === "surroundingSubwayStation") {
+		} else if (pageid === "surroundingBusStation" || pageid === "surroundingSubwayStation" ||
+				pageid === "busFavorite") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-4);
