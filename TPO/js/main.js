@@ -13,7 +13,7 @@ function keyEventHandler(event) {
 		} else if (pageid === "surroundingBusStation") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
-			window.history.go(-3);
+			window.history.go(-2);
 		} else if (pageid === "processing") {
 			// 아무것도 하지 않음
 		} else if (pageid === "busArrivalTime_MoreOptions") {
