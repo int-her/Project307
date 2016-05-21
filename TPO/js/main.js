@@ -15,7 +15,7 @@ function keyEventHandler(event) {
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-4);
 		} else if (pageid === "processing") {
-			// 아무것도 하지 않음
+			window.history.go(-1);
 		} else if (pageid === "busArrivalTime_MoreOptions") {
 			tau.closePopup(popup);
 		} else {
