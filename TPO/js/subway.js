@@ -8,7 +8,10 @@ SUBWAY.prototype = new Object();
 Window.prototype.subway = new SUBWAY();
 
 SUBWAY.prototype.realtimeStationArrival = function(stationName) {
-	var url = 'http://swopenAPI.seoul.go.kr/api/subway/sample/xml/realtimeStationArrival/0/5/' + stationName; 
+	/**
+	 *  서울시 지하철 실시간 도착정보(nearBy)
+	 */	
+	var url = 'http://swopenAPI.seoul.go.kr/api/subway/DELETED/xml/realtimeStationArrival/0/5/' + stationName; 
 	rest.get(url, null,	null,
 			function(data, xhr) {
 		var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
@@ -34,7 +37,7 @@ function successCallback(position) {
 	/**
 	 *  서울시 좌표기반 근접 지하철역 정보(nearBy)
 	 */
-	var url = 'http://swopenapi.seoul.go.kr/api/subway/DELETED/xml/nearBy/0/9' + position.coords.longitude + position.coords.latitude; 
+	var url = 'http://swopenapi.seoul.go.kr/api/subway/DELETED/xml/nearBy/0/9/' + position.coords.longitude + '/' + position.coords.latitude; 
 	rest.get(url, null, null, 
 			function(data, xhr) {
 		var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
