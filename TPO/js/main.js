@@ -80,7 +80,7 @@ function init() {
 	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
 
 	/** When click list element, find subway stations around */ 
-	document.getElementById('searchSurroundingSubway').addEventListener('click', subway.findSurroundingStationsByGps);
+	document.getElementById('searchSurroundingSubway').addEventListener('click', subway.showSurroundingStationsByGps);
 	
 	/** Test - image zoom in & out */
 	document.getElementById('viewMap').addEventListener('pagebeforshow', function() {
