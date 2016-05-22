@@ -8,11 +8,82 @@ SUBWAY.prototype = new Object();
 Window.prototype.subway = new SUBWAY();
 
 /**
+ *  지하철 역 리스트에서 클릭 시 realtimeStationArrival 함수를 불러와 그 지하철 역의 실시간 도착 정보를 보여준다.
+ */
+function clickList(event)
+{
+	var target = event.target;
+	if (target.classList.contains('li-subway-station')) {
+		subway.realtimeStationArrival(target.id);
+	}
+}
+
+/**
+ * li-subway-station 클래스를 가진 list item 에 대해 클릭 이벤트를 추가한다.
+ */
+function addListEvent() {
+	var stationList = document.getElementsByClassName("li-subway-station");
+	for (var i = 0; i < stationList.length; ++i) {
+		stationList[i].addEventListener("click", clickList);
+	}
+}
+
+/**
+ * API 에서 받아온 data를 파싱하여 도착 예상 시간을 보여주는 리스트를 만든다.
+ * @param {String} API 에서 받아온 XML String
+ */
+function createAllSubwayStationList(data) {
+	var lv = document.getElementById('lvAllSubwayStation_content');
+	lv.innerHTML = "";
+	var x = data.getElementsByTagName("row");
+	for (var i = 0; i < x.length; ++i) {
+		lv.innerHTML += "<li class='li-subway-station' id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + 
+		"><div class='li-subway-station' id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + ">" +
+		x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue +
+		"</div></li>";
+	}
+	addListEvent();
+}
+
+/**
+ * subwayNm 에 해당하는 호선의 경유 지하철 역을 보여준다.
+ * @param {string} subwayNm 지하철호선명
+ */
+SUBWAY.prototype.lvAllSubwayStation = function(subwayNm) {
+	tau.changePage("#processing");
+	/**
+	 * 	지하철 호선별 역사 경유정보(stationByLine)
+	 * 	1	subwayId	지하철호선ID
+		2	subwayNm	지하철호선명
+		3	statnId	지하철역ID
+		4	statnNm	지하철역명
+		5	statnSn	지하철역순번
+			(역사 순번)
+	 */
+	var url = 'http://swopenapi.seoul.go.kr/api/subway/DELETED/xml/stationByLine/0/200/' + subwayNm; 
+	rest.get(url, null, null,
+		function(data, xhr) {
+			var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
+			if (code !== "INFO-000") {
+				// Fail
+				toastPopup.openPopup("Fail to load API. Error Code : " + code, true);
+			} else if (code === "INFO-000"){
+				// Success
+				createAllSubwayStationList(data);
+				tau.changePage("#lvAllSubwayStation");
+			}
+		},
+		function(data, xhr) {
+			toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
+		});
+};
+
+/**
  * API 에서 받아온 data를 파싱하여 도착 예상 시간을 보여주는 리스트를 만든다.
  * @param {String} API 에서 받아온 XML String
  */
 function createSubwayArrivalTimeList(data) {
-	var lv = document.getElementById('lvSubwayArrivalTime');
+	var lv = document.getElementById('subwayArrivalTime_content');
 	lv.innerHTML = "";
 	var x = data.getElementsByTagName("row");
 	for (var i = 0; i < x.length; ++i) {
@@ -38,9 +109,9 @@ function createSubwayArrivalTimeList(data) {
 
 /**
  * stationName 에 해당하는 정류장에 대한 버스 도착 예상시간을 보여준다.
- * @param {number} stationName 지하철역명
+ * @param {number} stationNm 지하철역명
  */
-SUBWAY.prototype.realtimeStationArrival = function(stationName) {
+SUBWAY.prototype.realtimeStationArrival = function(stationNm) {
 	tau.changePage("#processing");
 	/**
 	 *  서울시 지하철 실시간 도착정보(realtimeStationArrival)
@@ -77,7 +148,7 @@ SUBWAY.prototype.realtimeStationArrival = function(stationName) {
 		21	arvlCd	도착코드
 			(0:진입, 1:도착, 2:출발, 3:전역출발, 4:전역진입, 5:전역도착, 99:운행중)
 	 */	
-	var url = 'http://swopenAPI.seoul.go.kr/api/subway/DELETED/xml/realtimeStationArrival/0/5/' + stationName; 
+	var url = 'http://swopenAPI.seoul.go.kr/api/subway/DELETED/xml/realtimeStationArrival/0/5/' + stationNm;
 	rest.get(url, null,	null,
 		function(data, xhr) {
 			var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
@@ -87,13 +158,14 @@ SUBWAY.prototype.realtimeStationArrival = function(stationName) {
 			} else if (code === "INFO-000") {
 				// Success
 				createSubwayArrivalTimeList(data);
+				document.getElementById('subwayArrivalTime_header').innerHTML = stationNm;
 				tau.changePage("#subwayArrivalTime");
 			}
 		},
 		function(data, xhr) {
 			toastPopup.openPopup("API 로드에 실패했습니다.");
 		});
-}
+};
 
 /**
  * API 에서 받아온 data를 파싱하여 주변 지하철 역을 보여주는 리스트를 만든다.
@@ -107,13 +179,14 @@ function createSurroundingSubwayList(data) {
 		if (i >= 20) {
 			break;
 		}
-		lv.innerHTML += "<li class='li-has-multiline'><div class='ui-marquee ui-marquee-gradient' id=" + i + ">" + 
-		x[i].getElementsByTagName("subwayNm")[0].childNodes[0].nodeValue + ' ' +
-		x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue +
-		"</div><div class='ui-li-sub-text li-text-sub'>imageX : " + 
-		x[i].getElementsByTagName("imageX")[0].childNodes[0].nodeValue + 
-		"m</div></li>";
+		lv.innerHTML += "<li id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='li-has-multiline' 'li-subway-station'>" +
+		"<div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='ui-marquee ui-marquee-gradient'>" + 
+		x[i].getElementsByTagName("subwayNm")[0].childNodes[0].nodeValue + ' ' + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue +
+		"</div><div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='ui-li-sub-text li-text-sub'>imageX : " + 
+		x[i].getElementsByTagName("ord")[0].childNodes[0].nodeValue + 
+		"</div></li>";
 	}
+	addListEvnet();
 }
 
 /**
@@ -179,4 +252,4 @@ SUBWAY.prototype.showSurroundingStationsByGps = function() {
 	} else {
 		toastPopup.openPopup("GPS를 지원하지 않는 기기입니다.");
 	}
-}
+};
