@@ -27706,7 +27706,7 @@ ns.version = '0.11.8';
 				var self = this;
 
 				window.removeEventListener("rotarydetent", self._callbacks.rotarydetent);
-
+				
 				self._callbacks.rotarydetent = null;
 			};
 
