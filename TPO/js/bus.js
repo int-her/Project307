@@ -11,12 +11,12 @@ BUS.prototype = new Object();
  */
 Window.prototype.bus = new BUS();
 
-function createFavoriteBusList(data, stationName) {
+BUS.prototype.createFavoriteBusList = function(data) {
 	var lv = document.getElementById('lvBusFavorite'),
 		x = data.getElementsByTagName("itemList");
 	
 	lv.innerHTML = "";
-	document.getElementById('favoriteStationName').innerHTML = stationName;
+	document.getElementById('favoriteStationName').innerHTML = this.activeStationName;
 	for (var i = 0; i < x.length; ++i) {
 		lv.innerHTML += "<li class='li-has-checkbox' id=" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
 		"><label>" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
@@ -33,8 +33,6 @@ BUS.prototype.showFavoriteBus = function() {
 			{
 		"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
 		"arsId" : this.activeStationId,
-		"numOfRows" : 999,
-		"pageNo" : 1
 			},
 			function(data, xhr) {
 				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
@@ -43,7 +41,7 @@ BUS.prototype.showFavoriteBus = function() {
 					toastPopup.openCheckPopup("정류장 번호를 찾지 못하였습니다.", true);
 				} else if (msg === "0") {
 					/** Success */
-					createFavoriteBusList(data, this.activeStationName);
+					bus.createFavoriteBusList(data);
 					tau.changePage("#busFavorite");
 				}
 			}, function(data, xhr) {
@@ -138,12 +136,14 @@ BUS.prototype.busId = function(strSch){
  * API 에서 받아온 data를 파싱하여 도착 예상 시간을 보여주는 리스트를 만든다.
  * @param {String} API 에서 받아온 XML String
  */
-function createBusArrivalTimeList(data) {
+BUS.prototype.createBusArrivalTimeList = function(data) {
 	var lv = document.getElementById('lvBusArrivalTime'),
 		x = data.getElementsByTagName("itemList");
 	
 	lv.innerHTML = "";
 	document.getElementById('stationName').innerHTML = x[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
+	this.activeStationId = x[0].getElementsByTagName("arsId")[0].childNodes[0].nodeValue;
+	this.activeStationName = x[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
 	
 	for (var i = 0; i < x.length; ++i) {
 		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
@@ -228,10 +228,7 @@ BUS.prototype.showBusArrivalTime = function(arsId) {
 					toastPopup.openCheckPopup("정류소 ID를 찾지 못하였습니다.", true, 2);
 				} else if (msg === "0"){
 					// Success
-					createBusArrivalTimeList(data);
-					this.activeStationId = data.getElementsByTagName("itemList")[0].getElementsByTagName("arsId")[0].childNodes[0].nodeValue;
-					
-					this.activeStationName = data.getElementsByTagName("itemList")[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
+					bus.createBusArrivalTimeList(data);
 					tau.changePage("#busArrivalTime");						
 				}
 			}, function(data, xhr) {

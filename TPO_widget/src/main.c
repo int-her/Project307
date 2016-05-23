@@ -62,7 +62,7 @@ _button_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	    }
 	    if (app_control_destroy(app_control) == APP_CONTROL_ERROR_NONE)
 	    {
-	        LOGI("App control destroyed.");
+
 	    }
 	}
 }
