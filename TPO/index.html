@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="lib/tau/wearable/theme/default/tau.min.css">
 	<link rel="stylesheet" media="all and (-tizen-geometric-shape: circle)"
 		href="lib/tau/wearable/theme/default/tau.circle.min.css">
+	<link rel="stylesheet" href="lib/tau-custom.css">
 	<link rel="stylesheet" href="css/style.css">
 	<script type="text/javascript" src="lib/tau/wearable/js/tau.min.js"></script>
 	<script type="text/javascript" src="js/rest.js"></script>
@@ -124,6 +125,20 @@
 		</div>
 	</div>
 	
+	<!-- Bus Favorite Page -->
+	<div class="ui-page" id="busFavorite">
+		<header class="ui-header">
+			<h2 class="ui-title" id="favoriteStationName"></h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview" id="lvBusFavorite">
+			</ul>
+		</div>
+		<footer class="ui-footer ui-bottom-button ui-fixed">
+			<button class="ui-btn" id="btnRegister">등록</button>
+		</footer>
+	</div>
+	
 	<!-- Toast Popup Page -->
 	<div class = "ui-popup ui-popup-toast" id="toastPopup">
 		<div class="ui-popup-content">
@@ -224,9 +239,9 @@
 	
 	<script type="text/javascript" src="js/marqueeList.js"></script>
 	<script type="text/javascript" src="js/toastPopup.js"></script>
-	<script type="text/javascript" src="js/moreoption.js"></script>
 	<script type="text/javascript" src="js/list.js"></script>
 	<script type="text/javascript" src="js/bus.js"></script>
+	<script type="text/javascript" src="js/moreoption.js"></script>
 	<script type="text/javascript" src="js/subway.js"></script>
 	<script type="text/javascript" src="js/image.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>

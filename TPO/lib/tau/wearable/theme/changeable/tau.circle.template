@@ -132,6 +132,8 @@ body {
   width: 34px;
   height: 200px;
   transform: translate(0, -50%);
+  border: 0 none;
+  padding: 0;
 }
 .ui-header.ui-has-more .ui-more.ui-icon-overflow {
   -webkit-mask-image: none;
@@ -157,7 +159,20 @@ body {
 .ui-header.ui-has-more .ui-more.ui-icon-overflow:active {
   background-color: transparent;
 }
-.ui-header.ui-has-more .ui-more::before {
+.ui-more {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  width: 34px;
+  height: 200px;
+  transform: translate(0, -50%);
+  background-color: transparent;
+  overflow: visible;
+  border: 0 none;
+  padding: 0;
+  text-indent: -9999px;
+}
+.ui-more::before {
   content: "";
   position: absolute;
   width: 8.75rem;
@@ -179,7 +194,7 @@ body {
   -ms-transition: transform ease-out 300ms;
   transition: transform ease-out 300ms;
 }
-.ui-header.ui-has-more .ui-more:active::before {
+.ui-more:active::before {
   -webkit-transition: transform ease-out 300ms;
   -moz-transition: transform ease-out 300ms;
   -o-transition: transform ease-out 300ms;
@@ -191,7 +206,7 @@ body {
   -o-transform: scale(1);
   transform: scale(1);
 }
-.ui-header.ui-has-more .ui-more::after {
+.ui-more::after {
   content: "";
   position: absolute;
   width: 1rem;
@@ -783,6 +798,12 @@ Option Popup
 /***************************************************************************
 				  listview
 ***************************************************************************/
+.ui-page.ui-scroll-on .ui-listview {
+  margin-top: 3.125rem;
+}
+.ui-page.ui-scroll-on .ui-header ~ .ui-content .ui-listview {
+  margin-top: 0;
+}
 .ui-listview {
   padding-bottom: 1.25rem;
 }

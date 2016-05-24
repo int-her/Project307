@@ -10,7 +10,8 @@ function keyEventHandler(event) {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
-		} else if (pageid === "surroundingBusStation" || pageid === "surroundingSubwayStation") {
+		} else if (pageid === "surroundingBusStation" || pageid === "surroundingSubwayStation" ||
+				pageid === "busFavorite") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-2);
@@ -67,21 +68,34 @@ function init() {
 	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
 		moreoption.pageBeforeShowHandler('busArrivalTime');
 	});
-	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', moreoption.pageBeforeHideHandler);
+	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', function() {
+		moreoption.pageBeforeHideHandler();
+	});
 	
 	
 	// Marquee list 초기화 
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
 		marqueeList.pageBeforeShowHandler('surroundingBusStation');
 	});
-	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', marqueeList.pageBeforeHideHandler);
+	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', function() {
+		marqueeList.pageBeforeHideHandler();
+	});
 	
 	
 	// 주변 정류장 클릭
-	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
+	document.getElementById('searchSurrounding').addEventListener('click', function() {
+		bus.showSurroundingStationsByGps();
+	});
+	
+	// 즐겨찾기 등록
+	document.getElementById('btnRegister').addEventListener('click', function() {
+		bus.registerFavoriteBus();
+	});
 
 	/** When click list element, find subway stations around */ 
-	document.getElementById('searchSurroundingSubway').addEventListener('click', subway.findSurroundingStationsByGps);
+	document.getElementById('searchSurroundingSubway').addEventListener('click', function(){
+		subway.findSurroundingStationsByGps();
+	});
 	
 	/** Test - image zoom in & out */
 	document.getElementById('viewMap').addEventListener('pagebeforshow', function() {
