@@ -2,6 +2,7 @@
 function BUS() {
 	this.activeStationId = 1;
 	this.activeStationName = null;
+	this.registerBusId = [];
 }
 BUS.prototype = new Object();
 
@@ -10,6 +11,85 @@ BUS.prototype = new Object();
  * @type BUS
  */
 Window.prototype.bus = new BUS();
+
+function onOpenFail(error) {
+	//toastPopup.openPopup("즐겨찾기 등록 실패!");
+	toastPopup.openPopup(error.message);
+}
+
+BUS.prototype._onOpenSuccess = function(fs, file) {
+	fs.write(this.activeStationId);
+	for (var i = 0; i < this.registerBusId.length; ++i) {
+		fs.write(" ");
+		fs.write(this.registerBusId[i]);
+	}
+	fs.close();
+	
+	toastPopup.openCheckPopup("위젯에 등록되었습니다.", true, 2);
+};
+
+
+/**
+ * 즐겨찾기 버스 목록을 저장할 파일을 만든다.
+ */
+BUS.prototype._createBusFavoriteFile = function() {
+	var documentsDir, 
+		tpoDir = null, 
+		tpoFile;
+	
+	// document 폴더에 저장한다.
+	tizen.filesystem.resolve("documents", function(result) {
+        documentsDir = result;
+        try {
+        	tpoDir = documentsDir.createDirectory("TPO_files");
+        } catch (error) {
+        	if (error.name === "IOError") {
+        		tpoDir = documentsDir.resolve("TPO_files");
+        	}
+        }
+        
+        if (tpoDir !== null) {
+        	try {
+        		tpoFile = tpoDir.createFile("TPO_favorite.tpo");
+        		tpoFile.openStream("rw", function(fs) {
+            		bus._onOpenSuccess(fs, tpoFile);
+            	}, onOpenFail, "UTF-8");
+        	} catch (error) {
+        		if (error.name === "IOError") {
+        			try {
+        				tpoFile = tpoDir.resolve("TPO_favorite.tpo");
+	        			tpoDir.deleteFile(tpoFile.fullPath, function() {
+	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
+	        				tpoFile.openStream("rw", function(fs) {
+	        	        		bus._onOpenSuccess(fs, tpoFile);
+	        	        	}, onOpenFail, "UTF-8");
+	        			});
+        			} catch (error) {
+        				
+        			}
+        		}
+        	}
+        }
+     });
+};
+
+
+/**
+ * 선택한 정류장에서 선택한 버스들을 즐겨찾기에 등록한다.
+ */
+BUS.prototype.registerFavoriteBus = function() {
+	var page = document.getElementById('busFavorite'),
+		checkbox = page.querySelectorAll(".li-checkbox"),
+		j = 0;
+	
+	for (var i = 0; i < checkbox.length; ++i) {
+		if (checkbox[i].checked) {
+			this.registerBusId[j++] = checkbox[i].id;
+		}
+	}
+	
+	this._createBusFavoriteFile();
+};
 
 BUS.prototype.createFavoriteBusList = function(data) {
 	var lv = document.getElementById('lvBusFavorite'),
@@ -20,14 +100,13 @@ BUS.prototype.createFavoriteBusList = function(data) {
 	for (var i = 0; i < x.length; ++i) {
 		lv.innerHTML += "<li class='li-has-checkbox' id=" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
 		"><label>" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
-		"<input type='checkbox' id=" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
-		"/></label></li>";
+		"<input type='checkbox' class='li-checkbox' id=" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
+		" /></label></li>";
 	}
-}
+};
 
 BUS.prototype.showFavoriteBus = function() {
 	tau.changePage("#processing");
-	alert(this.activeStationId);
 	rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getRouteByStation',
 			null,
 			{
@@ -47,7 +126,7 @@ BUS.prototype.showFavoriteBus = function() {
 			}, function(data, xhr) {
 				toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
 			});		
-}
+};
 
 function createBusStationList(data) {
 	var id = document.getElementById("lvBusNumber");
