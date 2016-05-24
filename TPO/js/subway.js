@@ -189,36 +189,10 @@ function createSurroundingSubwayList(data) {
 	addListEvent();
 }
 
-function transcoord(position) {
-	/**
-	 * 좌표계 변환(transCoord)
-	 * https://developers.daum.net/services/apis/local/geo/transcoord
-	 */
-	rest.get('https://apis.daum.net/local/geo/transcoord',
-			null,
-			{
-		"apikey" : "2693dc6c6564996cc45fcb78b3bb70d4",
-		"fromCoord" : "WGS84",
-		"y" : position.coords.latitude,
-		"x" : position.coords.longitude,
-		"toCoord" : "WTM",
-		"output" : "xml"
-			},
-			function(data, xhr) {
-				return data;
-			},
-			function(data, xhr) {
-				toastPopup.openPopup("좌표계 변환 에러");
-			});
-}
-
 /**
  * GPS 받아오기에 성공했을 시 1km 반경 내의 주변 지하철 역을 API를 통하여 읽어오고 리스트를 만든다.
  */
-function successCallback(position) {
-	var transPos = transcoord(position);
-	var x = transPos.getElementsByTagName("result")[0].getAttribute("x");
-	var y = transPos.getElementsByTagName("result")[0].getAttribute("y");
+function searchSurroundingSubwayStation(x, y) {
 	/**
 	 *  서울시 좌표기반 근접 지하철역 정보(nearBy)
 	 *  1	statnId	지하철역ID
@@ -232,7 +206,6 @@ function successCallback(position) {
 		9	imageY	이미지상Y좌표
 	 */
 	var url = 'http://swopenapi.seoul.go.kr/api/subway/4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==/xml/nearBy/0/5/' + x + '/' + y;
-	toastPopup.openPopup(x + '/' + y);
 	rest.get(url, null, null,
 		function(data, xhr) {
 			var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
@@ -247,6 +220,23 @@ function successCallback(position) {
 		},
 		function(data, xhr) {
 			toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
+		});
+}
+
+function successCallback(position) {
+	/**
+	 * 좌표계 변환(transCoord)
+	 * https://developers.daum.net/services/apis/local/geo/transcoord
+	 */
+	var url = 'https://apis.daum.net/local/geo/transcoord?apikey=2693dc6c6564996cc45fcb78b3bb70d4&fromCoord=WGS84&y=' + position.coords.latitude + '&x=' + position.coords.longitude + '&toCoord=WTM&output=xml';
+//	var url = 'https://apis.daum.net/local/geo/transcoord?apikey=2693dc6c6564996cc45fcb78b3bb70d4&fromCoord=WGS84&y=126.57740680000002&x=33.453357700000005&toCoord=WTM&output=xml';
+	rest.get(url, null, null,
+		function(data, xhr) {
+			var splitData = data.split("\'");
+			searchSurroundingSubwayStation(splitData[1], splitData[3]);
+		},
+		function(data, xhr) {
+			toastPopup.openPopup("좌표계 변환 에러");
 		});
 }
 
