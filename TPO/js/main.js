@@ -79,7 +79,11 @@ function init() {
 	
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', bus.showSurroundingStationsByGps);
-
+	
+	// 경로 찾기 클릭
+	document.getElementById('routeSearching').addEventListener('click', route.findway);
+	
+	
 	/** When click list element, find subway stations around */ 
 	document.getElementById('searchSurroundingSubway').addEventListener('click', subway.showSurroundingStationsByGps);
 	
