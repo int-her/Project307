@@ -20,14 +20,18 @@ MOREOPTION.prototype.clickElHandler = function(event) {
 		dataIndex;
 	
 	if (target.classList.contains("ui-selector-indicator")) {
-		tau.closePopup(this.popup);
+		dataIndex = target.getAttribute("data-index");
+		if (dataIndex === "0") {
+			tau.closePopup(this.popup);
+			bus.showFavoriteBus();
+		} else {
+			tau.closePopup(this.popup);
+		}
 	} else {
 		dataTitle = target.getAttribute("data-title");
 		if (dataTitle === "즐겨찾기 등록") {
 			tau.closePopup(this.popup);
 			bus.showFavoriteBus();
-		} else {
-			tau.closePopup(this.popup);
 		}
 	}
 };

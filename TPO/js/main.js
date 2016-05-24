@@ -86,6 +86,11 @@ function init() {
 	document.getElementById('searchSurrounding').addEventListener('click', function() {
 		bus.showSurroundingStationsByGps();
 	});
+	
+	// 즐겨찾기 등록
+	document.getElementById('btnRegister').addEventListener('click', function() {
+		bus.registerFavoriteBus();
+	});
 
 	/** When click list element, find subway stations around */ 
 	document.getElementById('searchSurroundingSubway').addEventListener('click', function(){

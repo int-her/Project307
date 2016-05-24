@@ -1,5 +1,40 @@
 #include <tizen.h>
+#include <storage.h>
 #include "main.h"
+
+static int internal_storage_id;
+
+static bool
+storage_cb(int storage_id, storage_type_e type, storage_state_e state, const char *path, void *user_data)
+{
+   if (type == STORAGE_TYPE_INTERNAL)
+   {
+      internal_storage_id = storage_id;
+
+      return false;
+   }
+
+   return true;
+}
+
+static bool
+exist_file()
+{
+	int error;
+	char *path;
+	error = storage_foreach_device_supported(storage_cb, NULL);
+	if (error)
+	{
+		return false;
+	}
+	error = storage_get_directory(internal_storage_id, STORAGE_DIRECTORY_DOCUMENTS, &path);
+	if (error)
+	{
+		return false;
+	}
+	return true;
+
+}
 
 static void
 app_get_resource(const char *edj_file_in, char *edj_path_out, int edj_path_max)
@@ -74,6 +109,7 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 	int ret;
 	char edj_path[PATH_MAX] = {0, };
 	Evas_Object *button = NULL;
+	Evas_Object *label;
 
 	if (content != NULL) {
 		/* Recover the previous status with the bundle object. */
@@ -108,9 +144,16 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 	evas_object_size_hint_weight_set(wid->layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_show(wid->layout);
 
+
+	Evas_Object *layout = elm_layout_edje_get(wid->layout);
+	edje_object_part_text_set(layout, "text_label", "즐겨찾기를 등록해주세요.");
+	label = elm_label_add(wid->layout);
+	elm_object_part_content_set(wid->layout, "text_label", label);
+	evas_object_show(label);
+
 	button = elm_button_add(wid->layout);
 	elm_object_style_set(button, "bottom");
-	elm_object_text_set(button, "OK");
+	elm_object_text_set(button, "등록");
 	elm_object_part_content_set(wid->layout, "elm.swallow.button", button);
 	evas_object_smart_callback_add(button, "clicked", _button_clicked_cb, wid);
 	evas_object_show(button);

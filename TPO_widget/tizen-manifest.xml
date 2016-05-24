@@ -7,6 +7,7 @@
         <support-size preview="preview.png">2x2</support-size>
     </widget-application>
     <privileges>
+        <privilege>http://tizen.org/privilege/mediastorage</privilege>
         <privilege>http://tizen.org/privilege/appmanager.launch</privilege>
     </privileges>
 </manifest>
