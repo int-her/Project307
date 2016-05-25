@@ -4976,7 +4976,6 @@ input[type="checkbox"]:not(.ui-switch-input):active:checked::before {
 .ui-selector .ui-layer .ui-item::before {
   -webkit-transition: background-color 200ms ease-out;
 }
-.ui-selector .ui-selector-indicator,
 .ui-selector .ui-selector-indicator-arrow {
   position: absolute;
   width: 13.125rem;
@@ -4989,11 +4988,17 @@ input[type="checkbox"]:not(.ui-switch-input):active:checked::before {
   font-size: 1.75rem;
 }
 .ui-selector .ui-selector-indicator {
+  position: absolute;
   z-index: 4;
-  width: 10rem;
-  height: 10rem;
-  margin: -5rem;
-  line-height: 10rem;
+  width: 9.375rem;
+  height: 9.375rem;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .ui-selector .ui-selector-indicator::before {
   content: "";
@@ -5023,6 +5028,23 @@ input[type="checkbox"]:not(.ui-switch-input):active:checked::before {
   -ms-transform: scale(1);
   -o-transform: scale(1);
   transform: scale(1);
+}
+.ui-selector .ui-selector-indicator .ui-selector-indicator-text {
+  pointer-events: none;
+  position: absolute;
+  width: 10.25rem;
+  max-height: 4.875rem;
+  line-height: 2.4375rem;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 .ui-selector .ui-selector-indicator-arrow {
   z-index: 0;
