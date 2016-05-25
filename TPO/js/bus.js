@@ -128,16 +128,39 @@ BUS.prototype.showFavoriteBus = function() {
 			});		
 };
 
-function createBusStationList(data) {
-	var id = document.getElementById("lvBusNumber");
-	id.innerHTML = "";
-	var x = data.getElementsByTagName("itemList");
-	for (var i = 0; i < x.length; ++i) {
-		id.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-		"' onclick='bus.showBusArrivalTime(this.id);'"+
-		">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+/**
+ *  버스 정류장 리스트에서 클릭 시 showBusArrivalTime 함수를 불러와 그 정류장에서의 버스 도착 예정 시간을 보여준다.
+ */
+function clickList(event)
+{
+	var target = event.target;
+	if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a') ||
+			target.classList.contains('li-bus-station-sub')) {
+		bus.showBusArrivalTime(target.id);
 	}
+}
 
+/**
+ * li-bus-station 클래스를 가진 list item 에 대해 클릭 이벤트를 추가한다.
+ */
+function addListEvent() {
+	var stationList = document.getElementsByClassName("li-bus-station"),
+	i;
+
+	for (i = 0; i < stationList.length; i++) {
+		stationList[i].addEventListener("click", clickList);
+	}
+}
+
+
+function createBusStationList(data) {
+	var lv = document.getElementById("lvBusNumber");
+	lv.innerHTML = "";
+	var x = data.getElementsByTagName("itemList");
+	for (var i = 0; i < x.length; i++) {
+		lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue +
+		"' onclick = 'bus.showBusArrivalTime(" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue + ");'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+	}
 }
 	
 function routeIdtoStation(busRouteId) {
@@ -226,7 +249,7 @@ BUS.prototype.createBusArrivalTimeList = function(data) {
 	
 	for (var i = 0; i < x.length; ++i) {
 		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
-		"' onclick='bus.busId(this.id);'"+
+		"' onclick = 'bus.busId(" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + ");'" +
 		"><div>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
 		"</div><div class='ui-li-sub-text li-text-sub'>" + 
 		x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
@@ -315,29 +338,6 @@ BUS.prototype.showBusArrivalTime = function(arsId) {
 			});
 };
 
-/**
- *  버스 정류장 리스트에서 클릭 시 showBusArrivalTime 함수를 불러와 그 정류장에서의 버스 도착 예정 시간을 보여준다.
- */
-function clickList(event)
-{
-	var target = event.target;
-	if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a') ||
-			target.classList.contains('li-bus-station-sub')) {
-		bus.showBusArrivalTime(target.id);
-	}
-}
-
-/**
- * li-bus-station 클래스를 가진 list item 에 대해 클릭 이벤트를 추가한다.
- */
-function addListEvent() {
-	var stationList = document.getElementsByClassName("li-bus-station"),
-	i;
-
-	for (i = 0; i < stationList.length; i++) {
-		stationList[i].addEventListener("click", clickList);
-	}
-}
 
 /**
  * 버스 정류장 리스트를 만든다. 현재 위치에 대한 거리, 정류장 고유번호를 부가적으로 표시해준다.
