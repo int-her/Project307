@@ -4,15 +4,15 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="author-signature.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>ZkCEdpx7KttJ5ap8emv4/+sImQ2Vek0FdJLa5WkOjC4=</DigestValue>
+<DigestValue>eTCHny+B1NEMzXBcWSHG26BAI5Zf31tQaFs5tRzOZ8w=</DigestValue>
 </Reference>
 <Reference URI="bin%2Ftpo_widget">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>d5IeEF1wNlOSS6XglCPJD58yxhAyNgST/TZaaXnshgg=</DigestValue>
+<DigestValue>qLTS5kpWfSow0a9BNrm7jZBDszU1Hob8iTK1OOvpxT8=</DigestValue>
 </Reference>
 <Reference URI="res%2Fedje%2Fwidget.edj">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>8tRe08VEeqFAIVsIoFQWyVkZipB1/HMbVSJlFfhObdQ=</DigestValue>
+<DigestValue>0lD/PKFRtZSDYOP1cWfiZ8XiXtKTX1Q87Rcaz3Ex5uo=</DigestValue>
 </Reference>
 <Reference URI="shared%2Fres%2Ficon.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -24,7 +24,7 @@
 </Reference>
 <Reference URI="tizen-manifest.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>9r7LKhXbOL4SsO7V56AHSSYiXzvGxagOvkoTydznK0s=</DigestValue>
+<DigestValue>jDIq2kFuKJVmk85GlX6tFOvwg0btHRUrPmliVhFsmwQ=</DigestValue>
 </Reference>
 <Reference URI="#prop">
 <Transforms>
@@ -35,11 +35,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-aye/mgI997CzIMypA/wVp9HGfcNLTR1gXZaxv9EIJ4aBqPmQjpPIx4vpcbqn41TUvtLmkWZFQSJq
-csJPu5zfvTEe0ExZoOtcXxsC+gRh4YocsmF0QzwF866iKhLrXJHis9aC39fHyoKveqCUtnoSeukW
-GSnvX3FgalWL4IJWuFl62YrnQ6j94d97sZoULqRDB64YjRZet2XfOXNScHOB/sK4SLBccDRj8CyM
-kihS679jQnheTI7cUSSSoQ+hijFmphqoLvfapBce/yuRQ+YaB4uMa0PH/A5j8m+L8Ry2/qC/V3cw
-Q5W8tvcl2t4gK7Wzvhj7LaUsNN7yjzQqpc4aUA==
+IItq2Aj69hh+dXKh4tcxumXhOvzwh56eawRRI64xETrsSdNCE7WOt97Bqs9qTRsArdTAyWz15nJk
+PXPM15DuqiBv5KbvNyffnSeEoAEE4PU9Jvcesh2ueCD8lYFR6uEympQvX2eCEvpt6Uqkf6zmu+8G
+vTF7DIOdirvb6l1bW5PTQw+DjdVZadexzRwr0/03HnPMsD9Wso+eWWt1I4tNG91209OM5jVMayFS
+oTz0PsEvEAhnogB72AVKBD9HdSXScR7QcKyEfOBB3DFN21APshqf6lwcM+XdR9wGQYCySVKjUPxL
+rrN7DGQojxBf3eAMthAz0nfvdrIU01WwvW49vw==
 </SignatureValue>
 <KeyInfo>
 <X509Data>
