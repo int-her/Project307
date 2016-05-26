@@ -3,6 +3,7 @@ function BUS() {
 	this.activeStationId = 1;
 	this.activeStationName = null;
 	this.registerBusId = [];
+	this.registerBusAdirection = [];
 }
 BUS.prototype = new Object();
 
@@ -17,17 +18,32 @@ function onOpenFail(error) {
 	//toastPopup.openPopup(error.message);
 }
 
-BUS.prototype._onOpenSuccess = function(fs, file) {
+BUS.prototype._writeFavoriteFile = function(fs, file, preSave) {
+	fs.write(preSave);
+	fs.write("\n");
 	fs.write(this.activeStationId);
+	fs.write(" ");
+	fs.write(this.activeStationId.length);
 	for (var i = 0; i < this.registerBusId.length; ++i) {
 		fs.write(" ");
 		fs.write(this.registerBusId[i]);
+		fs.write(" ");
+		fs.write(this.registerBusAdirection[i]);
 	}
 	fs.close();
 	
 	toastPopup.openCheckPopup("위젯에 등록되었습니다.", true, 2);
 };
 
+BUS.prototype._readFavoriteFile = function(fs, file) {
+	var txt;
+	
+	fs.position = 0;
+	txt = fs.read(file.length);
+	fs.close();
+	
+	return txt;
+} 
 
 /**
  * 즐겨찾기 버스 목록을 저장할 파일을 만든다.
@@ -52,18 +68,21 @@ BUS.prototype._createBusFavoriteFile = function() {
         	try {
         		tpoFile = tpoDir.createFile("TPO_favorite.tpo");
         		tpoFile.openStream("rw", function(fs) {
-            		bus._onOpenSuccess(fs, tpoFile);
+            		bus._writeFavoriteFile(fs, tpoFile, "");
             	}, onOpenFail, "UTF-8");
         	} catch (error) {
         		if (error.name === "IOError") {
         			try {
         				tpoFile = tpoDir.resolve("TPO_favorite.tpo");
-	        			tpoDir.deleteFile(tpoFile.fullPath, function() {
-	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
-	        				tpoFile.openStream("rw", function(fs) {
-	        	        		bus._onOpenSuccess(fs, tpoFile);
-	        	        	}, onOpenFail, "UTF-8");
-	        			});
+        				tpoFile.openStream("r", function(fs) {
+        					var txt = bus._readFavoriteFile(fs, tpoFile);
+        	        		tpoDir.deleteFile(tpoFile.fullPath, function() {
+    	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
+    	        				tpoFile.openStream("w", function(fs) {
+    	        	        		bus._writeFavoriteFile(fs, tpoFile, txt);
+    	        	        	}, onOpenFail, "UTF-8");
+    	        			});
+        	        	}, onOpenFail, "UTF-8");
         			} catch (error) {
         				
         			}
@@ -84,7 +103,8 @@ BUS.prototype.registerFavoriteBus = function() {
 	
 	for (var i = 0; i < checkbox.length; ++i) {
 		if (checkbox[i].checked) {
-			this.registerBusId[j++] = checkbox[i].id;
+			this.registerBusId[j] = checkbox[i].id;
+			this.registerBusAdirection[j++] = checkbox[i].adirection;
 		}
 	}
 	
@@ -95,17 +115,18 @@ BUS.prototype.registerFavoriteBus = function() {
  * 선택한 정류장의 모든 버스 번호를 list에 checkbox와 함께 추가한다.
  * @param data {String} XML Data
  */
-BUS.prototype.createFavoriteBusList = function(data) {
+BUS.prototype._createFavoriteBusList = function(data) {
 	var lv = document.getElementById('lvBusFavorite'),
 		x = data.getElementsByTagName("itemList");
 	
 	lv.innerHTML = "";
 	document.getElementById('favoriteStationName').innerHTML = this.activeStationName;
 	for (var i = 0; i < x.length; ++i) {
-		lv.innerHTML += "<li class='li-has-checkbox' id=" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
-		"><label>" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
-		"<input type='checkbox' class='li-checkbox' id=" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
-		" /></label></li>";
+		lv.innerHTML += "<li class='li-has-checkbox' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+		"><label>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+		"<input type='checkbox' class='li-checkbox' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+		"adirection=" + x[i].getElementsByTagName("adirection")[0].childNodes[0].nodeValue +  
+		"/></label></li>";
 	}
 };
 
@@ -114,7 +135,7 @@ BUS.prototype.createFavoriteBusList = function(data) {
  */
 BUS.prototype.showFavoriteBus = function() {
 	tau.changePage("#processing");
-	rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getRouteByStation',
+	rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid',
 			null,
 			{
 		"ServiceKey" : "DELETED",
@@ -127,7 +148,7 @@ BUS.prototype.showFavoriteBus = function() {
 					toastPopup.openCheckPopup("정류장 번호를 찾지 못하였습니다.", true);
 				} else if (msg === "0") {
 					/** Success */
-					bus.createFavoriteBusList(data);
+					bus._createFavoriteBusList(data);
 					tau.changePage("#busFavorite");
 				}
 			}, function(data, xhr) {
