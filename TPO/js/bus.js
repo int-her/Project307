@@ -3,6 +3,7 @@ function BUS() {
 	this.activeStationId = 1;
 	this.activeStationName = null;
 	this.registerBusId = [];
+	this.registerBusAdirection = [];
 }
 BUS.prototype = new Object();
 
@@ -13,21 +14,36 @@ BUS.prototype = new Object();
 Window.prototype.bus = new BUS();
 
 function onOpenFail(error) {
-	//toastPopup.openPopup("즐겨찾기 등록 실패!");
-	toastPopup.openPopup(error.message);
+	toastPopup.openPopup("즐겨찾기 등록 실패!");
+	//toastPopup.openPopup(error.message);
 }
 
-BUS.prototype._onOpenSuccess = function(fs, file) {
+BUS.prototype._writeFavoriteFile = function(fs, file, preSave) {
+	fs.write(preSave);
+	fs.write("\n");
 	fs.write(this.activeStationId);
+	fs.write(" ");
+	fs.write(this.activeStationId.length);
 	for (var i = 0; i < this.registerBusId.length; ++i) {
 		fs.write(" ");
 		fs.write(this.registerBusId[i]);
+		fs.write(" ");
+		fs.write(this.registerBusAdirection[i]);
 	}
 	fs.close();
 	
 	toastPopup.openCheckPopup("위젯에 등록되었습니다.", true, 2);
 };
 
+BUS.prototype._readFavoriteFile = function(fs, file) {
+	var txt;
+	
+	fs.position = 0;
+	txt = fs.read(file.length);
+	fs.close();
+	
+	return txt;
+} 
 
 /**
  * 즐겨찾기 버스 목록을 저장할 파일을 만든다.
@@ -52,18 +68,21 @@ BUS.prototype._createBusFavoriteFile = function() {
         	try {
         		tpoFile = tpoDir.createFile("TPO_favorite.tpo");
         		tpoFile.openStream("rw", function(fs) {
-            		bus._onOpenSuccess(fs, tpoFile);
+            		bus._writeFavoriteFile(fs, tpoFile, "");
             	}, onOpenFail, "UTF-8");
         	} catch (error) {
         		if (error.name === "IOError") {
         			try {
         				tpoFile = tpoDir.resolve("TPO_favorite.tpo");
-	        			tpoDir.deleteFile(tpoFile.fullPath, function() {
-	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
-	        				tpoFile.openStream("rw", function(fs) {
-	        	        		bus._onOpenSuccess(fs, tpoFile);
-	        	        	}, onOpenFail, "UTF-8");
-	        			});
+        				tpoFile.openStream("r", function(fs) {
+        					var txt = bus._readFavoriteFile(fs, tpoFile);
+        	        		tpoDir.deleteFile(tpoFile.fullPath, function() {
+    	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
+    	        				tpoFile.openStream("w", function(fs) {
+    	        	        		bus._writeFavoriteFile(fs, tpoFile, txt);
+    	        	        	}, onOpenFail, "UTF-8");
+    	        			});
+        	        	}, onOpenFail, "UTF-8");
         			} catch (error) {
         				
         			}
@@ -84,30 +103,39 @@ BUS.prototype.registerFavoriteBus = function() {
 	
 	for (var i = 0; i < checkbox.length; ++i) {
 		if (checkbox[i].checked) {
-			this.registerBusId[j++] = checkbox[i].id;
+			this.registerBusId[j] = checkbox[i].id;
+			this.registerBusAdirection[j++] = checkbox[i].adirection;
 		}
 	}
 	
 	this._createBusFavoriteFile();
 };
 
-BUS.prototype.createFavoriteBusList = function(data) {
+/**
+ * 선택한 정류장의 모든 버스 번호를 list에 checkbox와 함께 추가한다.
+ * @param data {String} XML Data
+ */
+BUS.prototype._createFavoriteBusList = function(data) {
 	var lv = document.getElementById('lvBusFavorite'),
 		x = data.getElementsByTagName("itemList");
 	
 	lv.innerHTML = "";
 	document.getElementById('favoriteStationName').innerHTML = this.activeStationName;
 	for (var i = 0; i < x.length; ++i) {
-		lv.innerHTML += "<li class='li-has-checkbox' id=" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
-		"><label>" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
-		"<input type='checkbox' class='li-checkbox' id=" + x[i].getElementsByTagName("busRouteNm")[0].childNodes[0].nodeValue + 
-		" /></label></li>";
+		lv.innerHTML += "<li class='li-has-checkbox' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+		"><label>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+		"<input type='checkbox' class='li-checkbox' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
+		"adirection=" + x[i].getElementsByTagName("adirection")[0].childNodes[0].nodeValue +  
+		"/></label></li>";
 	}
 };
 
+/**
+ * 현재 도착 시간을 보고 있는 정류장 번호를 기반으로 즐겨찾기를 등록하는 페이지로 이동한다.
+ */
 BUS.prototype.showFavoriteBus = function() {
 	tau.changePage("#processing");
-	rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getRouteByStation',
+	rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid',
 			null,
 			{
 		"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
@@ -120,7 +148,7 @@ BUS.prototype.showFavoriteBus = function() {
 					toastPopup.openCheckPopup("정류장 번호를 찾지 못하였습니다.", true);
 				} else if (msg === "0") {
 					/** Success */
-					bus.createFavoriteBusList(data);
+					bus._createFavoriteBusList(data);
 					tau.changePage("#busFavorite");
 				}
 			}, function(data, xhr) {
@@ -128,18 +156,69 @@ BUS.prototype.showFavoriteBus = function() {
 			});		
 };
 
+/**
+ *  버스 정류장 리스트에서 클릭 시 showBusArrivalTime 함수를 불러와 그 정류장에서의 버스 도착 예정 시간을 보여준다.
+ */
+function clickList(event)
+{
+	var target = event.target;
+	if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a') ||
+			target.classList.contains('li-bus-station-sub')) {
+		bus.showBusArrivalTime(target.id);
+	}
+}
+
+/**
+ * li-bus-station 클래스를 가진 list item 에 대해 클릭 이벤트를 추가한다.
+ */
+function addListEvent() {
+	var stationList = document.getElementsByClassName("li-bus-station"),
+	i;
+
+	for (i = 0; i < stationList.length; i++) {
+		stationList[i].addEventListener("click", clickList);
+	}
+}
+
+/**
+ * 숫자의 앞에 0을 채워넣어준다.
+ */
+function leadingZeros(n, digits) {
+	  var zero = '';
+	  n = n.toString();
+
+	  if (n.length < digits) {
+	    for (var i = 0; i < digits - n.length; i++)
+	      zero += '0';
+	  }
+	  return zero + n;
+}
+
+/**
+ * XML 데이터를 이용하여 정류소 목록을 보여주는 페이지를 만들어준다
+ * @param {String} API 에서 받아온 XML String
+ */
 function createBusStationList(data) {
-	var id = document.getElementById("lvBusNumber");
-	id.innerHTML = "";
+	var lv = document.getElementById("lvBusNumber");
+	lv.innerHTML = "";
 	var x = data.getElementsByTagName("itemList");
 	for (var i = 0; i < x.length; ++i) {
-		id.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-		"' onclick='bus.showBusArrivalTime(this.id);'"+
-		">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+		//숫자 앞이 0인경우
+		if(x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue < 10000) {
+			var str = parseInt(x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue, 10);
+			lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue +
+			"' onclick = 'bus.showBusArrivalTime(leadingZeros(" +str + ", 5));'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+		}
+		else
+			lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue +
+			"' onclick = 'bus.showBusArrivalTime(" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue.toString() + ");'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";	
 	}
-
 }
 	
+/**
+ * routeId를 입력받아 document의 header에 busNumber를 입력해주고
+ * 그 버스가 경유하는 정류소 목록을 받아온다.
+ */
 function routeIdtoStation(busRouteId) {
 	rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute',
 			null,
@@ -163,6 +242,10 @@ function routeIdtoStation(busRouteId) {
 			});		
 }
 	
+/**
+ * 원하는 버스 번호를 입력받으면 그 버스의 routeId를 찾아주고 list까지 만들어
+ * 페이지를 넘겨준다.
+ */
 BUS.prototype.busId = function(strSch){
 	tau.changePage("#processing");
 	/**
@@ -217,16 +300,17 @@ BUS.prototype.busId = function(strSch){
  */
 BUS.prototype.createBusArrivalTimeList = function(data) {
 	var lv = document.getElementById('lvBusArrivalTime'),
-		x = data.getElementsByTagName("itemList");
-	
+		x = data.getElementsByTagName("itemList"),
+		title = document.getElementById('stationName');
+		
 	lv.innerHTML = "";
-	document.getElementById('stationName').innerHTML = x[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
+	title.innerHTML = x[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
 	this.activeStationId = x[0].getElementsByTagName("arsId")[0].childNodes[0].nodeValue;
-	this.activeStationName = x[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
+	this.activeStationName = title.innerHTML;
 	
 	for (var i = 0; i < x.length; ++i) {
 		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
-		"' onclick='bus.busId(this.id);'"+
+		"' onclick = 'bus.busId(" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + ");'" +
 		"><div>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
 		"</div><div class='ui-li-sub-text li-text-sub'>" + 
 		x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
@@ -318,11 +402,10 @@ BUS.prototype.showBusArrivalTime = function(arsId) {
 /**
  *  버스 정류장 리스트에서 클릭 시 showBusArrivalTime 함수를 불러와 그 정류장에서의 버스 도착 예정 시간을 보여준다.
  */
-function clickList(event)
+function clickStationList(event)
 {
 	var target = event.target;
-	if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a') ||
-			target.classList.contains('li-bus-station-sub')) {
+	if (target.classList.contains('bus-station') || target.classList.contains('li-bus-station')) {
 		bus.showBusArrivalTime(target.id);
 	}
 }
@@ -330,21 +413,21 @@ function clickList(event)
 /**
  * li-bus-station 클래스를 가진 list item 에 대해 클릭 이벤트를 추가한다.
  */
-function addListEvent() {
+function addListClickEvent() {
 	var stationList = document.getElementsByClassName("li-bus-station"),
 	i;
 
 	for (i = 0; i < stationList.length; i++) {
-		stationList[i].addEventListener("click", clickList);
+		stationList[i].addEventListener("click", clickStationList);
 	}
 }
 
 /**
- * 버스 정류장 리스트를 만든다. 현재 위치에 대한 거리, 정류장 고유번호를 부가적으로 표시해준다.
+ * 주변 버스 정류장 리스트를 만든다. 현재 위치에 대한 거리, 정류장 고유번호를 부가적으로 표시해준다.
  */
 function createStationList(data) {
 	var lv = document.getElementById('lvBusStation'),
-		x = data.getElementsByTagName("itemList");
+		x = data.getElementsByTagName('itemList');
 	
 	lv.innerHTML = "";
 	for (var i = 0; i < x.length; ++i) {
@@ -352,15 +435,15 @@ function createStationList(data) {
 			break;
 		}
 		lv.innerHTML += "<li class='li-has-multiline li-bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
-		"><div class='ui-marquee ui-marquee-gradient li-bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
-		"><a class='li-bus-station-a' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
+		"><div class='ui-marquee ui-marquee-gradient bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
+		"><a class='bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
 		">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-		"</a></div><div class='ui-li-sub-text li-text-sub li-bus-station-sub' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + ">" + 
+		"</a></div><div class='ui-li-sub-text li-text-sub bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + ">" + 
 		x[i].getElementsByTagName("dist")[0].childNodes[0].nodeValue + "m" +
 		"(" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + ")" +
 		"</div></li>";
 	}
-	addListEvent();
+	addListClickEvent();
 }
 
 /**

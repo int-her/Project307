@@ -4,11 +4,11 @@
 <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></SignatureMethod>
 <Reference URI="bin%2Ftpo_widget">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>qLTS5kpWfSow0a9BNrm7jZBDszU1Hob8iTK1OOvpxT8=</DigestValue>
+<DigestValue>dUruM1OK7n6uGt+YMmUmDn5h+0lpa79FMuYIItdVIls=</DigestValue>
 </Reference>
 <Reference URI="res%2Fedje%2Fwidget.edj">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>0lD/PKFRtZSDYOP1cWfiZ8XiXtKTX1Q87Rcaz3Ex5uo=</DigestValue>
+<DigestValue>R8FxgY3VNlooXq3rHSOWwG3YAr2fEgu8JP437SwEWo0=</DigestValue>
 </Reference>
 <Reference URI="shared%2Fres%2Ficon.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -16,7 +16,7 @@
 </Reference>
 <Reference URI="shared%2Fres%2Fpreview.png">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
-<DigestValue>3S2wqsyIQa6TfFI/g4OhYbcOMGmwLq4Htei2dAAgeqc=</DigestValue>
+<DigestValue>GW7zZiUOVG7YgGE8xncAa37Z3P6y1yM9nRfBtcYwIcs=</DigestValue>
 </Reference>
 <Reference URI="tizen-manifest.xml">
 <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></DigestMethod>
@@ -31,11 +31,11 @@
 </Reference>
 </SignedInfo>
 <SignatureValue>
-MTmU6l55ALERVqPAzUZ9Cj/v6Md85qk8SluZVTPM2J+bMMWqcoy1yM4dPORpfoffHphT2skFrBk5
-D5r8SNi4wi+Jm6BiheTxYvatAXZr2gSg4leKlIsN6VbJiTWOAL5MTUd3+sxjauRSYEwHopBKHJWl
-/7qU9pQIODoHa6ZT3hxcnEYVrS9EUtRp59LdXCf3j+FZvZe3pBNMeOOop3LdD/+NSSVik1LAPWtf
-+VECz6k/FP+OQNwUVSapk2YxK7pJzsSQCXdy1p/UNHISBsXqhLg/r62QZdj80PUrqY2xyhs2SxuF
-bxWmfmgAhTKLq4QCtoxVO2erDat1cXgbwkiRhw==
+PVVB9WQTatDF71sV2wPkB9oBBM4ejkoTOq870ZwSaX08oXuXwUEr18P1f3ORaRt9mcu03X0K+kNw
+8Q2EZp1Jx8JrDAO6mKPeFs4i7hRf6ofBU3JkdY+k+1pFL4xt30M7rUmapD0TCHHtu43Fi2oC8135
+wE0SHp2ZXY7GitIPLh59PoasQyNgXQpwiqvOeNGS3xE61oQDfy8Ubc8BqwE3XDzTmriHuge83Ekw
+08ynzvok/Z4rWKIxaAKPMbyAk/JqjA9VZuqlSCsi+33W0LsFZXHRZGofL4h9/5cNeKJKhgBuHrEG
+UD7qbngIkVRNhXuWM7nkXZN1PfosAMOFj0hagg==
 </SignatureValue>
 <KeyInfo>
 <X509Data>
