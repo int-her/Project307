@@ -8,13 +8,170 @@ SUBWAY.prototype = new Object();
 Window.prototype.subway = new SUBWAY();
 
 /**
+ * initialize
+ */
+var subwayStatus;
+var startStation = "설정";
+var startStation_x = 0;
+var startStation_y = 0;
+var finishStation = "설정";
+var finishStation_x = 0;
+var finishStation_y = 0;
+
+document.getElementById('stationInfo_id').addEventListener('click', function() {
+	subwayStatus = 0;
+});
+document.getElementById('settingStart').addEventListener('click', function() {
+	subwayStatus = 1;
+});
+document.getElementById('settingStart_sub').addEventListener('click', function() {
+	subwayStatus = 1;
+});
+document.getElementById('settingFinish').addEventListener('click', function() {
+	subwayStatus = 2;
+});
+document.getElementById('settingFinish_sub').addEventListener('click', function() {
+	subwayStatus = 2;
+});
+
+SUBWAY.prototype.getPathInfoBySubway = function() {
+	/** Process
+	 *  1) station's name -> station's id
+	 *  2) station's id -> station's wgs84 point
+	 *  3) station's wgs84 point -> path info
+	 */
+	
+	/**
+	 * 	지하철이용 경로 조회 (getPathInfoBySubwayList)
+	 */
+	rest.get('http://ws.bus.go.kr/api/rest/pathinfo/getPathInfoBySubway',
+			null,
+			{
+		"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
+		"startX" : startStation_y,
+		"startY" : startStation_x,
+		"endX" : finishStation_y,
+		"endY" : finishStation_x,
+		"numOfRows" : "999",
+		"pageSize" : "999",
+		"pageNo" : "1",
+		"startPage" : "1"
+			}, 
+			function(data, xhr) {
+				var headerCd = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
+				if (headerCd === "4") {
+					// No result
+					toastPopup.openCheckPopup(startStation_x + ',' + startStation_y, true);
+				} else if (headerCd === "0"){
+					// Success
+					var hd = document.getElementById('subwayRouteResult_header');
+					hd.innerHTML = "<h2 class='ui-title'>" + startStation + '-' + finishStation + '</h2>';
+					var ct = document.getElementById('subwayRouteResult_content');
+					ct.innerHTML = "<div>distance : ";
+					ct.innerHTML += data.getElementsByTagName("distance")[0].childNodes[0].nodeValue;
+					ct.innerHTML += ', time : ' + data.getElementsByTagName("time")[0].childNodes[0].nodeValue;
+					ct.innerHTML += "</div>";
+					tau.changePage("#subwayRouteResult");				
+				}
+			}, function(data, xhr) {
+				toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
+			});
+};
+
+function remakeSearchSubwayRoutePage() {
+	var startSub = document.getElementById('settingStart_sub');
+	startSub.innerHTML = "<a href='#stationInfo'>" + startStation + "</a>";
+	var finishSub = document.getElementById('settingFinish_sub');
+	finishSub.innerHTML = "<a href='#stationInfo'>" + finishStation + "</a>";
+	tau.changePage("#searchSubwayRoute");
+}
+
+function setStationGPS(stationCd) {
+	/**
+	 * 	서울시 역코드로 지하철역 위치 조회 (SearchLocationOfSTNByIDService)
+	 * 	1	STATION_CD	전철역코드
+		2	STATION_NM	전철역명
+		3	LINE_NUM	호선
+		4	FR_CODE	외부코드
+			(외부코드는 지하철에 역 이름과 함께 적혀있는 역번호로, 외국인의 경우 역명보다 역번호로 문의를 하는 경우가 많음)
+		5	CYBER_ST_CODE	사이버스테이션
+			(환승역의 경우 여러 노선 중 마스터가 되는 노선의 전철역코드)
+		6	XPOINT	X좌표
+		7	YPOINT	Y좌표
+		8	XPOINT_WGS	X좌표(WGS)
+		9	YPOINT_WGS	Y좌표(WGS)
+	 */
+	var url = 'http://openapi.seoul.go.kr:8088/6d7a6d524676616c383573726b7043/xml/SearchLocationOfSTNByIDService/0/5/' + stationCd; 
+	rest.get(url, null, null,
+		function(data, xhr) {
+			var code = data.getElementsByTagName("CODE")[0].childNodes[0].nodeValue;
+			if (code !== "INFO-000") {
+				// Fail
+				toastPopup.openPopup("Fail to load API. Error Code : " + code, true);
+			} else if (code === "INFO-000"){
+				// Success
+				var wgs_x = data.getElementsByTagName("XPOINT_WGS")[0].childNodes[0].nodeValue;
+				var wgs_y = data.getElementsByTagName("YPOINT_WGS")[0].childNodes[0].nodeValue;
+				if (subwayStatus === 1) {
+					startStation_x = wgs_x;
+					startStation_y = wgs_y;
+				} else if (subwayStatus === 2) {
+					finishStation_x = wgs_x;
+					finishStation_y = wgs_y;			
+				}
+			}
+		},
+		function(data, xhr) {
+			toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
+		}); 
+}
+
+function setStationInfo(stationNm) {
+	if (subwayStatus === 1) {
+		startStation = stationNm;
+	} else if (subwayStatus === 2) {
+		finishStation = stationNm;
+	}
+	
+	/**
+	 * 	서울시 지하철역 정보 검색(역명) (SearchInfoBySubwayNameService)
+	 * 	1	STATION_CD	전철역코드
+		2	STATION_NM	전철역명
+		3	LINE_NUM	호선
+		4	FR_CODE	외부코드
+			(외부코드는 지하철에 역 이름과 함께 적혀있는 역번호로, 외국인의 경우 역명보다 역번호로 문의를 하는 경우가 많음)
+	 */
+	var url = 'http://openapi.seoul.go.kr:8088/6d7a6d524676616c383573726b7043/xml/SearchInfoBySubwayNameService/0/5/' + stationNm; 
+	rest.get(url, null, null,
+		function(data, xhr) {
+			var code = data.getElementsByTagName("CODE")[0].childNodes[0].nodeValue;
+			if (code !== "INFO-000") {
+				// Fail
+				toastPopup.openPopup("Fail to load API. Error Code : " + code, true);
+			} else if (code === "INFO-000"){
+				// Success
+				var station_cd = data.getElementsByTagName("STATION_CD")[0].childNodes[0].nodeValue;
+				setStationGPS(station_cd);
+			}
+		},
+		function(data, xhr) {
+			toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
+		}); 
+}
+
+/**
  *  지하철 역 리스트에서 클릭 시 realtimeStationArrival 함수를 불러와 그 지하철 역의 실시간 도착 정보를 보여준다.
  */
 function clickList(event)
 {
 	var target = event.target;
 	if (target.classList.contains('li-subway-station')) {
-		subway.realtimeStationArrival(target.id);
+		if (subwayStatus === 0) {
+			subway.realtimeStationArrival(target.id);
+		} else if (subwayStatus === 1 || subwayStatus === 2) {
+			setStationInfo(target.id);
+			remakeSearchSubwayRoutePage();
+		}
 	}
 }
 
@@ -189,36 +346,10 @@ function createSurroundingSubwayList(data) {
 	addListEvent();
 }
 
-function transcoord(position) {
-	/**
-	 * 좌표계 변환(transCoord)
-	 * https://developers.daum.net/services/apis/local/geo/transcoord
-	 */
-	rest.get('https://apis.daum.net/local/geo/transcoord',
-			null,
-			{
-		"apikey" : "2693dc6c6564996cc45fcb78b3bb70d4",
-		"fromCoord" : "WGS84",
-		"y" : position.coords.latitude,
-		"x" : position.coords.longitude,
-		"toCoord" : "WTM",
-		"output" : "xml"
-			},
-			function(data, xhr) {
-				return data;
-			},
-			function(data, xhr) {
-				toastPopup.openPopup("좌표계 변환 에러");
-			});
-}
-
 /**
  * GPS 받아오기에 성공했을 시 1km 반경 내의 주변 지하철 역을 API를 통하여 읽어오고 리스트를 만든다.
  */
-function successCallback(position) {
-	var transPos = transcoord(position);
-	var x = transPos.getElementsByTagName("result")[0].getAttribute("x");
-	var y = transPos.getElementsByTagName("result")[0].getAttribute("y");
+function searchSurroundingSubwayStation(x, y) {
 	/**
 	 *  서울시 좌표기반 근접 지하철역 정보(nearBy)
 	 *  1	statnId	지하철역ID
@@ -232,7 +363,6 @@ function successCallback(position) {
 		9	imageY	이미지상Y좌표
 	 */
 	var url = 'http://swopenapi.seoul.go.kr/api/subway/4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==/xml/nearBy/0/5/' + x + '/' + y;
-	toastPopup.openPopup(x + '/' + y);
 	rest.get(url, null, null,
 		function(data, xhr) {
 			var code = data.getElementsByTagName("code")[0].childNodes[0].nodeValue;
@@ -247,6 +377,23 @@ function successCallback(position) {
 		},
 		function(data, xhr) {
 			toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
+		});
+}
+
+function successCallback(position) {
+	/**
+	 * 좌표계 변환(transCoord)
+	 * https://developers.daum.net/services/apis/local/geo/transcoord
+	 */
+	var url = 'https://apis.daum.net/local/geo/transcoord?apikey=2693dc6c6564996cc45fcb78b3bb70d4&fromCoord=WGS84&y=' + position.coords.latitude + '&x=' + position.coords.longitude + '&toCoord=WTM&output=xml';
+//	var url = 'https://apis.daum.net/local/geo/transcoord?apikey=2693dc6c6564996cc45fcb78b3bb70d4&fromCoord=WGS84&y=126.57740680000002&x=33.453357700000005&toCoord=WTM&output=xml';
+	rest.get(url, null, null,
+		function(data, xhr) {
+			var splitData = data.split("\'");
+			searchSurroundingSubwayStation(splitData[1], splitData[3]);
+		},
+		function(data, xhr) {
+			toastPopup.openPopup("좌표계 변환 에러");
 		});
 }
 

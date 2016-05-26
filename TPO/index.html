@@ -17,7 +17,7 @@
 	<!--  Main Page -->
 	<div class="ui-page ui-page-active" id="main">
 		<header class="ui-header">
-			<h2 class="ui-title">TPO</h2>
+			<h2 class="ui-title">대중교통 알리미</h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview">
@@ -252,11 +252,27 @@
 		<div class="ui-header">
 			<h3 class="ui-title">지하철 길 찾기</h3>
 		</div>
-		<div class="ui-content">
+		<div id="searchSubwayRoute_content" class="ui-content">
 			<ul class="ui-listview">
-				<li id="settingStart"><a href="#stationInfo">출발지 설정</a></li>
-				<li id="settingFinish"><a href="#stationInfo">도착지 설정</a></li>
+				<li id="settingStart" class="li-has-multiline">
+					<div><a href="#stationInfo">출발</a></div>
+					<div id="settingStart_sub" class="ui-li-sub-text li-text-sub"><a href="#stationInfo">설정</a></div>
+				</li>
+				<li id="settingFinish" class="li-has-multiline">
+					<div><a href="#stationInfo">도착</a></div>
+					<div id="settingFinish_sub" class="ui-li-sub-text li-text-sub"><a href="#stationInfo">설정</a></div>
+				</li>
 			</ul>
+			<footer class="ui-footer">
+				<button type="button" onclick="subway.getPathInfoBySubway()" class="ui-btn">찾기</button>
+			</footer>
+		</div>
+	</div>
+	
+	<div id="subwayRouteResult" class="ui-page">
+		<div id="subwayRouteResult_header" class="ui-header">
+		</div>
+		<div id="subwayRouteResult_content" class="ui-content">
 		</div>
 	</div>
 		

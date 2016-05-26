@@ -96,18 +96,6 @@ function init() {
 		window.removeEventListener('rotarydetent', zoom.rotaryEventHandler);
 	});
 	
-	/** Test */
-	document.getElementById('stationInfo_id').addEventListener('click', function() {
-		subwayStatus = 0;
-	});
-	document.getElementById('settingStart').addEventListener('click', function() {
-		subwayStatus = 1;
-	});
-	document.getElementById('settingFinish').addEventListener('click', function() {
-		subwayStatus = 2;
-	});
-
-	
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }
 
