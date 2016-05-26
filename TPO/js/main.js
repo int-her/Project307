@@ -98,7 +98,6 @@ function init() {
 		marqueeStation.pageBeforeHideHandler();
 	});
 	
-	
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', function() {
 		bus.showSurroundingStationsByGps();
