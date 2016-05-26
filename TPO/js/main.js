@@ -107,6 +107,11 @@ function init() {
 	document.getElementById('btnRegister').addEventListener('click', function() {
 		bus.registerFavoriteBus();
 	});
+	
+	// navigate 클릭
+	document.getElementById('navigate').addEventListener('click', function() {
+		route.findway();
+	});
 
 	/** When click list element, find subway stations around */ 
 	document.getElementById('searchSurroundingSubway').addEventListener('click', function(){
