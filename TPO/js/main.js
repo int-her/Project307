@@ -11,12 +11,12 @@ function keyEventHandler(event) {
 			} catch (ignore) {
 			}
 		} else if (pageid === "surroundingBusStation" || pageid === "surroundingSubwayStation" ||
-				pageid === "busFavorite") {
+				pageid === "busFavorite" || pageid === "subwayArrivalTime" || pageid === "lvAllSubwayStation") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-2);
 		} else if (pageid === "processing") {
-			// 아무것도 하지 않음
+			window.history.go(-1);
 		} else if (pageid === "busArrivalTime_MoreOptions") {
 			tau.closePopup(popup);
 		} else {
@@ -26,7 +26,9 @@ function keyEventHandler(event) {
 }
 
 function init() {
-	var marqueeList = new MARQUEELIST(),
+	var marqueeSurrounding = new MARQUEELIST(),
+		marqueeStation = new MARQUEELIST(),
+		marqueeWidget,
 		moreoption = new MOREOPTION();
 	
 	// 버스 정류장 ID 입력
@@ -66,7 +68,16 @@ function init() {
 	
 	// More option 초기화
 	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
+		var title = document.getElementById('stationName');
+		
 		moreoption.pageBeforeShowHandler('busArrivalTime');
+		marqueeWidget = new tau.widget.Marquee(title, 
+				{
+			marqueeStyle: "endToEnd",
+			delay: "3000",
+			iteration: "infinite"
+				});
+		marqueeWidget.start();	
 	});
 	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', function() {
 		moreoption.pageBeforeHideHandler();
@@ -75,12 +86,17 @@ function init() {
 	
 	// Marquee list 초기화 
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforeshow', function() {
-		marqueeList.pageBeforeShowHandler('surroundingBusStation');
+		marqueeSurrounding.pageBeforeShowHandler('surroundingBusStation');
 	});
 	document.getElementById('surroundingBusStation').addEventListener('pagebeforehide', function() {
-		marqueeList.pageBeforeHideHandler();
+		marqueeSurrounding.pageBeforeHideHandler();
 	});
-	
+	document.getElementById('busNumberStationList').addEventListener('pagebeforeshow', function() {
+		marqueeStation.pageBeforeShowHandler('busNumberStationList');
+	});
+	document.getElementById('busNumberStationList').addEventListener('pagebeforehide', function() {
+		marqueeStation.pageBeforeHideHandler();
+	});
 	
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', function() {
@@ -94,7 +110,7 @@ function init() {
 
 	/** When click list element, find subway stations around */ 
 	document.getElementById('searchSurroundingSubway').addEventListener('click', function(){
-		subway.findSurroundingStationsByGps();
+		subway.showSurroundingStationsByGps();
 	});
 	
 	/** Test - image zoom in & out */
@@ -105,7 +121,6 @@ function init() {
 	document.getElementById('viewMap').addEventListener('pagebeforhide', function() {
 		window.removeEventListener('rotarydetent', zoom.rotaryEventHandler);
 	});
-	
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }
