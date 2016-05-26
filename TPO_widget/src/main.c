@@ -1,39 +1,46 @@
 #include <tizen.h>
 #include <storage.h>
+#include <curl/curl.h>
+#include <libxml/parser.h>
 #include "main.h"
 
-static int internal_storage_id;
+static xmlDocPtr doc = NULL;
+
+static int
+writer(char *data, size_t size, size_t nmemb, void *user_data)
+{
+	doc = xmlReadMemory(data, size * nmemb, NULL, NULL, 0);
+	return size * nmemb;
+}
 
 static bool
 storage_cb(int storage_id, storage_type_e type, storage_state_e state, const char *path, void *user_data)
 {
    if (type == STORAGE_TYPE_INTERNAL)
    {
-      internal_storage_id = storage_id;
-
+      *((int *)user_data) = storage_id;
       return false;
    }
-
    return true;
 }
 
 static bool
 exist_file()
 {
-	int error;
-	char *path;
-	error = storage_foreach_device_supported(storage_cb, NULL);
-	if (error)
-	{
-		return false;
-	}
-	error = storage_get_directory(internal_storage_id, STORAGE_DIRECTORY_DOCUMENTS, &path);
-	if (error)
-	{
-		return false;
-	}
-	return true;
+	int error, internal_storage_id;
+	char *dir, path[PATH_MAX] = {0,};
+	struct stat buffer;
 
+	error = storage_foreach_device_supported(storage_cb, &internal_storage_id);
+	if (error) return false;
+	storage_get_directory(internal_storage_id, STORAGE_DIRECTORY_DOCUMENTS, &dir);
+	strcat(path, dir);
+	strcat(path, "/TPO_files/TPO_favorite.tpo");
+	free(dir);
+
+	/* file is not exist */
+	if (stat(path, &buffer) != 0) return false;
+	return true;
 }
 
 static void
@@ -51,12 +58,15 @@ create_popup(Evas_Object *parent, char* text) {
 	Evas_Object *popup;
 
 	popup = elm_popup_add(parent);
-	elm_object_style_set(popup, "circle");
-	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
-	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, eext_popup_back_cb, parent);
+	elm_object_style_set(popup, "toast");
+	elm_popup_orient_set(popup, ELM_POPUP_ORIENT_BOTTOM);
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_object_text_set(popup, text);
-	elm_popup_timeout_set(popup, 2.0);
+	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
+	elm_object_part_text_set(popup, "elm.text", text);
+	elm_popup_timeout_set(popup, 3.0);
+	evas_object_smart_callback_add(popup, "timeout", eext_popup_back_cb, NULL);
+	evas_object_smart_callback_add(popup, "block,clicked", eext_popup_back_cb, parent);
+	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, eext_popup_back_cb, parent);
 	evas_object_show(popup);
 }
 
@@ -102,6 +112,65 @@ _button_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	}
 }
 
+static void
+read_file(int station_index, int bus_index, int *station_number, int *bus_number)
+{
+	int error, internal_storage_id;
+	int i, j, count;
+	char *dir, path[PATH_MAX] = {0,}, buf[1024];
+	FILE *f;
+
+	error = storage_foreach_device_supported(storage_cb, &internal_storage_id);
+	if (error) return;
+	storage_get_directory(internal_storage_id, STORAGE_DIRECTORY_DOCUMENTS, &dir);
+	if (!exist_file()) return;
+	strcat(path, dir);
+	strcat(path, "/TPO_files/TPO_favorite.tpo");
+	free(dir);
+
+	f = fopen(path, "r");
+	for (i = 0; i < station_index; i++)
+	{
+		fgets(buf, 1024, f);
+	}
+	fscanf(f, "%d ", station_number);
+	fscanf(f, "%d", &count);
+	if (bus_index >= count) {
+		*bus_number = -1;
+		return;
+	}
+	for (i = 0; i < bus_index; i++)
+	{
+		fscanf(f, " %d", &j);
+	}
+	fscanf(f, " %d", bus_number);
+	fclose(f);
+}
+
+static void
+get_arrival_time(int station_number, int bus_number)
+{
+	CURL *curl;
+	CURLcode res;
+
+	/* Get a curl handle */
+	curl = curl_easy_init();
+	if (curl)
+	{
+		/* Set restful API URL */
+		curl_easy_setopt(curl, CURLOPT_URL, "");
+		curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
+		curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION, writer);
+		res = curl_easy_perform(curl);
+		if (CURLE_OK == res)
+		{
+
+		}
+		curl_easy_cleanup(curl);
+	}
+
+}
+
 static int
 widget_instance_create(widget_context_h context, bundle *content, int w, int h, void *user_data)
 {
@@ -110,6 +179,9 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 	char edj_path[PATH_MAX] = {0, };
 	Evas_Object *button = NULL;
 	Evas_Object *label;
+
+
+	curl_global_init(CURL_GLOBAL_ALL);
 
 	if (content != NULL) {
 		/* Recover the previous status with the bundle object. */
@@ -139,17 +211,31 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 
 	app_get_resource(EDJ_FILE, edj_path, (int)PATH_MAX);
 
+	/* Interface of register favorite bus */
 	wid->layout = elm_layout_add(wid->nf);
 	elm_layout_file_set(wid->layout, edj_path, "info_layout");
 	evas_object_size_hint_weight_set(wid->layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_show(wid->layout);
 
-
-	Evas_Object *layout = elm_layout_edje_get(wid->layout);
-	edje_object_part_text_set(layout, "text_label", "즐겨찾기를 등록해주세요.");
 	label = elm_label_add(wid->layout);
-	elm_object_part_content_set(wid->layout, "text_label", label);
+	if (exist_file()) {
+		elm_object_text_set(label, "<font_size=15>대학동고시촌입구.우리집고등학교!</font>");
+	} else {
+		elm_object_text_set(label, "신림중.삼성고등학교.관악문화도서관");
+	}
+	elm_label_wrap_width_set(label, ELM_SCALE_SIZE(298));
+	//evas_object_resize(label, w / 2, h / 3);
+	//evas_object_move(label, w / 2, h / 3);
+	elm_object_part_content_set(wid->layout, "elm.swallow.text", label);
+	evas_object_size_hint_weight_set(label, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_size_hint_align_set(label, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	evas_object_size_hint_min_set(label, 298, 34);
+	evas_object_size_hint_max_set(label, 298, 34);
+	elm_object_style_set(label, "slide_roll");
+	elm_label_slide_duration_set(label, 3);
+	elm_label_slide_mode_set(label, ELM_LABEL_SLIDE_MODE_AUTO);
 	evas_object_show(label);
+	elm_label_slide_go(label);
 
 	button = elm_button_add(wid->layout);
 	elm_object_style_set(button, "bottom");
@@ -164,6 +250,9 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 	evas_object_show(wid->win);
 
 	widget_app_context_set_tag(context, wid);
+
+
+
 	return WIDGET_ERROR_NONE;
 }
 
@@ -179,8 +268,9 @@ widget_instance_destroy(widget_context_h context, widget_app_destroy_type_e reas
 
 	if (wid->win)
 		evas_object_del(wid->win);
-
 	free(wid);
+
+	curl_global_cleanup();
 
 	return WIDGET_ERROR_NONE;
 }
@@ -196,6 +286,7 @@ widget_instance_pause(widget_context_h context, void *user_data)
 static int
 widget_instance_resume(widget_context_h context, void *user_data)
 {
+
 	/* Take necessary actions when widget instance becomes visible. */
 	return WIDGET_ERROR_NONE;
 }
