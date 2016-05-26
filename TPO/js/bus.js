@@ -152,6 +152,9 @@ function addListEvent() {
 	}
 }
 
+/**
+ * 숫자의 앞에 0을 채워넣어준다.
+ */
 function leadingZeros(n, digits) {
 	  var zero = '';
 	  n = n.toString();
@@ -168,6 +171,7 @@ function createBusStationList(data) {
 	lv.innerHTML = "";
 	var x = data.getElementsByTagName("itemList");
 	for (var i = 0; i < x.length; ++i) {
+		//숫자 앞이 0인경우
 		if(x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue < 10000) {
 			var str = parseInt(x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue, 10);
 			lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue +
