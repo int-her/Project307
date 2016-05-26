@@ -135,20 +135,69 @@ BUS.prototype.showFavoriteBus = function() {
 			});		
 };
 
-function createBusStationList(data) {
-	var lv = document.getElementById("lvBusNumber"),
-		x = data.getElementsByTagName("itemList");
-	
-	lv.innerHTML = "";
-	for (var i = 0; i < x.length; ++i) {
-		lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-		"' onclick='bus.showBusArrivalTime(this.id);'><div class='ui-marquee ui-marquee-gradient'>" + 
-		x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-		"</div></li>";
+/**
+ *  버스 정류장 리스트에서 클릭 시 showBusArrivalTime 함수를 불러와 그 정류장에서의 버스 도착 예정 시간을 보여준다.
+ */
+function clickList(event)
+{
+	var target = event.target;
+	if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a') ||
+			target.classList.contains('li-bus-station-sub')) {
+		bus.showBusArrivalTime(target.id);
 	}
+}
 
+/**
+ * li-bus-station 클래스를 가진 list item 에 대해 클릭 이벤트를 추가한다.
+ */
+function addListEvent() {
+	var stationList = document.getElementsByClassName("li-bus-station"),
+	i;
+
+	for (i = 0; i < stationList.length; i++) {
+		stationList[i].addEventListener("click", clickList);
+	}
+}
+
+/**
+ * 숫자의 앞에 0을 채워넣어준다.
+ */
+function leadingZeros(n, digits) {
+	  var zero = '';
+	  n = n.toString();
+
+	  if (n.length < digits) {
+	    for (var i = 0; i < digits - n.length; i++)
+	      zero += '0';
+	  }
+	  return zero + n;
+}
+
+/**
+ * XML 데이터를 이용하여 정류소 목록을 보여주는 페이지를 만들어준다
+ * @param {String} API 에서 받아온 XML String
+ */
+function createBusStationList(data) {
+	var lv = document.getElementById("lvBusNumber");
+	lv.innerHTML = "";
+	var x = data.getElementsByTagName("itemList");
+	for (var i = 0; i < x.length; ++i) {
+		//숫자 앞이 0인경우
+		if(x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue < 10000) {
+			var str = parseInt(x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue, 10);
+			lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue +
+			"' onclick = 'bus.showBusArrivalTime(leadingZeros(" +str + ", 5));'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+		}
+		else
+			lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue +
+			"' onclick = 'bus.showBusArrivalTime(" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue.toString() + ");'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";	
+	}
 }
 	
+/**
+ * routeId를 입력받아 document의 header에 busNumber를 입력해주고
+ * 그 버스가 경유하는 정류소 목록을 받아온다.
+ */
 function routeIdtoStation(busRouteId) {
 	rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute',
 			null,
@@ -172,6 +221,10 @@ function routeIdtoStation(busRouteId) {
 			});		
 }
 	
+/**
+ * 원하는 버스 번호를 입력받으면 그 버스의 routeId를 찾아주고 list까지 만들어
+ * 페이지를 넘겨준다.
+ */
 BUS.prototype.busId = function(strSch){
 	tau.changePage("#processing");
 	/**
@@ -235,8 +288,8 @@ BUS.prototype.createBusArrivalTimeList = function(data) {
 	this.activeStationName = title.innerHTML;
 	
 	for (var i = 0; i < x.length; ++i) {
-		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("stNm")[0].childNodes[0].nodeValue +
-		"' onclick='bus.busId(this.id);'"+
+		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
+		"' onclick = 'bus.busId(" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + ");'" +
 		"><div>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
 		"</div><div class='ui-li-sub-text li-text-sub'>" + 
 		x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
