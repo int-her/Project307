@@ -18,7 +18,7 @@ function onOpenFail(error) {
 	//toastPopup.openPopup(error.message);
 }
 
-BUS.prototype._writeFavoriteFile = function(fs, file, preSave) {
+BUS.prototype._writeFavoriteFile = function(fs, preSave) {
 	fs.write(preSave);
 	fs.write("\n");
 	fs.write(this.activeStationId);
@@ -31,27 +31,17 @@ BUS.prototype._writeFavoriteFile = function(fs, file, preSave) {
 		fs.write(this.registerBusAdirection[i]);
 	}
 	fs.close();
-	
+
 	toastPopup.openCheckPopup("위젯에 등록되었습니다.", true, 2);
 };
 
-BUS.prototype._readFavoriteFile = function(fs, file) {
-	var txt;
-	
-	fs.position = 0;
-	txt = fs.read(file.length);
-	fs.close();
-	
-	return txt;
-} 
 
 /**
  * 즐겨찾기 버스 목록을 저장할 파일을 만든다.
  */
 BUS.prototype._createBusFavoriteFile = function() {
-	var documentsDir, 
-		tpoDir = null, 
-		tpoFile;
+	var documentsDir;
+	var tpoDir = null, tpoFile;
 	
 	// document 폴더에 저장한다.
 	tizen.filesystem.resolve("documents", function(result) {
@@ -74,8 +64,7 @@ BUS.prototype._createBusFavoriteFile = function() {
         		if (error.name === "IOError") {
         			try {
         				tpoFile = tpoDir.resolve("TPO_favorite.tpo");
-        				tpoFile.openStream("r", function(fs) {
-        					var txt = bus._readFavoriteFile(fs, tpoFile);
+        				tpoFile.readAsText(function(txt) {
         	        		tpoDir.deleteFile(tpoFile.fullPath, function() {
     	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
     	        				tpoFile.openStream("w", function(fs) {
@@ -155,20 +144,6 @@ BUS.prototype.showFavoriteBus = function() {
 				toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
 			});		
 };
-
-/**
- * 숫자의 앞에 0을 채워넣어준다.
- */
-function leadingZeros(n, digits) {
-	  var zero = '';
-	  n = n.toString();
-
-	  if (n.length < digits) {
-	    for (var i = 0; i < digits - n.length; i++)
-	      zero += '0';
-	  }
-	  return zero + n;
-}
 
 /**
  * XML 데이터를 이용하여 정류소 목록을 보여주는 페이지를 만들어준다
@@ -274,17 +249,21 @@ BUS.prototype.busId = function(strSch){
  * API 에서 받아온 data를 파싱하여 도착 예상 시간을 보여주는 리스트를 만든다.
  * @param {String} API 에서 받아온 XML String
  */
-BUS.prototype.createBusArrivalTimeList = function(data) {
+BUS.prototype.createBusArrivalTimeList = function(data, arsId) {
 	var lv = document.getElementById('lvBusArrivalTime'),
 		x = data.getElementsByTagName("itemList"),
 		title = document.getElementById('stationName');
 		
 	lv.innerHTML = "";
-	title.innerHTML = x[0].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
-	this.activeStationId = x[0].getElementsByTagName("arsId")[0].childNodes[0].nodeValue;
-	this.activeStationName = title.innerHTML;
+	title.innerHTML = "";
+	
+	this.activeStationId = arsId;
 	
 	for (var i = 0; i < x.length; ++i) {
+		if (title.innerHTML === "" && x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue.indexOf(arsId) > -1) {
+			title.innerHTML = x[i].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
+			this.activeStationName = title.innerHTML;
+		}
 		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
 		"' onclick = 'bus.busId(" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + ");'" +
 		"><div>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
@@ -292,6 +271,7 @@ BUS.prototype.createBusArrivalTimeList = function(data) {
 		x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
 		"</div></li>";
 	}
+	
 }
 	
 /**
@@ -364,10 +344,10 @@ BUS.prototype.showBusArrivalTime = function(arsId) {
 				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
 				if (msg === "4") {
 					// No result
-					toastPopup.openCheckPopup("정류소 ID를 찾지 못하였습니다.", true, 2);
+					toastPopup.openCheckPopup("정류소 ID를 찾지 못하였습니다.", true);
 				} else if (msg === "0"){
 					// Success
-					bus.createBusArrivalTimeList(data);
+					bus.createBusArrivalTimeList(data, arsId);
 					tau.changePage("#busArrivalTime");						
 				}
 			}, function(data, xhr) {
