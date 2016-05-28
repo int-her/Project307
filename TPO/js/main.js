@@ -10,10 +10,11 @@ function keyEventHandler(event) {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
-		} else if (pageid === "surroundingBusStation" || pageid === "surroundingSubwayStation" ||
-				pageid === "busFavorite" || pageid === "subwayArrivalTime" || pageid === "lvAllSubwayStation") {
+		} else if (pageid === "surroundingBusStation" || pageid === "busFavorite") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
+			window.history.go(-2);
+		} else if (pageid === "surroundingSubwayStation" || pageid === "subwayArrivalTime" || pageid === "lvAllSubwayStation") { // subway
 			window.history.go(-2);
 		} else if (pageid === "processing") {
 			window.history.go(-1);
@@ -114,14 +115,14 @@ function init() {
 		subway.showSurroundingStationsByGps();
 	});
 	
-	/** Test - image zoom in & out */
+	/** Test - image zoom in & out
 	document.getElementById('viewMap').addEventListener('pagebeforshow', function() {
 		window.addEventListener('rotarydetent', zoom.rotaryEventHandler);
 	});
 	
 	document.getElementById('viewMap').addEventListener('pagebeforhide', function() {
 		window.removeEventListener('rotarydetent', zoom.rotaryEventHandler);
-	});
+	}); */
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }
