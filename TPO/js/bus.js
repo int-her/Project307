@@ -157,30 +157,6 @@ BUS.prototype.showFavoriteBus = function() {
 };
 
 /**
- *  버스 정류장 리스트에서 클릭 시 showBusArrivalTime 함수를 불러와 그 정류장에서의 버스 도착 예정 시간을 보여준다.
- */
-function clickList(event)
-{
-	var target = event.target;
-	if (target.classList.contains('li-bus-station') || target.classList.contains('li-bus-station-a') ||
-			target.classList.contains('li-bus-station-sub')) {
-		bus.showBusArrivalTime(target.id);
-	}
-}
-
-/**
- * li-bus-station 클래스를 가진 list item 에 대해 클릭 이벤트를 추가한다.
- */
-function addListEvent() {
-	var stationList = document.getElementsByClassName("li-bus-station"),
-	i;
-
-	for (i = 0; i < stationList.length; i++) {
-		stationList[i].addEventListener("click", clickList);
-	}
-}
-
-/**
  * 숫자의 앞에 0을 채워넣어준다.
  */
 function leadingZeros(n, digits) {
