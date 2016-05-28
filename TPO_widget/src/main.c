@@ -4,12 +4,14 @@
 #include <libxml/parser.h>
 #include "main.h"
 
-static xmlDocPtr doc = NULL;
+static int station_cur_index;
+static int bus_cur_index;
+static char station_name[256];
 
 static int
 writer(char *data, size_t size, size_t nmemb, void *user_data)
 {
-	doc = xmlReadMemory(data, size * nmemb, NULL, NULL, 0);
+	*((xmlDocPtr *)user_data) = xmlReadMemory(data, size * nmemb, NULL, NULL, 0);
 	return size * nmemb;
 }
 
@@ -148,6 +150,42 @@ read_file(int station_index, int bus_index, int *station_number, int *bus_number
 }
 
 static void
+get_station_name(int station_number, char *station_name)
+{
+	xmlDocPtr doc;
+	xmlNodePtr root, item, current_node;
+	CURL *curl;
+	CURLcode res;
+
+
+	/* Get a curl handle */
+	curl = curl_easy_init();
+	if (curl)
+	{
+		/* Set restful API URL */
+		curl_easy_setopt(curl, CURLOPT_URL, "");
+		curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
+		curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION, writer);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &doc);
+		res = curl_easy_perform(curl);
+		if (CURLE_OK == res)
+		{
+			root = xmlDocGetRootElement(doc);
+			item = root->children->next->next->children;
+			for (current_node = item->children; current_node; current_node = current_node->next)
+			{
+				if (!strcmp((char *)current_node->name, "stNm"))
+				{
+					strcpy(station_name, (char *)current_node->content);
+				}
+			}
+		}
+		if (doc != NULL) xmlFreeDoc(doc);
+		curl_easy_cleanup(curl);
+	}
+}
+
+static void
 get_arrival_time(int station_number, int bus_number)
 {
 	CURL *curl;
@@ -176,16 +214,22 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 {
 	widget_instance_data_s *wid = (widget_instance_data_s*) malloc(sizeof(widget_instance_data_s));
 	int ret;
+	int station_number, bus_number;
 	char edj_path[PATH_MAX] = {0, };
 	Evas_Object *button = NULL;
-	Evas_Object *label;
-
-
-	curl_global_init(CURL_GLOBAL_ALL);
+	Evas_Object *label = NULL;
+	Evas_Object *station = NULL;
+	Evas_Object *bus = NULL;
+	Evas_Object *min = NULL;
+	Evas_Object *alarm_button = NULL;
 
 	if (content != NULL) {
 		/* Recover the previous status with the bundle object. */
 	}
+
+	station_cur_index = 0;
+	bus_cur_index = 0;
+	curl_global_init(CURL_GLOBAL_ALL);
 
 	/* Window */
 	ret = widget_app_get_elm_win(context, &wid->win);
@@ -212,46 +256,67 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 	app_get_resource(EDJ_FILE, edj_path, (int)PATH_MAX);
 
 	/* Interface of register favorite bus */
-	wid->layout = elm_layout_add(wid->nf);
-	elm_layout_file_set(wid->layout, edj_path, "info_layout");
-	evas_object_size_hint_weight_set(wid->layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_show(wid->layout);
+	wid->layout_register = elm_layout_add(wid->nf);
+	elm_layout_file_set(wid->layout_register, edj_path, "info_layout");
+	evas_object_size_hint_weight_set(wid->layout_register, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_show(wid->layout_register);
 
-	label = elm_label_add(wid->layout);
-	if (exist_file()) {
-		elm_object_text_set(label, "<font_size=15>대학동고시촌입구.우리집고등학교!</font>");
-	} else {
-		elm_object_text_set(label, "신림중.삼성고등학교.관악문화도서관");
-	}
-	elm_label_wrap_width_set(label, ELM_SCALE_SIZE(298));
-	//evas_object_resize(label, w / 2, h / 3);
-	//evas_object_move(label, w / 2, h / 3);
-	elm_object_part_content_set(wid->layout, "elm.swallow.text", label);
-	evas_object_size_hint_weight_set(label, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	evas_object_size_hint_align_set(label, EVAS_HINT_FILL, EVAS_HINT_FILL);
-	evas_object_size_hint_min_set(label, 298, 34);
-	evas_object_size_hint_max_set(label, 298, 34);
-	elm_object_style_set(label, "slide_roll");
-	elm_label_slide_duration_set(label, 3);
-	elm_label_slide_mode_set(label, ELM_LABEL_SLIDE_MODE_AUTO);
+	label = elm_label_add(wid->layout_register);
+	elm_object_text_set(label, "<font_size=25>즐겨찾기를 등록해주세요.</font>");
+//	elm_label_wrap_width_set(label, ELM_SCALE_SIZE(298));
+	elm_object_part_content_set(wid->layout_register, "elm.swallow.text", label);
+//	evas_object_size_hint_weight_set(label, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+//	evas_object_size_hint_align_set(label, EVAS_HINT_FILL, EVAS_HINT_FILL);
 	evas_object_show(label);
-	elm_label_slide_go(label);
 
-	button = elm_button_add(wid->layout);
+	button = elm_button_add(wid->layout_register);
 	elm_object_style_set(button, "bottom");
 	elm_object_text_set(button, "등록");
-	elm_object_part_content_set(wid->layout, "elm.swallow.button", button);
+	elm_object_part_content_set(wid->layout_register, "elm.swallow.button", button);
 	evas_object_smart_callback_add(button, "clicked", _button_clicked_cb, wid);
 	evas_object_show(button);
 
-	elm_naviframe_item_push(wid->nf, NULL, NULL, NULL, wid->layout, "empty");
+	/* Interface of showing favorite bus */
+	wid->layout_bus = elm_layout_add(wid->nf);
+	elm_layout_file_set(wid->layout_bus, edj_path, "bus_layout");
+	evas_object_size_hint_weight_set(wid->layout_bus, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	evas_object_show(wid->layout_bus);
+
+	station = elm_label_add(wid->layout_bus);
+//	read_file(station_cur_index, bus_cur_index, &station_number, &bus_number);
+//	get_station_name(station_number, station_name);
+//	sprintf(station_name, "<font_size=15>%s</font>", station_name);
+//	elm_object_text_set(station, station_name);
+	elm_object_text_set(station, "<font_size=22>신림중.삼성고.관악문화도서관</font>");
+//	elm_label_wrap_width_set(station, ELM_SCALE_SIZE(298));
+	elm_object_part_content_set(wid->layout_bus, "elm.swallow.sliding_text", station);
+//	evas_object_size_hint_weight_set(station, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+//	evas_object_size_hint_align_set(station, EVAS_HINT_FILL, EVAS_HINT_FILL);
+//	evas_object_size_hint_min_set(station, 298, 34);
+//	evas_object_size_hint_max_set(station, 298, 34);
+//	elm_object_style_set(station, "slide_roll");
+//	elm_label_slide_duration_set(station, 3);
+//	elm_label_slide_mode_set(station, ELM_LABEL_SLIDE_MODE_AUTO);
+	evas_object_show(station);
+//	elm_label_slide_go(station);
+
+	alarm_button = elm_button_add(wid->layout_bus);
+	elm_object_style_set(alarm_button, "bottom");
+	elm_object_text_set(alarm_button, "알람");
+	elm_object_part_content_set(wid->layout_bus, "elm.swallow.alarm", alarm_button);
+	evas_object_show(alarm_button);
+
+	elm_naviframe_item_push(wid->nf, NULL, NULL, NULL, wid->layout_bus, "empty");
+//	if (exist_file()) {
+//		elm_naviframe_item_push(wid->nf, NULL, NULL, NULL, wid->layout_bus, "empty");
+//	} else {
+//		elm_naviframe_item_push(wid->nf, NULL, NULL, NULL, wid->layout_register, "empty");
+//	}
 
 	/* Show window after base gui is set up */
 	evas_object_show(wid->win);
 
 	widget_app_context_set_tag(context, wid);
-
-
 
 	return WIDGET_ERROR_NONE;
 }
@@ -270,6 +335,7 @@ widget_instance_destroy(widget_context_h context, widget_app_destroy_type_e reas
 		evas_object_del(wid->win);
 	free(wid);
 
+	xmlCleanupParser();
 	curl_global_cleanup();
 
 	return WIDGET_ERROR_NONE;
@@ -286,6 +352,16 @@ widget_instance_pause(widget_context_h context, void *user_data)
 static int
 widget_instance_resume(widget_context_h context, void *user_data)
 {
+	widget_instance_data_s *wid = NULL;
+	widget_app_context_get_tag(context,(void**)&wid);
+
+//	if (exist_file()) {
+//		evas_object_hide(wid->layout_register);
+//		evas_object_show(wid->layout_bus);
+//	} else {
+//		evas_object_hide(wid->layout_bus);
+//		evas_object_show(wid->layout_register);
+//	}
 
 	/* Take necessary actions when widget instance becomes visible. */
 	return WIDGET_ERROR_NONE;

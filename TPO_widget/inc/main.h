@@ -24,7 +24,8 @@ typedef struct widget_instance_data {
 	Evas_Object *win;
 	Evas_Object *conform;
 	Evas_Object *nf;
-	Evas_Object *layout;
+	Evas_Object *layout_register;
+	Evas_Object *layout_bus;
 	Eext_Circle_Surface *circle_surface;
 } widget_instance_data_s;
 
