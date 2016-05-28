@@ -35,6 +35,7 @@ document.getElementById('settingFinish_sub').addEventListener('click', function(
 });
 
 SUBWAY.prototype.getPathInfoBySubway = function() {
+	tau.changePage("#processing");
 	/** Process
 	 *  1) station's name -> station's id
 	 *  2) station's id -> station's wgs84 point
@@ -337,9 +338,9 @@ function createSurroundingSubwayList(data) {
 			break;
 		}
 		lv.innerHTML += "<li id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='li-has-multiline li-subway-station'>" +
-		"<div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='ui-marquee ui-marquee-gradient'>" + 
+		"<div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='li-subway-station'>" + 
 		x[i].getElementsByTagName("subwayNm")[0].childNodes[0].nodeValue + ' ' + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue +
-		"</div><div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='ui-li-sub-text li-text-sub'>ord : " + 
+		"</div><div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='ui-li-sub-text li-text-sub li-subway-station'>ord : " + 
 		x[i].getElementsByTagName("ord")[0].childNodes[0].nodeValue + 
 		"</div></li>";
 	}
