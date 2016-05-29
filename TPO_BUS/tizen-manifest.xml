@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<manifest xmlns="http://tizen.org/ns/packages" api-version="2.3.1" package="Jlkedqbso8" version="1.0.0">
+    <profile name="wearable"/>
+    <widget-application appid="Jlkedqbso8.tpo_bus" exec="tpo_bus" main="true" update-period="0">
+        <label>대중교통 알리미 BUS</label>
+        <icon>icon.png</icon>
+        <support-size preview="preview.png">2x2</support-size>
+    </widget-application>
+    <privileges>
+        <privilege>http://tizen.org/privilege/mediastorage</privilege>
+        <privilege>http://tizen.org/privilege/appmanager.launch</privilege>
+        <privilege>http://tizen.org/privilege/internet</privilege>
+    </privileges>
+    <feature name="http://tizen.org/feature/screen.auto_rotation">true</feature>
+    <feature name="http://tizen.org/feature/network.internet">true</feature>
+    <feature name="http://tizen.org/feature/screen.size.normal.320.320">true</feature>
+    <feature name="http://tizen.org/feature/screen.shape.circle">true</feature>
+</manifest>

@@ -3,7 +3,7 @@
 	<name>TPO</name>
 	<comment></comment>
 	<projects>
-		<project>TPO_widget</project>
+		<project>TPO_BUS</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
