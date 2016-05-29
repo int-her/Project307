@@ -1,5 +1,5 @@
-set sysroot C:\tizen-sdk\platforms\tizen-2.3.1\wearable\rootstraps\wearable-2.3.1-device.core
-set debug-file-directory C:\tizen-sdk\platforms\tizen-2.3.1\wearable\rootstraps\wearable-2.3.1-device.core\usr\lib\debug
-set solib-search-path E:\Project\Project307\TPO_BUS\Debug
-dir C:\tizen-sdk\platforms\tizen-2.3.1\wearable\rootstraps\wearable-2.3.1-device.core\usr\src\debug
-file "E:\Project\Project307\TPO_BUS\Debug\tpo_bus"
+set sysroot C:\tizen-sdk\platforms\tizen-2.3.1\wearable\rootstraps\wearable-2.3.1-emulator.core
+set debug-file-directory C:\tizen-sdk\platforms\tizen-2.3.1\wearable\rootstraps\wearable-2.3.1-emulator.core\usr\lib\debug
+set solib-search-path D:\Project\Project307\TPO_BUS\Debug
+dir C:\tizen-sdk\platforms\tizen-2.3.1\wearable\rootstraps\wearable-2.3.1-emulator.core\usr\src\debug
+file "D:\Project\Project307\TPO_BUS\Debug\tpo_bus"
