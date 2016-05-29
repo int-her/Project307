@@ -66,7 +66,17 @@ function init() {
 		processing.style.visibility = "hidden";
 	});
 	
-	// More option 초기화
+	document.getElementById('busFavorite').addEventListener('pagebeforeshow', function() {
+		var title = document.getElementById('favoriteStationName');
+		
+		marqueeWidget = new tau.widget.Marquee(title, 
+				{
+			marqueeStyle: "endToEnd",
+			delay: "3000",
+			iteration: "infinite"
+				});
+		marqueeWidget.start();	
+	});
 	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
 		var title = document.getElementById('stationName');
 		

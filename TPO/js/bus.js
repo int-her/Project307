@@ -23,7 +23,9 @@ BUS.prototype._writeFavoriteFile = function(fs, preSave) {
 	fs.write("\n");
 	fs.write(this.activeStationId);
 	fs.write(" ");
-	fs.write(this.activeStationId.length);
+	fs.write(this.activeStationName);
+	fs.write(" ");
+	fs.write(this.registerBusId.length);
 	for (var i = 0; i < this.registerBusId.length; ++i) {
 		fs.write(" ");
 		fs.write(this.registerBusId[i]);
@@ -65,6 +67,7 @@ BUS.prototype._createBusFavoriteFile = function() {
         			try {
         				tpoFile = tpoDir.resolve("TPO_favorite.tpo");
         				tpoFile.readAsText(function(txt) {
+        					alert(tpoFile.fullPath);
         	        		tpoDir.deleteFile(tpoFile.fullPath, function() {
     	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
     	        				tpoFile.openStream("w", function(fs) {
@@ -93,7 +96,7 @@ BUS.prototype.registerFavoriteBus = function() {
 	for (var i = 0; i < checkbox.length; ++i) {
 		if (checkbox[i].checked) {
 			this.registerBusId[j] = checkbox[i].id;
-			this.registerBusAdirection[j++] = checkbox[i].adirection;
+			this.registerBusAdirection[j++] = checkbox[i].dataset.adirection;
 		}
 	}
 	
@@ -114,8 +117,8 @@ BUS.prototype._createFavoriteBusList = function(data) {
 		lv.innerHTML += "<li class='li-has-checkbox' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
 		"><label>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
 		"<input type='checkbox' class='li-checkbox' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
-		"adirection=" + x[i].getElementsByTagName("adirection")[0].childNodes[0].nodeValue +  
-		"/></label></li>";
+		" data-adirection=" + x[i].getElementsByTagName("adirection")[0].childNodes[0].nodeValue +  
+		" /></label></li>";
 	}
 };
 
@@ -139,11 +142,35 @@ BUS.prototype.showFavoriteBus = function() {
 					/** Success */
 					bus._createFavoriteBusList(data);
 					tau.changePage("#busFavorite");
+					
+					tizen.filesystem.resolve("documents", function(result) {
+						var tpoDir = result.resolve("TPO_files");
+				        
+				        if (tpoDir !== null) {
+	        				var tpoFile = tpoDir.resolve("TPO_favorite.tpo");
+	        				tpoDir.deleteFile(tpoFile.fullPath, function() {}, function() {});
+				        }
+				     });
 				}
 			}, function(data, xhr) {
 				toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
 			});		
 };
+
+
+/**
+ * 숫자의 앞에 0을 채워넣어준다.
+ */
+function leadingZeros(n, digits) {
+	  var zero = '';
+	  n = n.toString();
+
+	  if (n.length < digits) {
+	    for (var i = 0; i < digits - n.length; i++)
+	      zero += '0';
+	  }
+	  return zero + n;
+}
 
 /**
  * XML 데이터를 이용하여 정류소 목록을 보여주는 페이지를 만들어준다
@@ -158,14 +185,18 @@ function createBusStationList(data) {
 		if(x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue < 10000) {
 			var str = parseInt(x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue, 10);
 			lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue +
-			"' onclick = 'bus.showBusArrivalTime(leadingZeros(" +str + ", 5));'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";
+			"' onclick = 'bus.showBusArrivalTime(leadingZeros(" +str + ", 5));'><div class='ui-marquee ui-marquee-gradient'>" + 
+			x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</div></li>";
 		}
 		else
 			lv.innerHTML += "<li id='" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue +
-			"' onclick = 'bus.showBusArrivalTime(" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue.toString() + ");'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + "</li>";	
+			"' onclick = 'bus.showBusArrivalTime(" + x[i].getElementsByTagName("stationNo")[0].childNodes[0].nodeValue.toString() + 
+			");'><div class='ui-marquee ui-marquee-gradient'>" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
+			"</div></li>";	
 	}
 }
-	
+
+
 /**
  * routeId를 입력받아 document의 header에 busNumber를 입력해주고
  * 그 버스가 경유하는 정류소 목록을 받아온다.
