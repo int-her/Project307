@@ -147,22 +147,23 @@ read_file(int station_index, int bus_index, char *station_number, char *bus_numb
 	fclose(f);
 }
 
-static void
+static int
 get_arrival_time(widget_instance_data_s *wid, char *station_id, char *bus_number, char *adirection)
 {
 	CURL *curl;
 	CURLcode res;
 	xmlDocPtr doc = NULL;
-	xmlNodePtr root, item, bus, ad;
+	xmlNodePtr root, item, bus, ad, time;
 	char url[1024] = {0, };
+	int second = 30;
 
-	dlog_print(DLOG_DEBUG, "USER_TAG", "start");
 	/* Get a curl handle */
 	curl = curl_easy_init();
 	if (curl)
 	{
+		second += 2;
 		/* Set restful API URL */
-		strcpy(url, "http://http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid?ServiceKey=4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2%2B8%2BTMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa%2BLdhW0%2BA%3D%3D&arsId=");
+		strcpy(url, "http://http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid?ServiceKey=4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==&arsId=");
 		strcat(url, station_id);
 		strcat(url, "&numOfRows=999&pageSize=999&pageNo=1&startPage=1");
 		curl_easy_setopt(curl, CURLOPT_URL, url);
@@ -174,31 +175,67 @@ get_arrival_time(widget_instance_data_s *wid, char *station_id, char *bus_number
 		{
 			if (doc != NULL)
 			{
+				second += 10;
 				root = xmlDocGetRootElement(doc);
 				item = root->children->next->next->children;
 				for (; item; item = item->next)
 				{
-
+					for (bus = item->children; bus; bus = bus->next)
+					{
+						if (!xmlStrcmp(bus->name, (const xmlChar *)"rtNm"))
+						{
+							second += 60;
+							break;
+						}
+					}
+					for (ad = item->children; ad; ad = ad->next)
+					{
+						if (!xmlStrcmp(ad->name, (const xmlChar *)"adirection"))
+						{
+							second += 60;
+							break;
+						}
+					}
+					if (!xmlStrcmp(bus->content, (const xmlChar *)bus_number) &&
+							!xmlStrcmp(ad->content, (const xmlChar *)adirection))
+					{
+						for (time = item->children; time; time = time->next)
+						{
+							if (!xmlStrcmp(time->name, (const xmlChar *)"traTime1"))
+							{
+								second += 60;
+								break;
+							}
+						}
+						break;
+					}
 				}
+				sscanf(time->content, "%d", &second);
 				xmlFreeDoc(doc);
 			}
+			second += 5;
 		}
 		curl_easy_cleanup(curl);
 	}
+	return second;
 }
 
 static void
 update_information(widget_instance_data_s *wid)
 {
-	char station_number[16], bus_number[32];
+	int second;
+	char station_number[16] = {0, }, bus_number[32] = {0, }, bus_time[128] = {0, };
+	xmlChar *temp;
 	read_file(station_cur_index, bus_cur_index, station_number, bus_number, adirection, station_name);
+	second = get_arrival_time(wid, station_number, bus_number, adirection);
+	//temp = get_arrival_time(wid, station_number, bus_number, adirection);
 	sprintf(display_name, "<font_size=25><align=center>%s</font></align>", station_name);
 	sprintf(display_number, "<font_size=50><align=center>%s</font></align>", bus_number);
-	get_arrival_time(wid, station_number, bus_number, adirection);
+	sprintf(bus_time, "<font_size=25><align=center>%d</font></align>", second);
 
 	elm_object_text_set(wid->label_station, display_name);
 	elm_object_text_set(wid->btn_number, display_number);
-
+	elm_object_text_set(wid->label_minite, bus_time);
 }
 
 static void
@@ -287,7 +324,7 @@ view_favorite_create(widget_instance_data_s *wid, int w, int h)
 
 	wid->btn_number = elm_button_add(wid->layout_register);
 	//elm_object_style_set(wid->btn_number, "focus");
-	evas_object_resize(wid->btn_number, w / 2, h / 5);
+	evas_object_resize(wid->btn_number, w / 2, h / 6);
 	evas_object_move(wid->btn_number, w / 2 - w / 4, h / 3);
 	evas_object_smart_callback_add(wid->btn_number, "clicked", _label_station_clicked_cb, wid);
 
@@ -357,6 +394,7 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 		evas_object_hide(wid->btn_register);
 		evas_object_show(wid->label_station);
 		evas_object_show(wid->label_number);
+		evas_object_show(wid->label_minite);
 		evas_object_show(wid->btn_number);
 		evas_object_show(wid->btn_alarm);
 	} else {
@@ -364,6 +402,7 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 		evas_object_show(wid->btn_register);
 		evas_object_hide(wid->label_station);
 		evas_object_hide(wid->label_number);
+		evas_object_hide(wid->label_minite);
 		evas_object_hide(wid->btn_number);
 		evas_object_hide(wid->btn_alarm);
 	}
