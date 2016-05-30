@@ -241,6 +241,24 @@ SUBWAY.prototype.lvAllSubwayStation = function(subwayNm) {
 		5	statnSn	지하철역순번
 			(역사 순번)
 	 */
+
+	/**
+	var reader = new XMLHttpRequest();
+	reader.open("GET", "..\lib\dataset\2.xml");
+	reader.onreadystatechange = function () {
+        if(reader.readyState === 4) {
+            if(reader.status === 0) {
+            	console.log(reader.response)
+            	console.log(reader.responseText)
+            	console.log(reader.responseXML)
+                createAllSubwayStationList(reader.responseText);
+                tau.changePage("#lvAllSubwayStation");
+            }
+        }
+    }
+    reader.send(null);
+	*/
+	
 	var url = 'http://swopenapi.seoul.go.kr/api/subway/DELETED/xml/stationByLine/0/200/' + subwayNm; 
 	rest.get(url, null, null,
 		function(data, xhr) {
