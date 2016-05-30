@@ -7,6 +7,11 @@
 #include <Elementary.h>
 #include <dlog.h>
 #include <app.h>
+#include <tizen.h>
+#include <storage.h>
+#include <curl/curl.h>
+#include <libxml/parser.h>
+#include <app_alarm.h>
 
 #ifdef  LOG_TAG
 #undef  LOG_TAG
@@ -32,5 +37,10 @@ typedef struct widget_instance_data {
 	Evas_Object *label_minite;
 	Evas_Object *label_station;
 } widget_instance_data_s;
+
+struct MemoryStruct {
+  char *memory;
+  size_t size;
+};
 
 #endif /* __tpo_widget_H__ */

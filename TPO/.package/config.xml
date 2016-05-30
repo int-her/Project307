@@ -7,7 +7,9 @@
     <feature name="http://tizen.org/feature/screen.size.normal.320.320"/>
     <feature name="http://tizen.org/feature/screen.auto_rotation"/>
     <feature name="http://tizen.org/feature/network.internet"/>
+    <feature name="http://tizen.org/feature/network.wifi"/>
     <feature name="http://tizen.org/feature/screen.shape.circle"/>
+    <feature name="http://tizen.org/feature/network.telephony"/>
     <icon src="icon1.png" height="117" width="117"/>
     <name>대중교통 알리미</name>
     <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
@@ -16,7 +18,11 @@
     <tizen:privilege name="http://tizen.org/privilege/internet"/>
     <tizen:privilege name="http://tizen.org/privilege/location"/>
     <tizen:privilege name="http://tizen.org/privilege/mediastorage"/>
+    <tizen:privilege name="http://tizen.org/privilege/download"/>
+    <tizen:privilege name="http://tizen.org/privilege/network.get"/>
     <tizen:privilege name="http://tizen.org/privilege/appmanager.launch"/>
+    <tizen:privilege name="http://tizen.org/privilege/alarm.get"/>
+    <tizen:privilege name="http://tizen.org/privilege/alarm.set"/>
     <tizen:profile name="wearable"/>
     <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
 </widget>

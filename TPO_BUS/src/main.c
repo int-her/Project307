@@ -1,19 +1,10 @@
-#include <tizen.h>
-#include <storage.h>
-#include <curl/curl.h>
-#include <libxml/parser.h>
 #include "main.h"
 
 static int station_cur_index;
 static int bus_cur_index;
-static char station_name[256], display_name[256], adirection[64], display_number[64];
+static char station_name[256], display_name[256], display_number[64];
 
-static int
-writer(char *data, size_t size, size_t nmemb, void *user_data)
-{
-	*((xmlDocPtr *)user_data) = xmlReadMemory(data, strlen(data), NULL, NULL, 0);
-	return size * nmemb;
-}
+
 
 static bool
 storage_cb(int storage_id, storage_type_e type, storage_state_e state, const char *path, void *user_data)
@@ -60,14 +51,14 @@ create_popup(Evas_Object *parent, char* text) {
 	Evas_Object *popup;
 
 	popup = elm_popup_add(parent);
-	elm_object_style_set(popup, "toast");
+	elm_object_style_set(popup, "circle");
 	elm_popup_orient_set(popup, ELM_POPUP_ORIENT_BOTTOM);
 	evas_object_size_hint_weight_set(popup, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_popup_align_set(popup, ELM_NOTIFY_ALIGN_FILL, 1.0);
-	elm_object_part_text_set(popup, "elm.text", text);
+	elm_object_text_set(popup, text);
 	elm_popup_timeout_set(popup, 3.0);
 	evas_object_smart_callback_add(popup, "timeout", eext_popup_back_cb, NULL);
-	evas_object_smart_callback_add(popup, "block,clicked", eext_popup_back_cb, parent);
+	evas_object_smart_callback_add(popup, "clicked", eext_popup_back_cb, parent);
 	eext_object_event_callback_add(popup, EEXT_CALLBACK_BACK, eext_popup_back_cb, parent);
 	evas_object_show(popup);
 }
@@ -117,13 +108,21 @@ read_file(int station_index, int bus_index, char *station_number, char *bus_numb
 	storage_get_directory(internal_storage_id, STORAGE_DIRECTORY_DOCUMENTS, &dir);
 	if (!exist_file())
 	{
-		*station_number = -1;
+		strcpy(station_number, "not_found");
 		strcpy(bus_number, "not_found");
+		free(dir);
 		return;
 	}
 	strcat(path, dir);
 	strcat(path, "/TPO_files/TPO_favorite.tpo");
 	free(dir);
+
+	if (get_station_count() <= station_index)
+	{
+		strcpy(station_number, "over_count");
+		strcpy(bus_number, "station_error");
+		return;
+	}
 
 	f = fopen(path, "r");
 	fgets(buf, 1024, f);
@@ -134,48 +133,86 @@ read_file(int station_index, int bus_index, char *station_number, char *bus_numb
 	fscanf(f, "%s ", station_number);
 	fscanf(f, "%s ", station_name);
 	fscanf(f, "%d", &count);
-	if (bus_index >= count) {
-		strcpy(bus_number, "over_count");
-		return;
-	}
-	for (i = 0; i < bus_index; i++)
+	if (bus_index >= count)
 	{
-		fscanf(f, " %s %s", buf, buf);
+		strcpy(bus_number, "over_count");
 	}
-	fscanf(f, " %s", bus_number);
-	fscanf(f, " %s", adirection);
+	else
+	{
+		for (i = 0; i < bus_index; i++)
+		{
+			fscanf(f, " %s %s", buf, buf);
+		}
+		fscanf(f, " %s", bus_number);
+		fscanf(f, " %s", adirection);
+	}
 	fclose(f);
 }
 
 static int
-get_arrival_time(widget_instance_data_s *wid, char *station_id, char *bus_number, char *adirection)
+write_memory(void *data, size_t size, size_t nmemb, void *user_data)
+{
+	size_t realsize = size * nmemb;
+	struct MemoryStruct *mem = (struct MemoryStruct *)user_data;
+
+	mem->memory = realloc(mem->memory, mem->size + realsize + 1);
+	if(mem->memory == NULL) {
+		/* out of memory! */
+		return 0;
+	}
+
+	memcpy(&(mem->memory[mem->size]), data, realsize);
+	mem->size += realsize;
+	mem->memory[mem->size] = 0;
+
+	return realsize;
+}
+
+static int
+get_arrival_time(char *station_id, char *bus_number, char *adirection)
 {
 	CURL *curl;
 	CURLcode res;
 	xmlDocPtr doc = NULL;
-	xmlNodePtr root, item, bus, ad, time;
+	xmlNodePtr root, item, bus, ad, time = NULL;
+	struct MemoryStruct chunk;
 	char url[1024] = {0, };
-	int second = 30;
+	int second = 1;
+
+//	int error, internal_storage_id;
+//	char *dir, path[PATH_MAX] = {0,};
+//	FILE *f;
+//
+//	error = storage_foreach_device_supported(storage_cb, &internal_storage_id);
+//	storage_get_directory(internal_storage_id, STORAGE_DIRECTORY_DOCUMENTS, &dir);
+//	strcat(path, dir);
+//	strcat(path, "/TPO_files/temp_xml.tpo");
+//	free(dir);
+//
+//	f = fopen(path, "w");
+//
 
 	/* Get a curl handle */
 	curl = curl_easy_init();
 	if (curl)
 	{
-		second += 2;
+		chunk.memory = malloc(1);  /* will be grown as needed by the realloc above */
+		chunk.size = 0;    /* no data at this point */
+
 		/* Set restful API URL */
-		strcpy(url, "http://http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid?ServiceKey=4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==&arsId=");
+		strcpy(url, "http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid?ServiceKey=4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2%2B8%2BTMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa%2BLdhW0%2BA%3D%3D&arsId=");
 		strcat(url, station_id);
 		strcat(url, "&numOfRows=999&pageSize=999&pageNo=1&startPage=1");
 		curl_easy_setopt(curl, CURLOPT_URL, url);
 		curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
-		curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION, writer);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &doc);
+		curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION, write_memory);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &chunk);
 		res = curl_easy_perform(curl);
-		if (CURLE_OK == res)
+		if (res == CURLE_OK)
 		{
+			doc = xmlReadMemory(chunk.memory, chunk.size, NULL, NULL, 0);
 			if (doc != NULL)
 			{
-				second += 10;
 				root = xmlDocGetRootElement(doc);
 				item = root->children->next->next->children;
 				for (; item; item = item->next)
@@ -184,7 +221,6 @@ get_arrival_time(widget_instance_data_s *wid, char *station_id, char *bus_number
 					{
 						if (!xmlStrcmp(bus->name, (const xmlChar *)"rtNm"))
 						{
-							second += 60;
 							break;
 						}
 					}
@@ -192,31 +228,32 @@ get_arrival_time(widget_instance_data_s *wid, char *station_id, char *bus_number
 					{
 						if (!xmlStrcmp(ad->name, (const xmlChar *)"adirection"))
 						{
-							second += 60;
 							break;
 						}
 					}
-					if (!xmlStrcmp(bus->content, (const xmlChar *)bus_number) &&
-							!xmlStrcmp(ad->content, (const xmlChar *)adirection))
+
+					if (!xmlStrcmp(xmlNodeListGetString(doc, bus->children, 1), (const xmlChar *)bus_number) &&
+							!xmlStrcmp(xmlNodeListGetString(doc, ad->children, 1), (const xmlChar *)adirection))
 					{
 						for (time = item->children; time; time = time->next)
 						{
 							if (!xmlStrcmp(time->name, (const xmlChar *)"traTime1"))
 							{
-								second += 60;
 								break;
 							}
 						}
 						break;
 					}
 				}
-				sscanf(time->content, "%d", &second);
+				if (time != NULL) sscanf(xmlNodeListGetString(doc, time->children, 1), "%d", &second);
 				xmlFreeDoc(doc);
 			}
-			second += 5;
+
 		}
 		curl_easy_cleanup(curl);
+		free(chunk.memory);
 	}
+//	fclose(f);
 	return second;
 }
 
@@ -224,25 +261,60 @@ static void
 update_information(widget_instance_data_s *wid)
 {
 	int second;
-	char station_number[16] = {0, }, bus_number[32] = {0, }, bus_time[128] = {0, };
-	xmlChar *temp;
+	char station_number[16] = {0, }, bus_number[32] = {0, }, bus_time[128] = {0, }, adirection[64] = {0, };
+
 	read_file(station_cur_index, bus_cur_index, station_number, bus_number, adirection, station_name);
-	second = get_arrival_time(wid, station_number, bus_number, adirection);
-	//temp = get_arrival_time(wid, station_number, bus_number, adirection);
+	second = get_arrival_time(station_number, bus_number, adirection);
 	sprintf(display_name, "<font_size=25><align=center>%s</font></align>", station_name);
 	sprintf(display_number, "<font_size=50><align=center>%s</font></align>", bus_number);
-	sprintf(bus_time, "<font_size=25><align=center>%d</font></align>", second);
+	if (second / 60 < 1)
+	{
+		sprintf(bus_time, "<align=center><font_size=30>곧 도착</font></align>", second / 60);
+	}
+	else
+	{
+		sprintf(bus_time, "<align=center><font_size=45>%d </font><font_size=25><color=#7F7F7FFF>분</color></font></align>", second / 60);
+	}
 
-	elm_object_text_set(wid->label_station, display_name);
-	elm_object_text_set(wid->btn_number, display_number);
+
 	elm_object_text_set(wid->label_minite, bus_time);
+	elm_object_text_set(wid->label_station, display_name);
+	elm_object_text_set(wid->label_number, display_number);
 }
 
 static void
-_label_station_clicked_cb(void *data, Evas_Object *obj, void *event_info)
+_btn_alarm_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	widget_instance_data_s *wid = data;
-	char station_number[16], bus_number[32];
+	app_control_h app_control;
+	int id, res;
+
+	app_control_create(&app_control);
+	app_control_set_operation(app_control, APP_CONTROL_OPERATION_MAIN);
+	app_control_set_app_id (app_control, "Jlkedqbso8.tpo_bus");
+
+	res = alarm_schedule_after_delay(app_control, 30, 3, &id);
+	if (res == ALARM_ERROR_NONE) {
+		create_popup(wid->win, "REGISTERED");
+	} else if (res == ALARM_ERROR_INVALID_PARAMETER) {
+		create_popup(wid->win, "INVALID PARAMETER");
+	} else if (res == ALARM_ERROR_INVALID_TIME) {
+		create_popup(wid->win, "INVALID TIME");
+	} else if (res == ALARM_ERROR_CONNECTION_FAIL) {
+		create_popup(wid->win, "FAIL");
+	} else if (res == ALARM_ERROR_PERMISSION_DENIED) {
+		create_popup(wid->win, "DENIED");
+	}
+
+	app_control_destroy(app_control);
+}
+
+
+static void
+_btn_bus_clicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	widget_instance_data_s *wid = data;
+	char station_number[16], bus_number[32], adirection[64];
 
 	bus_cur_index++;
 	read_file(station_cur_index, bus_cur_index, station_number, bus_number, adirection, station_name);
@@ -323,14 +395,19 @@ view_favorite_create(widget_instance_data_s *wid, int w, int h)
 	elm_label_slide_go(wid->label_station);
 
 	wid->btn_number = elm_button_add(wid->layout_register);
-	//elm_object_style_set(wid->btn_number, "focus");
+	elm_object_style_set(wid->btn_number, "focus");
 	evas_object_resize(wid->btn_number, w / 2, h / 6);
 	evas_object_move(wid->btn_number, w / 2 - w / 4, h / 3);
-	evas_object_smart_callback_add(wid->btn_number, "clicked", _label_station_clicked_cb, wid);
+	evas_object_smart_callback_add(wid->btn_number, "clicked", _btn_bus_clicked_cb, wid);
+
+	wid->label_number = elm_label_add(wid->layout_register);
+	evas_object_resize(wid->label_number, w / 2, h / 5);
+	evas_object_move(wid->label_number, w / 2 - w / 4,  h / 3);
+	evas_object_pass_events_set(wid->label_number, EINA_TRUE);
 
 	wid->label_minite = elm_label_add(wid->layout_register);
 	evas_object_resize(wid->label_minite, w / 2, h / 5);
-	evas_object_move(wid->label_minite, w / 2 - w / 4, 2 * h / 3);
+	evas_object_move(wid->label_minite, w / 2 - w / 4, h / 2);
 
 	update_information(wid);
 
@@ -338,7 +415,7 @@ view_favorite_create(widget_instance_data_s *wid, int w, int h)
 	elm_object_style_set(wid->btn_alarm, "bottom");
 	elm_object_text_set(wid->btn_alarm, "알람 등록");
 	elm_object_part_content_set(wid->layout_register, "elm.swallow.button2", wid->btn_alarm);
-	//evas_object_smart_callback_add(button, "clicked", _button_clicked_cb, wid);
+	evas_object_smart_callback_add(wid->btn_alarm, "clicked", _btn_alarm_clicked_cb, wid);
 
 }
 
