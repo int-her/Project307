@@ -174,10 +174,10 @@ get_arrival_time(char *station_id, char *bus_number, char *adirection)
 	CURL *curl;
 	CURLcode res;
 	xmlDocPtr doc = NULL;
-	xmlNodePtr root, item, bus, ad, time = NULL;
+	xmlNodePtr root, item, bus, ad, time = NULL, station = NULL;
 	struct MemoryStruct chunk;
 	char url[1024] = {0, };
-	int second = 1;
+	int second = 1, sect = 0;
 
 //	int error, internal_storage_id;
 //	char *dir, path[PATH_MAX] = {0,};
@@ -242,10 +242,28 @@ get_arrival_time(char *station_id, char *bus_number, char *adirection)
 								break;
 							}
 						}
+						for (station = item->children; station; station = station->next)
+						{
+							if (!xmlStrcmp(station->name, (const xmlChar *)"sectOrd1"))
+							{
+								break;
+							}
+						}
 						break;
 					}
 				}
-				if (time != NULL) sscanf(xmlNodeListGetString(doc, time->children, 1), "%d", &second);
+				if (station != NULL)
+				{
+					sscanf(xmlNodeListGetString(doc, station->children, 1), "%d", &sect);
+					if (sect == 0)
+					{
+						second = -1;
+					}
+					else
+					{
+						if (time != NULL) sscanf(xmlNodeListGetString(doc, time->children, 1), "%d", &second);
+					}
+				}
 				xmlFreeDoc(doc);
 			}
 
@@ -267,19 +285,24 @@ update_information(widget_instance_data_s *wid)
 	second = get_arrival_time(station_number, bus_number, adirection);
 	sprintf(display_name, "<font_size=25><align=center>%s</font></align>", station_name);
 	sprintf(display_number, "<font_size=50><align=center>%s</font></align>", bus_number);
-	if (second / 60 < 1)
+	if (second == -1)
 	{
-		sprintf(bus_time, "<align=center><font_size=30>곧 도착</font></align>", second / 60);
+		sprintf(bus_time, "<align=center><font_size=25><color=#7F7F7FFF>%s방면 - 도착 정보 없음</color></font></align>", adirection);
+	}
+	else if (second < 60)
+	{
+		sprintf(bus_time, "<align=center><font_size=25><color=#7F7F7FFF>%s방면 - </color></font><font_size=30>곧 도착</font></align>", adirection);
 	}
 	else
 	{
-		sprintf(bus_time, "<align=center><font_size=45>%d </font><font_size=25><color=#7F7F7FFF>분</color></font></align>", second / 60);
+		sprintf(bus_time, "<align=center><font_size=25><color=#7F7F7FFF>%s방면 - </color></font><font_size=45>%d </font><font_size=25><color=#7F7F7FFF>분</color></font></align>", adirection, second / 60);
 	}
 
 
 	elm_object_text_set(wid->label_minite, bus_time);
 	elm_object_text_set(wid->label_station, display_name);
 	elm_object_text_set(wid->label_number, display_number);
+	elm_label_slide_go(wid->label_station);
 }
 
 static void
@@ -309,6 +332,21 @@ _btn_alarm_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	app_control_destroy(app_control);
 }
 
+static void
+_btn_station_clicked_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	widget_instance_data_s *wid = data;
+	char station_number[16], bus_number[32], adirection[64];
+
+	station_cur_index++;
+	read_file(station_cur_index, bus_cur_index, station_number, bus_number, adirection, station_name);
+	if (!strcmp(station_number, "over_count"))
+	{
+		station_cur_index = 0;
+	}
+
+	update_information(wid);
+}
 
 static void
 _btn_bus_clicked_cb(void *data, Evas_Object *obj, void *event_info)
@@ -386,6 +424,12 @@ view_register_create(widget_instance_data_s *wid, int w, int h)
 static void
 view_favorite_create(widget_instance_data_s *wid, int w, int h)
 {
+	wid->btn_station = elm_button_add(wid->layout_register);
+	elm_object_style_set(wid->btn_station, "focus");
+	evas_object_resize(wid->btn_station, w / 2, h / 5);
+	evas_object_move(wid->btn_station, w / 2 - w / 4, h / 6);
+	evas_object_smart_callback_add(wid->btn_station, "clicked", _btn_station_clicked_cb, wid);
+
 	wid->label_station = elm_label_add(wid->layout_register);
 	evas_object_resize(wid->label_station, w / 2, h / 5);
 	evas_object_move(wid->label_station, w / 2 - w / 4, h / 6);
@@ -393,6 +437,7 @@ view_favorite_create(widget_instance_data_s *wid, int w, int h)
 	elm_label_slide_duration_set(wid->label_station, 3);
 	elm_label_slide_mode_set(wid->label_station, ELM_LABEL_SLIDE_MODE_ALWAYS);
 	elm_label_slide_go(wid->label_station);
+	evas_object_pass_events_set(wid->label_station, EINA_TRUE);
 
 	wid->btn_number = elm_button_add(wid->layout_register);
 	elm_object_style_set(wid->btn_number, "focus");
@@ -406,16 +451,16 @@ view_favorite_create(widget_instance_data_s *wid, int w, int h)
 	evas_object_pass_events_set(wid->label_number, EINA_TRUE);
 
 	wid->label_minite = elm_label_add(wid->layout_register);
-	evas_object_resize(wid->label_minite, w / 2, h / 5);
-	evas_object_move(wid->label_minite, w / 2 - w / 4, h / 2);
+	evas_object_resize(wid->label_minite, w, h / 5);
+	evas_object_move(wid->label_minite, 0, h / 2);
 
 	update_information(wid);
 
-	wid->btn_alarm = elm_button_add(wid->layout_register);
+	/*wid->btn_alarm = elm_button_add(wid->layout_register);
 	elm_object_style_set(wid->btn_alarm, "bottom");
 	elm_object_text_set(wid->btn_alarm, "알람 등록");
 	elm_object_part_content_set(wid->layout_register, "elm.swallow.button2", wid->btn_alarm);
-	evas_object_smart_callback_add(wid->btn_alarm, "clicked", _btn_alarm_clicked_cb, wid);
+	evas_object_smart_callback_add(wid->btn_alarm, "clicked", _btn_alarm_clicked_cb, wid);*/
 
 }
 
@@ -461,10 +506,15 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 	evas_object_size_hint_weight_set(wid->layout_register, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	evas_object_show(wid->layout_register);
 
-	view_register_create(wid, w, h);
 	view_favorite_create(wid, w, h);
+	view_register_create(wid, w, h);
 
 	elm_naviframe_item_push(wid->nf, NULL, NULL, NULL, wid->layout_register, NULL);
+
+	/* Show window after base gui is set up */
+	evas_object_show(wid->win);
+
+	widget_app_context_set_tag(context, wid);
 
 	if (exist_file()) {
 		evas_object_hide(wid->label_register);
@@ -473,21 +523,18 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 		evas_object_show(wid->label_number);
 		evas_object_show(wid->label_minite);
 		evas_object_show(wid->btn_number);
-		evas_object_show(wid->btn_alarm);
+		evas_object_show(wid->btn_station);
+		//evas_object_show(wid->btn_alarm);
 	} else {
-		evas_object_show(wid->label_register);
-		evas_object_show(wid->btn_register);
 		evas_object_hide(wid->label_station);
 		evas_object_hide(wid->label_number);
 		evas_object_hide(wid->label_minite);
 		evas_object_hide(wid->btn_number);
-		evas_object_hide(wid->btn_alarm);
+		evas_object_hide(wid->btn_station);
+		//evas_object_hide(wid->btn_alarm);
+		evas_object_show(wid->label_register);
+		evas_object_show(wid->btn_register);
 	}
-
-	/* Show window after base gui is set up */
-	evas_object_show(wid->win);
-
-	widget_app_context_set_tag(context, wid);
 
 	return WIDGET_ERROR_NONE;
 }
@@ -534,18 +581,22 @@ widget_instance_resume(widget_context_h context, void *user_data)
 		evas_object_show(wid->label_station);
 		evas_object_show(wid->label_number);
 		evas_object_show(wid->label_minite);
-		evas_object_show(wid->btn_alarm);
+		evas_object_show(wid->btn_number);
+		evas_object_show(wid->btn_station);
+		//evas_object_show(wid->btn_alarm);
 	} else {
-		evas_object_show(wid->label_register);
-		elm_object_text_set(wid->label_register, "<font_size=29><align=center>즐겨찾기를 등록해주세요.</font></align>");
-		evas_object_show(wid->btn_register);
 		evas_object_hide(wid->label_station);
 		evas_object_hide(wid->label_number);
 		evas_object_hide(wid->label_minite);
 		elm_object_text_set(wid->label_station, "");
 		elm_object_text_set(wid->label_number, "");
 		elm_object_text_set(wid->label_minite, "");
-		evas_object_hide(wid->btn_alarm);
+		evas_object_hide(wid->btn_number);
+		evas_object_hide(wid->btn_station);
+		//evas_object_hide(wid->btn_alarm);
+		evas_object_show(wid->label_register);
+		elm_object_text_set(wid->label_register, "<font_size=29><align=center>즐겨찾기를 등록해주세요.</font></align>");
+		evas_object_show(wid->btn_register);
 	}
 
 	/* Take necessary actions when widget instance becomes visible. */

@@ -83,14 +83,35 @@ function init() {
 	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
 		var title = document.getElementById('stationName');
 		
-		moreoption.pageBeforeShowHandler('busArrivalTime');
 		marqueeWidget = new tau.widget.Marquee(title, 
 				{
 			marqueeStyle: "endToEnd",
 			delay: "3000",
 			iteration: "infinite"
 				});
-		marqueeWidget.start();	
+		marqueeWidget.start();
+		
+		moreoption.pageBeforeShowHandler('busArrivalTime', function(event) {
+			var target = event.target,
+			dataTitle,
+			dataIndex;
+
+			if (target.classList.contains("ui-selector-indicator")) {
+				dataIndex = target.getAttribute("data-index");
+				if (dataIndex === "0") {
+					tau.closePopup(moreoption.popup);
+					bus.showFavoriteBus();
+				} else {
+					tau.closePopup(moreoption.popup);
+				}
+			} else {
+				dataTitle = target.getAttribute("data-title");
+				if (dataTitle === "즐겨찾기 등록") {
+					tau.closePopup(this.popup);
+					bus.showFavoriteBus();
+				}
+			}
+		});
 	});
 	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', function() {
 		moreoption.pageBeforeHideHandler();
@@ -121,6 +142,11 @@ function init() {
 		bus.registerFavoriteBus();
 	});
 
+	// 등록한 즐겨찾기 보기
+	document.getElementById('viewFavoriteBus').addEventListener('click', function(){
+		bus.showRegisteredStation();
+	});
+	
 	/** When click list element, find subway stations around */ 
 	document.getElementById('searchSurroundingSubway').addEventListener('click', function(){
 		subway.showSurroundingStationsByGps();

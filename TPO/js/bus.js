@@ -13,6 +13,56 @@ BUS.prototype = new Object();
  */
 Window.prototype.bus = new BUS();
 
+
+/**
+ * 즐겨찾기로 등록한 버스 정류장들을 리스트로 만든다.
+ * @param data {String Array} [Station ID] [Station Name] [Registered Bus Length] <[Bus Number] [Bus Adirection]>* 
+ */
+BUS.prototype._createRegisteredStationList = function(data, init) {
+	var lv = document.getElementById('lvRegisteredStation');
+	
+	if (init) {
+		lv.innerHTML = "";
+	}
+	lv.innerHTML += "<li id=" + data[0] + "><div class='ui-marquee ui-marquee-gradient'>" + data[1] + "</div></li>";
+};
+
+/**
+ * 즐겨찾기로 등록한 버스 정류장들을 보여준다. 
+ */
+BUS.prototype.showRegisteredStation = function() {
+	var tpoDir, 
+		tpoFile;
+	
+	tizen.filesystem.resolve("documents", function(result) {
+        try {
+        	tpoDir = result.resolve("TPO_files");
+        } catch (error) {
+        	toastPopup.openCheckPopup("등록하신 즐겨찾기가 없습니다.", false);
+        	return;
+        }
+        
+        if (tpoDir !== null) {
+    		try {
+    			tpoFile = tpoDir.resolve("TPO_favorite.tpo");
+    			tpoFile.readAsText(function(txt) {
+    				var stations = txt.split("\n"),
+    					station;
+    				
+    				for (var i = 1; i < stations.length; ++i) {
+    					station = stations[i].split(" ");
+    					bus._createRegisteredStationList(station, i === 1);
+    				}
+    				tau.changePage('#showFavoriteStation');
+    			});
+    		} catch (error) {
+    			toastPopup.openCheckPopup("등록하신 즐겨찾기가 없습니다.", false);
+    			return;
+    		}
+    	}
+	});
+};
+
 function onOpenFail(error) {
 	toastPopup.openPopup("즐겨찾기 등록 실패!");
 	//toastPopup.openPopup(error.message);
@@ -42,17 +92,15 @@ BUS.prototype._writeFavoriteFile = function(fs, preSave) {
  * 즐겨찾기 버스 목록을 저장할 파일을 만든다.
  */
 BUS.prototype._createBusFavoriteFile = function() {
-	var documentsDir;
 	var tpoDir = null, tpoFile;
 	
 	// document 폴더에 저장한다.
 	tizen.filesystem.resolve("documents", function(result) {
-        documentsDir = result;
         try {
-        	tpoDir = documentsDir.createDirectory("TPO_files");
+        	tpoDir = result.createDirectory("TPO_files");
         } catch (error) {
         	if (error.name === "IOError") {
-        		tpoDir = documentsDir.resolve("TPO_files");
+        		tpoDir = result.resolve("TPO_files");
         	}
         }
         
@@ -60,7 +108,7 @@ BUS.prototype._createBusFavoriteFile = function() {
         	try {
         		tpoFile = tpoDir.createFile("TPO_favorite.tpo");
         		tpoFile.openStream("rw", function(fs) {
-            		bus._writeFavoriteFile(fs, tpoFile, "");
+            		bus._writeFavoriteFile(fs, '');
             	}, onOpenFail, "UTF-8");
         	} catch (error) {
         		if (error.name === "IOError") {
@@ -71,7 +119,7 @@ BUS.prototype._createBusFavoriteFile = function() {
         	        		tpoDir.deleteFile(tpoFile.fullPath, function() {
     	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
     	        				tpoFile.openStream("w", function(fs) {
-    	        	        		bus._writeFavoriteFile(fs, tpoFile, txt);
+    	        	        		bus._writeFavoriteFile(fs, txt);
     	        	        	}, onOpenFail, "UTF-8");
     	        			});
         	        	}, onOpenFail, "UTF-8");
@@ -100,7 +148,11 @@ BUS.prototype.registerFavoriteBus = function() {
 		}
 	}
 	
-	this._createBusFavoriteFile();
+	if (j === 0) {
+		toastPopup.openCheckPopup("버스 하나 이상을 등록해주세요!", false);
+	} else {
+		this._createBusFavoriteFile();
+	}
 };
 
 /**

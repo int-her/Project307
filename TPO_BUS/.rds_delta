@@ -5,3 +5,6 @@ author-signature.xml
 signature1.xml
 res/edje/widget.edj
 bin/tpo_bus
+shared/res/icon.png
+shared/res/preview.png
+tizen-manifest.xml
