@@ -1,0 +1,11 @@
+# ninja log v5
+0	105	0	res/edje/widget.edj	1cd78f47e513e919
+3	11800	0	src/main.o	f24230cd5f5cdcc6
+11803	19885	0	org.example.tpo_bus	ca1b30c9d5c0e100
+0	14	0	clean_sa	13875f8ff8af16a2
+14	23	0	clean	d59b6dac04fa9b5d
+0	15	0	clean_sa	13875f8ff8af16a2
+15	24	0	clean	d59b6dac04fa9b5d
+7	968	0	res/edje/widget.edj	1cd78f47e513e919
+4	7165	0	src/main.o	f24230cd5f5cdcc6
+7165	7679	0	tpo_bus	a85b0431e574e639

@@ -9,7 +9,7 @@
         <blacklist/>
         <resFallback autoGen="true"/>
         <subProjects>
-            <tizenProject project="TPO_widget" style="native main"/>
+            <tizenProject project="TPO_BUS" style="native main"/>
         </subProjects>
     </package>
 </tproject>
