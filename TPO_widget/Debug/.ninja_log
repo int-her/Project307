@@ -1,0 +1,10 @@
+# ninja log v5
+3	4419	0	res/edje/widget.edj	9b704825d2e47367
+193	10418	0	src/main.o	ef2253715c701793
+10502	16437	0	tpo_widget	d7e56642bf03c3ae
+19	4207	0	src/main.o	ef2253715c701793
+4208	5689	0	tpo_widget	d7e56642bf03c3ae
+15	3812	0	src/main.o	ef2253715c701793
+3813	4841	0	tpo_widget	d7e56642bf03c3ae
+1	319	0	clean_sa	769b319e0da7e16e
+319	493	0	clean	d59b6dac04fa9b5d

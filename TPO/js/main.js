@@ -10,10 +10,13 @@ function keyEventHandler(event) {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
-		} else if (pageid === "surroundingBusStation" || pageid === "surroundingSubwayStation" ||
-				pageid === "busFavorite" || pageid === "subwayArrivalTime" || pageid === "lvAllSubwayStation") {
+		} else if (pageid === "subwayArrivalTime") {
+			window.history.go(-5);
+		} else if (pageid === "surroundingBusStation" || pageid === "busFavorite") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
+			window.history.go(-2);
+		} else if (pageid === "surroundingSubwayStation" || pageid === "lvAllSubwayStation") { // subway
 			window.history.go(-2);
 		} else if (pageid === "processing") {
 			window.history.go(-1);
@@ -66,11 +69,9 @@ function init() {
 		processing.style.visibility = "hidden";
 	});
 	
-	// More option 초기화
-	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
-		var title = document.getElementById('stationName');
+	document.getElementById('busFavorite').addEventListener('pagebeforeshow', function() {
+		var title = document.getElementById('favoriteStationName');
 		
-		moreoption.pageBeforeShowHandler('busArrivalTime');
 		marqueeWidget = new tau.widget.Marquee(title, 
 				{
 			marqueeStyle: "endToEnd",
@@ -78,6 +79,39 @@ function init() {
 			iteration: "infinite"
 				});
 		marqueeWidget.start();	
+	});
+	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
+		var title = document.getElementById('stationName');
+		
+		marqueeWidget = new tau.widget.Marquee(title, 
+				{
+			marqueeStyle: "endToEnd",
+			delay: "3000",
+			iteration: "infinite"
+				});
+		marqueeWidget.start();
+		
+		moreoption.pageBeforeShowHandler('busArrivalTime', function(event) {
+			var target = event.target,
+			dataTitle,
+			dataIndex;
+
+			if (target.classList.contains("ui-selector-indicator")) {
+				dataIndex = target.getAttribute("data-index");
+				if (dataIndex === "0") {
+					tau.closePopup(moreoption.popup);
+					bus.showFavoriteBus();
+				} else {
+					tau.closePopup(moreoption.popup);
+				}
+			} else {
+				dataTitle = target.getAttribute("data-title");
+				if (dataTitle === "즐겨찾기 등록") {
+					tau.closePopup(this.popup);
+					bus.showFavoriteBus();
+				}
+			}
+		});
 	});
 	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', function() {
 		moreoption.pageBeforeHideHandler();
@@ -108,19 +142,24 @@ function init() {
 		bus.registerFavoriteBus();
 	});
 
+	// 등록한 즐겨찾기 보기
+	document.getElementById('viewFavoriteBus').addEventListener('click', function(){
+		bus.showRegisteredStation();
+	});
+	
 	/** When click list element, find subway stations around */ 
 	document.getElementById('searchSurroundingSubway').addEventListener('click', function(){
 		subway.showSurroundingStationsByGps();
 	});
 	
-	/** Test - image zoom in & out */
+	/** Test - image zoom in & out
 	document.getElementById('viewMap').addEventListener('pagebeforshow', function() {
 		window.addEventListener('rotarydetent', zoom.rotaryEventHandler);
 	});
 	
 	document.getElementById('viewMap').addEventListener('pagebeforhide', function() {
 		window.removeEventListener('rotarydetent', zoom.rotaryEventHandler);
-	});
+	}); */
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }

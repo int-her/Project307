@@ -1,3 +1,4 @@
+/**
 var zoom = (function(){
 	zoom = {};
 
@@ -20,3 +21,4 @@ var zoom = (function(){
 	
 	return zoom;
 }());
+*/
