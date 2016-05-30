@@ -10,11 +10,13 @@ function keyEventHandler(event) {
 				tizen.application.getCurrentApplication().exit();
 			} catch (ignore) {
 			}
+		} else if (pageid === "subwayArrivalTime") {
+			window.history.go(-5);
 		} else if (pageid === "surroundingBusStation" || pageid === "busFavorite") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-2);
-		} else if (pageid === "surroundingSubwayStation" || pageid === "subwayArrivalTime" || pageid === "lvAllSubwayStation") { // subway
+		} else if (pageid === "surroundingSubwayStation" || pageid === "lvAllSubwayStation") { // subway
 			window.history.go(-2);
 		} else if (pageid === "processing") {
 			window.history.go(-1);
