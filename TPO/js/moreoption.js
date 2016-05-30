@@ -6,6 +6,7 @@ function MOREOPTION() {
 	this.clickElHandlerBound = null;
 	this.selector = null;
 	this.popup = null;
+	this.clickElHandler = null;
 }
 
 MOREOPTION.prototype = new Object();
@@ -14,32 +15,11 @@ MOREOPTION.prototype.clickHandler = function(event) {
 	tau.openPopup(this.popup);
 };
 
-MOREOPTION.prototype.clickElHandler = function(event) {
-	var target = event.target,
-		dataTitle,
-		dataIndex;
-	
-	if (target.classList.contains("ui-selector-indicator")) {
-		dataIndex = target.getAttribute("data-index");
-		if (dataIndex === "0") {
-			tau.closePopup(this.popup);
-			bus.showFavoriteBus();
-		} else {
-			tau.closePopup(this.popup);
-		}
-	} else {
-		dataTitle = target.getAttribute("data-title");
-		if (dataTitle === "즐겨찾기 등록") {
-			tau.closePopup(this.popup);
-			bus.showFavoriteBus();
-		}
-	}
-};
-
-MOREOPTION.prototype.pageBeforeShowHandler = function(pageId) {
+MOREOPTION.prototype.pageBeforeShowHandler = function(pageId, click) {
 	var radius = window.innerHeight / 2 * 0.8,
 		page = document.getElementById(pageId);
 	
+	this.clickElHandler = click;
 	this.popup = page.querySelector("#" + pageId + "_MoreOptions");
 	this.handler = page.querySelector(".ui-more");
 	this.elSelector = page.querySelector("#selector");

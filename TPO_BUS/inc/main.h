@@ -33,6 +33,7 @@ typedef struct widget_instance_data {
 	Evas_Object *btn_register;
 	Evas_Object *btn_alarm;
 	Evas_Object *btn_number;
+	Evas_Object *btn_station;
 	Evas_Object *label_number;
 	Evas_Object *label_minite;
 	Evas_Object *label_station;
