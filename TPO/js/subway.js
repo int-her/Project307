@@ -35,14 +35,25 @@ document.getElementById('settingFinish_sub').addEventListener('click', function(
 });
 
 SUBWAY.prototype.getPathInfoBySubway = function() {
+	tau.changePage("#processing");
 	/** Process
 	 *  1) station's name -> station's id
 	 *  2) station's id -> station's wgs84 point
 	 *  3) station's wgs84 point -> path info
 	 */
-	
+		
 	/**
 	 * 	지하철이용 경로 조회 (getPathInfoBySubwayList)
+	 * 	요청 결과 코드 정의
+	 * 	-  0: 정상적으로 처리되었습니다.
+		-  1: 시스템 오류가 발생하였습니다.
+		-  2: 잘못된 쿼리 요청입니다. 쿼리 변수가 정확한지 확인하세요.
+		-  3: 정류소를 찾을 수 없습니다.
+		-  4: 노선을 찾을 수 없습니다.
+		-  5: 잘못된 위치로 요청을 하였습니다. 위/경도 좌표가 정확한지 확인하세요
+		-  6: 실시간 정보를 읽을 수 없습니다. 잠시 후 다시 시도하세요
+		-  7: 경로 검색 결과가 존재하지 않습니다.
+		-  8: 운행 종료되었습니다.
 	 */
 	rest.get('http://ws.bus.go.kr/api/rest/pathinfo/getPathInfoBySubway',
 			null,
@@ -59,10 +70,7 @@ SUBWAY.prototype.getPathInfoBySubway = function() {
 			}, 
 			function(data, xhr) {
 				var headerCd = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
-				if (headerCd === "4") {
-					// No result
-					toastPopup.openCheckPopup(startStation_x + ',' + startStation_y, true);
-				} else if (headerCd === "0"){
+				if (headerCd === "0") {
 					// Success
 					var hd = document.getElementById('subwayRouteResult_header');
 					hd.innerHTML = "<h2 class='ui-title'>" + startStation + '-' + finishStation + '</h2>';
@@ -71,7 +79,23 @@ SUBWAY.prototype.getPathInfoBySubway = function() {
 					ct.innerHTML += data.getElementsByTagName("distance")[0].childNodes[0].nodeValue;
 					ct.innerHTML += ', time : ' + data.getElementsByTagName("time")[0].childNodes[0].nodeValue;
 					ct.innerHTML += "</div>";
-					tau.changePage("#subwayRouteResult");				
+					tau.changePage("#subwayRouteResult");
+				} else if (headerCd === "1") {
+					toastPopup.openPopup("시스템 오류가 발생하였습니다.", true);
+				} else if (headerCd === "2") {
+					toastPopup.openPopup("잘못된 쿼리 요청입니다. 쿼리 변수가 정확한지 확인하세요.", true);
+				} else if (headerCd === "3") {
+					toastPopup.openPopup("정류소를 찾을 수 없습니다.", true);
+				} else if (headerCd === "4") {
+					toastPopup.openPopup("노선을 찾을 수 없습니다.", true);
+				} else if (headerCd === "5") {
+					toastPopup.openPopup("잘못된 위치로 요청을 하였습니다. 위/경도 좌표가 정확한지 확인하세요.", true);
+				} else if (headerCd === "6") {
+					toastPopup.openPopup("실시간 정보를 읽을 수 없습니다. 잠시 후 다시 시도하세요.", true);
+				} else if (headerCd === "7") {
+					toastPopup.openPopup("경로 검색 결과가 존재하지 않습니다.", true);
+				} else if (headerCd === "8") {
+					toastPopup.openPopup("운행 종료되었습니다.", true);
 				}
 			}, function(data, xhr) {
 				toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
@@ -217,6 +241,24 @@ SUBWAY.prototype.lvAllSubwayStation = function(subwayNm) {
 		5	statnSn	지하철역순번
 			(역사 순번)
 	 */
+
+	/**
+	var reader = new XMLHttpRequest();
+	reader.open("GET", "..\lib\dataset\2.xml");
+	reader.onreadystatechange = function () {
+        if(reader.readyState === 4) {
+            if(reader.status === 0) {
+            	console.log(reader.response)
+            	console.log(reader.responseText)
+            	console.log(reader.responseXML)
+                createAllSubwayStationList(reader.responseText);
+                tau.changePage("#lvAllSubwayStation");
+            }
+        }
+    }
+    reader.send(null);
+	*/
+	
 	var url = 'http://swopenapi.seoul.go.kr/api/subway/DELETED/xml/stationByLine/0/200/' + subwayNm; 
 	rest.get(url, null, null,
 		function(data, xhr) {
@@ -337,9 +379,9 @@ function createSurroundingSubwayList(data) {
 			break;
 		}
 		lv.innerHTML += "<li id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='li-has-multiline li-subway-station'>" +
-		"<div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='ui-marquee ui-marquee-gradient'>" + 
+		"<div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='li-subway-station'>" + 
 		x[i].getElementsByTagName("subwayNm")[0].childNodes[0].nodeValue + ' ' + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue +
-		"</div><div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='ui-li-sub-text li-text-sub'>ord : " + 
+		"</div><div id=" + x[i].getElementsByTagName("statnNm")[0].childNodes[0].nodeValue + " class='ui-li-sub-text li-text-sub li-subway-station'>ord : " + 
 		x[i].getElementsByTagName("ord")[0].childNodes[0].nodeValue + 
 		"</div></li>";
 	}
