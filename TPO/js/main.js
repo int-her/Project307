@@ -22,6 +22,8 @@ function keyEventHandler(event) {
 			window.history.go(-1);
 		} else if (pageid === "busArrivalTime_MoreOptions") {
 			tau.closePopup(popup);
+		} else if (pageid === "showFavoriteStation_MoreOptions") {
+			tau.closePopup(popup);
 		} else {
 			window.history.back();
 		}
@@ -31,8 +33,11 @@ function keyEventHandler(event) {
 function init() {
 	var marqueeSurrounding = new MARQUEELIST(),
 		marqueeStation = new MARQUEELIST(),
+		marqueeFavorite = new MARQUEELIST(),
 		marqueeWidget,
-		moreoption = new MOREOPTION();
+		moreoption = new MOREOPTION(),
+		moreoptionFavorite = new MOREOPTION();
+	
 	
 	// 버스 정류장 ID 입력
 	document.getElementById('inputBusID').addEventListener('pagebeforeshow', function() {
@@ -107,7 +112,7 @@ function init() {
 			} else {
 				dataTitle = target.getAttribute("data-title");
 				if (dataTitle === "즐겨찾기 등록") {
-					tau.closePopup(this.popup);
+					tau.closePopup(moreoption.popup);
 					bus.showFavoriteBus();
 				}
 			}
@@ -115,6 +120,32 @@ function init() {
 	});
 	document.getElementById('busArrivalTime').addEventListener('pagebeforehide', function() {
 		moreoption.pageBeforeHideHandler();
+	});
+	document.getElementById('showFavoriteStation').addEventListener('pagebeforeshow', function() {
+		moreoptionFavorite.pageBeforeShowHandler('showFavoriteStation', function(event) {
+			var target = event.target,
+			dataTitle,
+			dataIndex;
+
+			if (target.classList.contains("ui-selector-indicator")) {
+				dataIndex = target.getAttribute("data-index");
+				if (dataIndex === "0") {
+					tau.closePopup(moreoptionFavorite.popup);
+					bus.changeToDeleteModeOnFavorite("showFavoriteStation");
+				} else {
+					tau.closePopup(moreoptionFavorite.popup);
+				}
+			} else {
+				dataTitle = target.getAttribute("data-title");
+				if (dataTitle === "삭제") {
+					tau.closePopup(moreoptionFavorite.popup);
+					bus.changeToDeleteModeOnFavorite("showFavoriteStation");
+				}
+			}
+		});
+	});
+	document.getElementById('showFavoriteStation').addEventListener('pagebeforehide', function() {
+		moreoptionFavorite.pageBeforeHideHandler();
 	});
 	
 	
@@ -131,6 +162,12 @@ function init() {
 	document.getElementById('busNumberStationList').addEventListener('pagebeforehide', function() {
 		marqueeStation.pageBeforeHideHandler();
 	});
+	document.getElementById('showFavoriteStation').addEventListener('pagebeforeshow', function() {
+		marqueeFavorite.pageBeforeShowHandler('showFavoriteStation');
+	});
+	document.getElementById('showFavoriteStation').addEventListener('pagebeforehide', function() {
+		marqueeFavorite.pageBeforeHideHandler();
+	});
 	
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', function() {
@@ -140,6 +177,28 @@ function init() {
 	// 즐겨찾기 등록
 	document.getElementById('btnRegister').addEventListener('click', function() {
 		bus.registerFavoriteBus();
+	});
+	
+	// 즐겨찾기 삭제
+	document.getElementById('btnDelete').addEventListener('click', function() {
+		var listview = document.querySelector('#showFavoriteStation .ui-listview'),
+		list = listview.getElementsByTagName("li"),
+		listLength = list.length,
+		i,
+		j = 0,
+		id = [];
+		
+		for (i = 0; i < listLength; ++i) {
+			if (list[i].classList.contains("select")) {
+				id[j++] = list[i].id;
+			}
+		}
+		
+		if (j == 0) {
+			toastPopup.openCheckPopup("하나 이상의 즐겨찾기를 선택해주세요.", false);
+		} else {
+			bus.deleteFavorite(id);
+		}
 	});
 
 	// 등록한 즐겨찾기 보기
