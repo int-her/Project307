@@ -22,15 +22,41 @@ BUS.prototype.deleteFavorite = function(stationIds) {
 		tpoFile = tpoDir.resolve("TPO_favorite.tpo");
 		tpoFile.readAsText(function(txt) {
 			var stations = txt.split("\n"),
-			station;
+				station,
+				txt = "\n",
+				count = 0;
 
 			
 			for (var i = 1; i < stations.length; ++i) {
 				station = stations[i].split(" ");
+				for (var j = 0; j < stationIds.length; ++j) {
+					if (stationIds[j] === station[0]) {
+						break;
+					}
+				}
+				// stationIds do not include this station id
+				if (j === stationIds.length) {
+					txt += stations[i];
+					count++;
+				}
 			}
-			tau.changePage('#showFavoriteStation');
-		});
-		
+			
+			if (count == 0) {
+				tpoDir.deleteFile(tpoFile.fullPath, function() {
+					toastPopup.openCheckPopup("삭제 완료!", true);
+				});
+			} else {
+				tpoDir.deleteFile(tpoFile.fullPath, function() {
+					tpoFile = tpoDir.createFile("TPO_favorite.tpo");
+					tpoFile.openStream("w", function(fs) {
+		        		fs.write(txt);
+		        		fs.close();
+		        		
+		        		toastPopup.openCheckPopup("삭제 완료!", true);
+		        	}, onOpenFail, "UTF-8");		
+				});
+			}
+		});	
 	});
 };
 
@@ -141,6 +167,20 @@ BUS.prototype.changeToDeleteModeOnFavorite = function(pageId) {
 			event.stopPropagation();
 		} 
 	};
+	
+	page.addEventListener('pagehide', function() {
+		title.innerHTML = "즐겨찾기";
+		listview.removeEventListener('click', addFunction, false);
+		selectAll.removeEventListener("click", fnSelectAll, false);
+		deselectAll.removeEventListener("click", fnDeselectAll, false);
+		selectBtn.removeEventListener("click", fnPopup, false);
+		selectWrapper.removeEventListener("click", fnPopupClose, false);
+		document.removeEventListener('tizenhwkey', fnBackKey);
+		modeHide();
+		
+		more.style.display = "block";
+		footer.style.display = "none";
+	});
 	
 	more.style.display = "none";
 	footer.style.display = "block";
@@ -334,14 +374,14 @@ BUS.prototype.showFavoriteBus = function() {
 					bus._createFavoriteBusList(data);
 					tau.changePage("#busFavorite");
 					
-					tizen.filesystem.resolve("documents", function(result) {
-						var tpoDir = result.resolve("TPO_files");
-				        
-				        if (tpoDir !== null) {
-	        				var tpoFile = tpoDir.resolve("TPO_favorite.tpo");
-	        				tpoDir.deleteFile(tpoFile.fullPath, function() {}, function() {});
-				        }
-				     });
+//					tizen.filesystem.resolve("documents", function(result) {
+//						var tpoDir = result.resolve("TPO_files");
+//				        
+//				        if (tpoDir !== null) {
+//	        				var tpoFile = tpoDir.resolve("TPO_favorite.tpo");
+//	        				tpoDir.deleteFile(tpoFile.fullPath, function() {}, function() {});
+//				        }
+//				     });
 				}
 			}, function(data, xhr) {
 				toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);

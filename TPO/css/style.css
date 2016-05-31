@@ -120,7 +120,7 @@
 	}
 	
 	/*------------- Select List -------------*/
-	#showFavoriteStation li.select div::after {
+	#showFavoriteStation li.select::after {
 		content:"";
 		-webkit-mask-image: url(./icon/list_check.png);
 		-webkit-mask-repeat: no-repeat;
