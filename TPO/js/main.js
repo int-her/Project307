@@ -15,7 +15,7 @@ function keyEventHandler(event) {
 		} else if (pageid === "surroundingBusStation" || pageid === "busFavorite") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
-			window.history.go(-3);
+			window.history.go(-2);
 		} else if (pageid === "surroundingSubwayStation" || pageid === "lvAllSubwayStation") { // subway
 			window.history.go(-2);
 		} else if (pageid === "processing") {
@@ -181,21 +181,24 @@ function init() {
 	
 	// 즐겨찾기 삭제
 	document.getElementById('btnDelete').addEventListener('click', function() {
-		var page = document.getElementById('showFavoriteStation'),
-		listview = document.querySelector('#' + pageId + ' .ui-listview'),
+		var listview = document.querySelector('#showFavoriteStation .ui-listview'),
 		list = listview.getElementsByTagName("li"),
-		listLength = list.length
+		listLength = list.length,
 		i,
 		j = 0,
 		id = [];
 		
-		for (i = 0; i < listlength; ++i) {
+		for (i = 0; i < listLength; ++i) {
 			if (list[i].classList.contains("select")) {
 				id[j++] = list[i].id;
 			}
 		}
 		
-		bus.deleteFavorite(id);
+		if (j == 0) {
+			toastPopup.openCheckPopup("하나 이상의 즐겨찾기를 선택해주세요.", false);
+		} else {
+			bus.deleteFavorite(id);
+		}
 	});
 
 	// 등록한 즐겨찾기 보기

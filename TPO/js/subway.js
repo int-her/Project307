@@ -282,28 +282,31 @@ SUBWAY.prototype.lvAllSubwayStation = function(subwayNm) {
  * @param {String} API 에서 받아온 XML String
  */
 function createSubwayArrivalTimeList(data) {
-	var lv = document.getElementById('subwayArrivalTime_content');
+	var lv = document.getElementById('subwayArrivalTime_content'),
+		html = "";
+			
 	lv.innerHTML = "";
 	var x = data.getElementsByTagName("row");
 	for (var i = 0; i < x.length; ++i) {
 		if (i >= 20) {
 			break;
 		}
-		lv.innerHTML += "<li class='li-has-multiline' id=" + x[i].getElementsByTagName("btrainNo")[0].childNodes[0].nodeValue + 
+		html += "<li class='li-has-multiline' id=" + x[i].getElementsByTagName("btrainNo")[0].childNodes[0].nodeValue + 
 		"><div>" + x[i].getElementsByTagName("trainLineNm")[0].childNodes[0].nodeValue +
 		"</div>";
 		
 		var barvlDt = x[i].getElementsByTagName("barvlDt")[0].childNodes[0].nodeValue;
 		if (barvlDt === 0) {
-			lv.innerHTML += "<div class='ui-li-sub-text li-text-sub'>잠시 후 도착</div></li>";
+			html += "<div class='ui-li-sub-text li-text-sub'>잠시 후 도착</div></li>";
 		} else if (barvlDt < 60) {
-			lv.innerHTML += "<div class='ui-li-sub-text li-text-sub'>" + barvlDt + "초  후 도착</div></li>";
+			html += "<div class='ui-li-sub-text li-text-sub'>" + barvlDt + "초  후 도착</div></li>";
 		} else if (barvlDt % 60 === 0){
-			lv.innerHTML += "<div class='ui-li-sub-text li-text-sub'>" + barvlDt/60 + "분  후 도착</div></li>";
+			html += "<div class='ui-li-sub-text li-text-sub'>" + barvlDt/60 + "분  후 도착</div></li>";
 		} else {
-			lv.innerHTML += "<div class='ui-li-sub-text li-text-sub'>" + Math.floor(barvlDt/60) + "분 " + barvlDt%60 + "초 후 도착</div></li>";
+			html += "<div class='ui-li-sub-text li-text-sub'>" + Math.floor(barvlDt/60) + "분 " + barvlDt%60 + "초 후 도착</div></li>";
 		}
 	}
+	lv.innerHTML = html;
 }
 
 /**
