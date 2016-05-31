@@ -83,7 +83,7 @@ function getShortestPathSubway() {
 			function(data, xhr) {
 				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
 				if (msg === "4") {
-					navigateAll();
+					getShortestPathAll();
 					// No result
 				} else if (msg === "0"){
 					var cn = data.getElementsByTagName("itemList");
@@ -121,7 +121,7 @@ ROUTE.prototype.findway = function () {
 				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
 				if (msg === "4") {
 					// No result
-					navigateSubway();
+					getShortestPathSubway();
 				} else if (msg === "0"){
 					var cn = data.getElementsByTagName("itemList");
 					var i;
