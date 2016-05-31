@@ -291,7 +291,7 @@ update_information(widget_instance_data_s *wid)
 	}
 	else if (second < 60)
 	{
-		sprintf(bus_time, "<align=center><font_size=25><color=#7F7F7FFF>%s방면 - </color></font><font_size=30>곧 도착</font></align>", adirection);
+		sprintf(bus_time, "<align=center><font_size=25><color=#7F7F7FFF>%s방면 - </color></font><font_size=45>곧 도착</font></align>", adirection);
 	}
 	else
 	{
@@ -419,6 +419,7 @@ view_register_create(widget_instance_data_s *wid, int w, int h)
 	elm_object_text_set(wid->btn_register, "등록");
 	elm_object_part_content_set(wid->layout_register, "elm.swallow.button", wid->btn_register);
 	evas_object_smart_callback_add(wid->btn_register, "clicked", _button_clicked_cb, wid);
+	evas_object_show(wid->btn_register);
 }
 
 static void
@@ -518,7 +519,7 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 
 	if (exist_file()) {
 		evas_object_hide(wid->label_register);
-		evas_object_hide(wid->btn_register);
+		//evas_object_hide(wid->btn_register);
 		evas_object_show(wid->label_station);
 		evas_object_show(wid->label_number);
 		evas_object_show(wid->label_minite);
@@ -533,7 +534,7 @@ widget_instance_create(widget_context_h context, bundle *content, int w, int h, 
 		evas_object_hide(wid->btn_station);
 		//evas_object_hide(wid->btn_alarm);
 		evas_object_show(wid->label_register);
-		evas_object_show(wid->btn_register);
+		//evas_object_show(wid->btn_register);
 	}
 
 	return WIDGET_ERROR_NONE;
@@ -576,7 +577,7 @@ widget_instance_resume(widget_context_h context, void *user_data)
 	if (exist_file()) {
 		evas_object_hide(wid->label_register);
 		elm_object_text_set(wid->label_register, "");
-		evas_object_hide(wid->btn_register);
+		//evas_object_hide(wid->btn_register);
 		update_information(wid);
 		evas_object_show(wid->label_station);
 		evas_object_show(wid->label_number);
@@ -596,7 +597,7 @@ widget_instance_resume(widget_context_h context, void *user_data)
 		//evas_object_hide(wid->btn_alarm);
 		evas_object_show(wid->label_register);
 		elm_object_text_set(wid->label_register, "<font_size=29><align=center>즐겨찾기를 등록해주세요.</font></align>");
-		evas_object_show(wid->btn_register);
+		//evas_object_show(wid->btn_register);
 	}
 
 	/* Take necessary actions when widget instance becomes visible. */

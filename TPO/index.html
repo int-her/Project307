@@ -142,12 +142,37 @@
 	
 	<!-- Favorite Bus List Page -->
 	<div class="ui-page" id="showFavoriteStation">
-		<header class="ui-header">
-			<h2 class="ui-title">즐겨찾기</h2>
+		<header class="ui-header ui-has-more">
+			<h2 class="ui-title" id="showFavoriteStation_title">즐겨찾기</h2>
+			<button type="button" class="ui-more ui-icon-overflow" id="showFavoriteStation_more">More Options</button>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview marquee-list" id="lvRegisteredStation">
 			</ul>
+		</div>
+		<footer class="ui-footer ui-bottom-button ui-fixed" style="display: none" id="showFavoriteStation_footer">
+			<button class="ui-btn" id="btnDelete">삭제</button>
+		</footer>
+		
+		<div class="select-mode">
+		    <!-- select button -->
+		    <div class="select-btn" id="select-btn">
+                <a class="select-btn-text" id="select-btn-text"></a>
+            </div>
+            <!-- select option popup -->
+            <div class="select-popup">
+                <ul class="ui-listview">
+                    <li><a href="#" id="select-all">Select all</a></li>
+                    <li><a href="#" id="deselect-all">Deselect all</a></li>
+                </ul>
+            </div>
+        </div>
+        
+		<!-- More Options -->
+		<div id="showFavoriteStation_MoreOptions" class="ui-popup">
+			<div id="selector" class="ui-selector">
+				<div class="ui-item delete-icon" data-title="삭제"></div>
+			</div>
 		</div>
 	</div>
 	

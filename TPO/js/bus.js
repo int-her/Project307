@@ -13,6 +13,146 @@ BUS.prototype = new Object();
  */
 Window.prototype.bus = new BUS();
 
+BUS.prototype.deleteFavorite = function(stationIds) {
+	var tpoDir, 
+	tpoFile;
+
+	tizen.filesystem.resolve("documents", function(result) {
+		tpoDir = result.resolve("TPO_files");
+		tpoFile = tpoDir.resolve("TPO_favorite.tpo");
+		tpoFile.readAsText(function(txt) {
+			var stations = txt.split("\n"),
+			station;
+
+			
+			for (var i = 1; i < stations.length; ++i) {
+				station = stations[i].split(" ");
+			}
+			tau.changePage('#showFavoriteStation');
+		});
+		
+	});
+};
+
+BUS.prototype.changeToDeleteModeOnFavorite = function(pageId) {
+	var page = document.getElementById(pageId),
+	title = document.querySelector('#' + pageId + '_title'),
+	more = document.querySelector('#' + pageId + '_more'),
+	footer = document.querySelector('#' + pageId + '_footer'),
+	listview = document.querySelector('#' + pageId + ' .ui-listview'),
+	list = listview.getElementsByTagName("li"),
+	listLength = list.length,
+	selectWrapper = document.querySelector(".select-mode"),
+	selectBtn = document.getElementById("select-btn"),
+	selectBtnText =  document.getElementById("select-btn-text"),
+	selectAll = document.getElementById("select-all"),
+	deselectAll = document.getElementById("deselect-all"),
+	selectCount,
+	i,
+	addFunction,
+	fnSelectAll,
+	fnDeselectAll,
+	fnPopup,
+	fnPopupClose,
+	fnBackKey;
+
+	function textRefresh() {
+		selectBtnText.innerHTML =
+			selectCount < 10 ? "0" + selectCount : selectCount;
+	}
+
+	function modeShow() {
+		selectWrapper.classList.remove("open");
+		selectWrapper.classList.add("show-btn");
+		textRefresh();
+	}
+
+	function modeHide() {
+		selectWrapper.classList.remove("open");
+		selectWrapper.classList.remove("show-btn");
+		selectCount = 0;
+	}
+
+	addFunction = function(event){
+		var target = event.target;
+		if (!target.classList.contains("select")) {
+			target.classList.add("select");
+			selectCount++;
+			modeShow();
+		} else {
+			target.classList.remove("select");
+			selectCount--;
+			if (selectCount <= 0) {
+				modeHide();
+			} else {
+				textRefresh();
+			}
+		}
+	};
+
+	fnSelectAll = function(){
+		for (i = 0; i < listLength; i++) {
+			list[i].classList.add("select");
+		}
+		selectCount = listLength;
+		modeShow();
+	};
+
+	fnDeselectAll = function(){
+		for (i = 0; i < listLength; i++) {
+			list[i].classList.remove("select");
+		}
+		modeHide();
+	};
+
+	fnPopup = function() {
+		selectWrapper.classList.add("open");
+		event.preventDefault();
+		event.stopPropagation();
+	};
+
+	fnPopupClose = function() {
+		selectWrapper.classList.remove("open");
+	};
+
+	fnBackKey = function() {
+		var classList = selectWrapper.classList;
+		if (event.keyName === "back" && classList.contains("show-btn")) {
+			if (classList.contains("open")) {
+				classList.remove("open");
+			} else {
+				fnDeselectAll();
+			}
+			event.preventDefault();
+			event.stopPropagation();
+		} else if (event.keyName === "back" && !classList.contains("show-btn")) {
+			title.innerHTML = "즐겨찾기";
+			listview.removeEventListener('click', addFunction, false);
+			selectAll.removeEventListener("click", fnSelectAll, false);
+			deselectAll.removeEventListener("click", fnDeselectAll, false);
+			selectBtn.removeEventListener("click", fnPopup, false);
+			selectWrapper.removeEventListener("click", fnPopupClose, false);
+			document.removeEventListener('tizenhwkey', fnBackKey);
+			modeHide();
+			
+			more.style.display = "block";
+			footer.style.display = "none";
+			event.preventDefault();
+			event.stopPropagation();
+		} 
+	};
+	
+	more.style.display = "none";
+	footer.style.display = "block";
+	title.innerHTML = "";
+	listview.addEventListener('click', addFunction, false);
+	selectAll.addEventListener("click", fnSelectAll, false);
+	deselectAll.addEventListener("click", fnDeselectAll, false);
+	selectBtn.addEventListener("click", fnPopup, false);
+	selectWrapper.addEventListener("click", fnPopupClose, false);
+	document.addEventListener('tizenhwkey', fnBackKey);
+	modeHide();
+};
 
 /**
  * 즐겨찾기로 등록한 버스 정류장들을 리스트로 만든다.
@@ -24,7 +164,7 @@ BUS.prototype._createRegisteredStationList = function(data, init) {
 	if (init) {
 		lv.innerHTML = "";
 	}
-	lv.innerHTML += "<li id=" + data[0] + "><div class='ui-marquee ui-marquee-gradient'>" + data[1] + "</div></li>";
+	lv.innerHTML += "<li id=" + data[0] + ">" + data[1] + "</li>";
 };
 
 /**
@@ -115,7 +255,6 @@ BUS.prototype._createBusFavoriteFile = function() {
         			try {
         				tpoFile = tpoDir.resolve("TPO_favorite.tpo");
         				tpoFile.readAsText(function(txt) {
-        					alert(tpoFile.fullPath);
         	        		tpoDir.deleteFile(tpoFile.fullPath, function() {
     	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
     	        				tpoFile.openStream("w", function(fs) {
