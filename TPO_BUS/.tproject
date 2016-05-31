@@ -8,8 +8,5 @@
     <package>
         <blacklist/>
         <resFallback autoGen="true"/>
-        <subProjects>
-            <tizenProject project="TPO_BUS" style="native main"/>
-        </subProjects>
     </package>
 </tproject>

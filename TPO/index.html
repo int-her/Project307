@@ -39,6 +39,7 @@
 			<ul class="ui-listview">
 				<li><a href="#searchBusStation">정류장 검색</a></li>
 				<li><a href="#inputBusID">노선 번호 검색</a></li>
+				<li id="viewFavoriteBus">즐겨찾기</li>
 			</ul>
 		</div>
 	</div>
@@ -125,7 +126,7 @@
 		</div>
 	</div>
 	
-	<!-- Bus Favorite Page -->
+	<!-- Add Favorite Bus Page -->
 	<div class="ui-page" id="busFavorite">
 		<header class="ui-header">
 			<h2 class="ui-title" id="favoriteStationName"></h2>
@@ -137,6 +138,17 @@
 		<footer class="ui-footer ui-bottom-button ui-fixed">
 			<button class="ui-btn" id="btnRegister">등록</button>
 		</footer>
+	</div>
+	
+	<!-- Favorite Bus List Page -->
+	<div class="ui-page" id="showFavoriteStation">
+		<header class="ui-header">
+			<h2 class="ui-title">즐겨찾기</h2>
+		</header>
+		<div class="ui-content">
+			<ul class="ui-listview marquee-list" id="lvRegisteredStation">
+			</ul>
+		</div>
 	</div>
 	
 	<!-- Toast Popup Page -->
