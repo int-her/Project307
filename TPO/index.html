@@ -24,8 +24,8 @@
 			<ul class="ui-listview">
 				<li><a href="#bus-main">버스</a></li>
 				<li><a href="#subway-main">지하철</a></li>
-				<!-- <li>길 찾기 안내</li>
-				<li>환경 설정</li> -->
+				<li onclick="route.findway()">길 찾기 안내</li>
+				<!--<li>환경 설정</li> -->
 			</ul>
 		</div>
 	</div>
@@ -306,6 +306,21 @@
 		</div>
 	</div>
 			
+			
+	<!-- Route Page : Show Route -->
+	<div id="showRoute" class="ui-page">
+		<div class="ui-header">
+			<h3 class="ui-title">길 안내</h3>
+		</div>
+		<div id="route_content" class="ui-content">
+			<li id="routeNavigation">
+					
+			</li>
+			<footer class="ui-footer ui-bottom-button ui-fixed">
+				<button type="button" onclick="route.findway()" class="ui-btn">새로운 경로 탐색</button>
+			</footer>
+		</div>
+	</div>	
 	
 	<script type="text/javascript" src="js/marqueeList.js"></script>
 	<script type="text/javascript" src="js/toastPopup.js"></script>
@@ -313,6 +328,7 @@
 	<script type="text/javascript" src="js/bus.js"></script>
 	<script type="text/javascript" src="js/moreoption.js"></script>
 	<script type="text/javascript" src="js/subway.js"></script>
+	<script type="text/javascript" src="js/route.js"></script>
 	<script type="text/javascript" src="js/image.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
