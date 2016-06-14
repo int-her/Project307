@@ -4,6 +4,6 @@
 
 
 edctool = edje_cc
-edcflags = -id "E:/Project/Project307/TPO_BUS/edje/images" -id "C:/tizen-sdk/tools/enventor/share/enventor/images" -sd "E:/Project/Project307/TPO_BUS/edje/sounds" -sd "C:/tizen-sdk/tools/enventor/share/enventor/sounds" -fd "E:/Project/Project307/TPO_BUS/edje/fonts" -fd "C:/tizen-sdk/tools/enventor/share/enventor/fonts"
+edcflags = -id "D:/Project/Project307/TPO_BUS/edje/images" -id "C:/tizen-sdk/tools/enventor/share/enventor/images" -sd "D:/Project/Project307/TPO_BUS/edje/sounds" -sd "C:/tizen-sdk/tools/enventor/share/enventor/sounds" -fd "D:/Project/Project307/TPO_BUS/edje/fonts" -fd "C:/tizen-sdk/tools/enventor/share/enventor/fonts"
 
 build res/edje/widget.edj: build_edc ../res/edje/widget.edc 
