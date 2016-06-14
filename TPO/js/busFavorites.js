@@ -299,12 +299,12 @@ BUSFAVORITES.prototype._modifyFile = function() {
 					for (var i = 1; i < stations.length; ++i) {
 						station = stations[i].split(" ");
 						if (station[0] === busFavorites.activeStationId.toString()) {
-							station[i] = busFavorites.activeStationId.toString();
-							station[i] += " " + busFavorites.activeStationName;
-							station[i] += " " + busFavorites.registerBusId.length;
-							for (var j = 0; j < this.registerBusId.length; ++j) {
-								station[i] += " " + busFavorites.registerBusId[j];
-								station[i] += " " + busFavorites.registerBusAdirection[j];
+							stations[i] = busFavorites.activeStationId.toString();
+							stations[i] += " " + busFavorites.activeStationName;
+							stations[i] += " " + busFavorites.registerBusId.length;
+							for (var j = 0; j < busFavorites.registerBusId.length; ++j) {
+								stations[i] += " " + busFavorites.registerBusId[j];
+								stations[i] += " " + busFavorites.registerBusAdirection[j];
 							}
 						}
 						temp += "\n" + stations[i];
