@@ -12,7 +12,7 @@ function keyEventHandler(event) {
 			}
 		} else if (pageid === "subwayArrivalTime") {
 			window.history.go(-5);
-		} else if (pageid === "surroundingBusStation" || pageid === "busFavorite") {
+		} else if (pageid === "surroundingBusStation" || pageid === "busFavorites") {
 			window.history.go(-2);
 		} else if (pageid === "busArrivalTime" || pageid === "busNumberStationList") {
 			window.history.go(-2);
@@ -74,8 +74,8 @@ function init() {
 		processing.style.visibility = "hidden";
 	});
 	
-	document.getElementById('busFavorite').addEventListener('pagebeforeshow', function() {
-		var title = document.getElementById('favoriteStationName');
+	document.getElementById('busFavorites').addEventListener('pagebeforeshow', function() {
+		var title = document.getElementById('activeStationName');
 		
 		marqueeWidget = new tau.widget.Marquee(title, 
 				{
@@ -105,7 +105,7 @@ function init() {
 				dataIndex = target.getAttribute("data-index");
 				if (dataIndex === "0") {
 					tau.closePopup(moreoption.popup);
-					bus.showFavoriteBus();
+					busFavorites.showBusListInStation(0);
 				} else {
 					tau.closePopup(moreoption.popup);
 				}
@@ -113,7 +113,7 @@ function init() {
 				dataTitle = target.getAttribute("data-title");
 				if (dataTitle === "즐겨찾기 등록") {
 					tau.closePopup(moreoption.popup);
-					bus.showFavoriteBus();
+					busFavorites.showBusListInStation(0);
 				}
 			}
 		});
@@ -131,7 +131,7 @@ function init() {
 				dataIndex = target.getAttribute("data-index");
 				if (dataIndex === "0") {
 					tau.closePopup(moreoptionFavorite.popup);
-					bus.changeToDeleteModeOnFavorite("showFavoriteStation");
+					busFavorites.changeToDeleteMode("showFavoriteStation");
 				} else {
 					tau.closePopup(moreoptionFavorite.popup);
 				}
@@ -139,7 +139,7 @@ function init() {
 				dataTitle = target.getAttribute("data-title");
 				if (dataTitle === "삭제") {
 					tau.closePopup(moreoptionFavorite.popup);
-					bus.changeToDeleteModeOnFavorite("showFavoriteStation");
+					busFavorites.changeToDeleteMode("showFavoriteStation");
 				}
 			}
 		});
@@ -176,7 +176,12 @@ function init() {
 	
 	// 즐겨찾기 등록
 	document.getElementById('btnRegister').addEventListener('click', function() {
-		bus.registerFavoriteBus();
+		busFavorites.confirm(0);
+	});
+	
+	// 즐겨찾기 수정
+	document.getElementById('btnModify').addEventListener('click', function() {
+		busFavorites.confirm(1);
 	});
 	
 	// 즐겨찾기 삭제
@@ -186,24 +191,24 @@ function init() {
 		listLength = list.length,
 		i,
 		j = 0,
-		id = [];
+		stationId = [];
 		
 		for (i = 0; i < listLength; ++i) {
 			if (list[i].classList.contains("select")) {
-				id[j++] = list[i].id;
+				stationId[j++] = list[i].id;
 			}
 		}
 		
 		if (j == 0) {
 			toastPopup.openCheckPopup("하나 이상의 즐겨찾기를 선택해주세요.", false);
 		} else {
-			bus.deleteFavorite(id);
+			busFavorites.deleteFavorites(stationId);
 		}
 	});
 
 	// 등록한 즐겨찾기 보기
-	document.getElementById('viewFavoriteBus').addEventListener('click', function(){
-		bus.showRegisteredStation();
+	document.getElementById('viewBusFavorites').addEventListener('click', function(){
+		busFavorites.showRegisteredStation();
 	});
 	
 	/** When click list element, find subway stations around */ 
