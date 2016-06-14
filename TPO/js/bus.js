@@ -1,7 +1,5 @@
 ﻿/*global tau, toastPopup, rest */
 function BUS() {
-	this.activeStationId = 1;
-	this.activeStationName = null;
 	this.registerBusId = [];
 	this.registerBusAdirection = [];
 }
@@ -12,381 +10,6 @@ BUS.prototype = new Object();
  * @type BUS
  */
 Window.prototype.bus = new BUS();
-
-BUS.prototype.deleteFavorite = function(stationIds) {
-	var tpoDir, 
-	tpoFile;
-
-	tizen.filesystem.resolve("documents", function(result) {
-		tpoDir = result.resolve("TPO_files");
-		tpoFile = tpoDir.resolve("TPO_favorite.tpo");
-		tpoFile.readAsText(function(txt) {
-			var stations = txt.split("\n"),
-				station,
-				txt = "\n",
-				count = 0;
-
-			
-			for (var i = 1; i < stations.length; ++i) {
-				station = stations[i].split(" ");
-				for (var j = 0; j < stationIds.length; ++j) {
-					if (stationIds[j] === station[0]) {
-						break;
-					}
-				}
-				// stationIds do not include this station id
-				if (j === stationIds.length) {
-					txt += stations[i];
-					count++;
-				}
-			}
-			
-			if (count == 0) {
-				tpoDir.deleteFile(tpoFile.fullPath, function() {
-					toastPopup.openCheckPopup("삭제 완료!", true);
-				});
-			} else {
-				tpoDir.deleteFile(tpoFile.fullPath, function() {
-					tpoFile = tpoDir.createFile("TPO_favorite.tpo");
-					tpoFile.openStream("w", function(fs) {
-		        		fs.write(txt);
-		        		fs.close();
-		        		
-		        		toastPopup.openCheckPopup("삭제 완료!", true);
-		        	}, onOpenFail, "UTF-8");		
-				});
-			}
-		});	
-	});
-};
-
-BUS.prototype.changeToDeleteModeOnFavorite = function(pageId) {
-	var page = document.getElementById(pageId),
-	title = document.querySelector('#' + pageId + '_title'),
-	more = document.querySelector('#' + pageId + '_more'),
-	footer = document.querySelector('#' + pageId + '_footer'),
-	listview = document.querySelector('#' + pageId + ' .ui-listview'),
-	list = listview.getElementsByTagName("li"),
-	listLength = list.length,
-	selectWrapper = document.querySelector(".select-mode"),
-	selectBtn = document.getElementById("select-btn"),
-	selectBtnText =  document.getElementById("select-btn-text"),
-	selectAll = document.getElementById("select-all"),
-	deselectAll = document.getElementById("deselect-all"),
-	selectCount,
-	i,
-	addFunction,
-	fnSelectAll,
-	fnDeselectAll,
-	fnPopup,
-	fnPopupClose,
-	fnBackKey;
-
-	function textRefresh() {
-		selectBtnText.innerHTML =
-			selectCount < 10 ? "0" + selectCount : selectCount;
-	}
-
-	function modeShow() {
-		selectWrapper.classList.remove("open");
-		selectWrapper.classList.add("show-btn");
-		textRefresh();
-	}
-
-	function modeHide() {
-		selectWrapper.classList.remove("open");
-		selectWrapper.classList.remove("show-btn");
-		selectCount = 0;
-	}
-
-	addFunction = function(event){
-		var target = event.target;
-		if (!target.classList.contains("select")) {
-			target.classList.add("select");
-			selectCount++;
-			modeShow();
-		} else {
-			target.classList.remove("select");
-			selectCount--;
-			if (selectCount <= 0) {
-				modeHide();
-			} else {
-				textRefresh();
-			}
-		}
-	};
-
-	fnSelectAll = function(){
-		for (i = 0; i < listLength; i++) {
-			list[i].classList.add("select");
-		}
-		selectCount = listLength;
-		modeShow();
-	};
-
-	fnDeselectAll = function(){
-		for (i = 0; i < listLength; i++) {
-			list[i].classList.remove("select");
-		}
-		modeHide();
-	};
-
-	fnPopup = function() {
-		selectWrapper.classList.add("open");
-		event.preventDefault();
-		event.stopPropagation();
-	};
-
-	fnPopupClose = function() {
-		selectWrapper.classList.remove("open");
-	};
-
-	fnBackKey = function() {
-		var classList = selectWrapper.classList;
-		if (event.keyName === "back" && classList.contains("show-btn")) {
-			if (classList.contains("open")) {
-				classList.remove("open");
-			} else {
-				fnDeselectAll();
-			}
-			event.preventDefault();
-			event.stopPropagation();
-		} else if (event.keyName === "back" && !classList.contains("show-btn")) {
-			title.innerHTML = "즐겨찾기";
-			listview.removeEventListener('click', addFunction, false);
-			selectAll.removeEventListener("click", fnSelectAll, false);
-			deselectAll.removeEventListener("click", fnDeselectAll, false);
-			selectBtn.removeEventListener("click", fnPopup, false);
-			selectWrapper.removeEventListener("click", fnPopupClose, false);
-			document.removeEventListener('tizenhwkey', fnBackKey);
-			modeHide();
-			
-			more.style.display = "block";
-			footer.style.display = "none";
-			event.preventDefault();
-			event.stopPropagation();
-		} 
-	};
-	
-	page.addEventListener('pagehide', function() {
-		title.innerHTML = "즐겨찾기";
-		listview.removeEventListener('click', addFunction, false);
-		selectAll.removeEventListener("click", fnSelectAll, false);
-		deselectAll.removeEventListener("click", fnDeselectAll, false);
-		selectBtn.removeEventListener("click", fnPopup, false);
-		selectWrapper.removeEventListener("click", fnPopupClose, false);
-		document.removeEventListener('tizenhwkey', fnBackKey);
-		modeHide();
-		
-		more.style.display = "block";
-		footer.style.display = "none";
-	});
-	
-	more.style.display = "none";
-	footer.style.display = "block";
-	title.innerHTML = "";
-	listview.addEventListener('click', addFunction, false);
-	selectAll.addEventListener("click", fnSelectAll, false);
-	deselectAll.addEventListener("click", fnDeselectAll, false);
-	selectBtn.addEventListener("click", fnPopup, false);
-	selectWrapper.addEventListener("click", fnPopupClose, false);
-	document.addEventListener('tizenhwkey', fnBackKey);
-	modeHide();
-};
-
-/**
- * 즐겨찾기로 등록한 버스 정류장들을 리스트로 만든다.
- * @param data {String Array} [Station ID] [Station Name] [Registered Bus Length] <[Bus Number] [Bus Adirection]>* 
- */
-BUS.prototype._createRegisteredStationList = function(data, init) {
-	var lv = document.getElementById('lvRegisteredStation');
-	
-	if (init) {
-		lv.innerHTML = "";
-	}
-	lv.innerHTML += "<li id=" + data[0] + ">" + data[1] + "</li>";
-};
-
-/**
- * 즐겨찾기로 등록한 버스 정류장들을 보여준다. 
- */
-BUS.prototype.showRegisteredStation = function() {
-	var tpoDir, 
-		tpoFile;
-	
-	tizen.filesystem.resolve("documents", function(result) {
-        try {
-        	tpoDir = result.resolve("TPO_files");
-        } catch (error) {
-        	toastPopup.openCheckPopup("등록하신 즐겨찾기가 없습니다.", false);
-        	return;
-        }
-        
-        if (tpoDir !== null) {
-    		try {
-    			tpoFile = tpoDir.resolve("TPO_favorite.tpo");
-    			tpoFile.readAsText(function(txt) {
-    				var stations = txt.split("\n"),
-    					station;
-    				
-    				for (var i = 1; i < stations.length; ++i) {
-    					station = stations[i].split(" ");
-    					bus._createRegisteredStationList(station, i === 1);
-    				}
-    				tau.changePage('#showFavoriteStation');
-    			});
-    		} catch (error) {
-    			toastPopup.openCheckPopup("등록하신 즐겨찾기가 없습니다.", false);
-    			return;
-    		}
-    	}
-	});
-};
-
-function onOpenFail(error) {
-	toastPopup.openPopup("즐겨찾기 등록 실패!");
-	//toastPopup.openPopup(error.message);
-}
-
-BUS.prototype._writeFavoriteFile = function(fs, preSave) {
-	fs.write(preSave);
-	fs.write("\n");
-	fs.write(this.activeStationId);
-	fs.write(" ");
-	fs.write(this.activeStationName);
-	fs.write(" ");
-	fs.write(this.registerBusId.length);
-	for (var i = 0; i < this.registerBusId.length; ++i) {
-		fs.write(" ");
-		fs.write(this.registerBusId[i]);
-		fs.write(" ");
-		fs.write(this.registerBusAdirection[i]);
-	}
-	fs.close();
-
-	toastPopup.openCheckPopup("위젯에 등록되었습니다.", true, 2);
-};
-
-
-/**
- * 즐겨찾기 버스 목록을 저장할 파일을 만든다.
- */
-BUS.prototype._createBusFavoriteFile = function() {
-	var tpoDir = null, tpoFile;
-	
-	// document 폴더에 저장한다.
-	tizen.filesystem.resolve("documents", function(result) {
-        try {
-        	tpoDir = result.createDirectory("TPO_files");
-        } catch (error) {
-        	if (error.name === "IOError") {
-        		tpoDir = result.resolve("TPO_files");
-        	}
-        }
-        
-        if (tpoDir !== null) {
-        	try {
-        		tpoFile = tpoDir.createFile("TPO_favorite.tpo");
-        		tpoFile.openStream("rw", function(fs) {
-            		bus._writeFavoriteFile(fs, '');
-            	}, onOpenFail, "UTF-8");
-        	} catch (error) {
-        		if (error.name === "IOError") {
-        			try {
-        				tpoFile = tpoDir.resolve("TPO_favorite.tpo");
-        				tpoFile.readAsText(function(txt) {
-        	        		tpoDir.deleteFile(tpoFile.fullPath, function() {
-    	        				tpoFile = tpoDir.createFile("TPO_favorite.tpo");
-    	        				tpoFile.openStream("w", function(fs) {
-    	        	        		bus._writeFavoriteFile(fs, txt);
-    	        	        	}, onOpenFail, "UTF-8");
-    	        			});
-        	        	}, onOpenFail, "UTF-8");
-        			} catch (error) {
-        				
-        			}
-        		}
-        	}
-        }
-     });
-};
-
-
-/**
- * 선택한 정류장에서 선택한 버스들을 즐겨찾기에 등록한다.
- */
-BUS.prototype.registerFavoriteBus = function() {
-	var page = document.getElementById('busFavorite'),
-		checkbox = page.querySelectorAll(".li-checkbox"),
-		j = 0;
-	
-	for (var i = 0; i < checkbox.length; ++i) {
-		if (checkbox[i].checked) {
-			this.registerBusId[j] = checkbox[i].id;
-			this.registerBusAdirection[j++] = checkbox[i].dataset.adirection;
-		}
-	}
-	
-	if (j === 0) {
-		toastPopup.openCheckPopup("버스 하나 이상을 등록해주세요!", false);
-	} else {
-		this._createBusFavoriteFile();
-	}
-};
-
-/**
- * 선택한 정류장의 모든 버스 번호를 list에 checkbox와 함께 추가한다.
- * @param data {String} XML Data
- */
-BUS.prototype._createFavoriteBusList = function(data) {
-	var lv = document.getElementById('lvBusFavorite'),
-		x = data.getElementsByTagName("itemList");
-	
-	lv.innerHTML = "";
-	document.getElementById('favoriteStationName').innerHTML = this.activeStationName;
-	for (var i = 0; i < x.length; ++i) {
-		lv.innerHTML += "<li class='li-has-checkbox' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
-		"><label>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
-		"<input type='checkbox' class='li-checkbox' id=" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
-		" data-adirection=" + x[i].getElementsByTagName("adirection")[0].childNodes[0].nodeValue +  
-		" /></label></li>";
-	}
-};
-
-/**
- * 현재 도착 시간을 보고 있는 정류장 번호를 기반으로 즐겨찾기를 등록하는 페이지로 이동한다.
- */
-BUS.prototype.showFavoriteBus = function() {
-	tau.changePage("#processing");
-	rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid',
-			null,
-			{
-		"ServiceKey" : "4we1Svife1ANzIwfRlMm4LIKHZI6BiBr2+8+TMz1QkiwBNUTmqJImecu2GHvh04mEAYTTgh60HoxSa+LdhW0+A==",
-		"arsId" : this.activeStationId,
-			},
-			function(data, xhr) {
-				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue;				
-				if (msg === "4") {
-					/** No result */
-					toastPopup.openCheckPopup("정류장 번호를 찾지 못하였습니다.", true);
-				} else if (msg === "0") {
-					/** Success */
-					bus._createFavoriteBusList(data);
-					tau.changePage("#busFavorite");
-					
-//					tizen.filesystem.resolve("documents", function(result) {
-//						var tpoDir = result.resolve("TPO_files");
-//				        
-//				        if (tpoDir !== null) {
-//	        				var tpoFile = tpoDir.resolve("TPO_favorite.tpo");
-//	        				tpoDir.deleteFile(tpoFile.fullPath, function() {}, function() {});
-//				        }
-//				     });
-				}
-			}, function(data, xhr) {
-				toastPopup.openPopup("API를 불러오는데 실패하였습니다.", true);
-			});		
-};
 
 
 /**
@@ -511,7 +134,7 @@ BUS.prototype.busId = function(strSch){
  * API 에서 받아온 data를 파싱하여 도착 예상 시간을 보여주는 리스트를 만든다.
  * @param {String} API 에서 받아온 XML String
  */
-BUS.prototype.createBusArrivalTimeList = function(data, arsId) {
+BUS.prototype._createArrivalTimeList = function(data, arsId) {
 	var lv = document.getElementById('lvBusArrivalTime'),
 		x = data.getElementsByTagName("itemList"),
 		title = document.getElementById('stationName');
@@ -519,12 +142,12 @@ BUS.prototype.createBusArrivalTimeList = function(data, arsId) {
 	lv.innerHTML = "";
 	title.innerHTML = "";
 	
-	this.activeStationId = arsId;
+	busFavorites.activeStationId = arsId;
 	
 	for (var i = 0; i < x.length; ++i) {
 		if (title.innerHTML === "" && x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue.indexOf(arsId) > -1) {
 			title.innerHTML = x[i].getElementsByTagName("stNm")[0].childNodes[0].nodeValue;
-			this.activeStationName = title.innerHTML;
+			busFavorites.activeStationName = title.innerHTML;
 		}
 		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
 		"' onclick = 'bus.busId(" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + ");'" +
@@ -609,7 +232,7 @@ BUS.prototype.showBusArrivalTime = function(arsId) {
 					toastPopup.openCheckPopup("정류소 ID를 찾지 못하였습니다.", true);
 				} else if (msg === "0"){
 					// Success
-					bus.createBusArrivalTimeList(data, arsId);
+					bus._createArrivalTimeList(data, arsId);
 					tau.changePage("#busArrivalTime");						
 				}
 			}, function(data, xhr) {
@@ -620,12 +243,10 @@ BUS.prototype.showBusArrivalTime = function(arsId) {
 /**
  *  버스 정류장 리스트에서 클릭 시 showBusArrivalTime 함수를 불러와 그 정류장에서의 버스 도착 예정 시간을 보여준다.
  */
-function clickStationList(event)
+function showArrivalTime(event)
 {
 	var target = event.target;
-	if (target.classList.contains('bus-station') || target.classList.contains('li-bus-station')) {
-		bus.showBusArrivalTime(target.id);
-	}
+	bus.showBusArrivalTime(target.id);
 }
 
 /**
@@ -636,7 +257,7 @@ function addListClickEvent() {
 	i;
 
 	for (i = 0; i < stationList.length; i++) {
-		stationList[i].addEventListener("click", clickStationList);
+		stationList[i].addEventListener("click", showArrivalTime);
 	}
 }
 
@@ -653,10 +274,10 @@ function createStationList(data) {
 			break;
 		}
 		lv.innerHTML += "<li class='li-has-multiline li-bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
-		"><div class='ui-marquee ui-marquee-gradient bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
-		"><a class='bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
+		"><div class='ui-marquee ui-marquee-gradient' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
+		"><a id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + 
 		">" + x[i].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue + 
-		"</a></div><div class='ui-li-sub-text li-text-sub bus-station' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + ">" + 
+		"</a></div><div class='ui-li-sub-text li-text-sub' id=" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + ">" + 
 		x[i].getElementsByTagName("dist")[0].childNodes[0].nodeValue + "m" +
 		"(" + x[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue + ")" +
 		"</div></li>";
