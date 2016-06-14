@@ -39,7 +39,7 @@
 			<ul class="ui-listview">
 				<li><a href="#searchBusStation">정류장 검색</a></li>
 				<li><a href="#inputBusID">노선 번호 검색</a></li>
-				<li id="viewFavoriteBus">즐겨찾기</li>
+				<li id="viewBusFavorites">즐겨찾기</li>
 			</ul>
 		</div>
 	</div>
@@ -126,21 +126,22 @@
 		</div>
 	</div>
 	
-	<!-- Add Favorite Bus Page -->
-	<div class="ui-page" id="busFavorite">
+	<!-- Register or Modify Bus Favorites Page -->
+	<div class="ui-page" id="busFavorites">
 		<header class="ui-header">
-			<h2 class="ui-title" id="favoriteStationName"></h2>
+			<h2 class="ui-title" id="activeStationName"></h2>
 		</header>
 		<div class="ui-content">
-			<ul class="ui-listview" id="lvBusFavorite">
+			<ul class="ui-listview" id="lvBusFavorites">
 			</ul>
 		</div>
 		<footer class="ui-footer ui-bottom-button ui-fixed">
-			<button class="ui-btn" id="btnRegister">등록</button>
+			<button class="ui-btn" id="btnRegister" style="display: none">등록</button>
+			<button class="ui-btn" id="btnModify" style="display: none">수정</button>
 		</footer>
 	</div>
 	
-	<!-- Favorite Bus List Page -->
+	<!-- Favorite Bus Station List Page -->
 	<div class="ui-page" id="showFavoriteStation">
 		<header class="ui-header ui-has-more">
 			<h2 class="ui-title" id="showFavoriteStation_title">즐겨찾기</h2>
@@ -154,6 +155,7 @@
 			<button class="ui-btn" id="btnDelete">삭제</button>
 		</footer>
 		
+		<!-- List Selection Mode -->
 		<div class="select-mode">
 		    <!-- select button -->
 		    <div class="select-btn" id="select-btn">
@@ -168,13 +170,13 @@
             </div>
         </div>
         
-		<!-- More Options -->
-		<div id="showFavoriteStation_MoreOptions" class="ui-popup">
-			<div id="selector" class="ui-selector">
-				<div class="ui-item delete-icon" data-title="삭제"></div>
-			</div>
-		</div>
-	</div>
+        <!-- More Options -->
+        <div id="showFavoriteStation_MoreOptions" class="ui-popup">
+            <div id="selector" class="ui-selector">
+                <div class="ui-item delete-icon" data-title="삭제"></div>
+            </div>
+        </div>
+    </div>
 	
 	<!-- Toast Popup Page -->
 	<div class = "ui-popup ui-popup-toast" id="toastPopup">
@@ -351,6 +353,7 @@
 	<script type="text/javascript" src="js/toastPopup.js"></script>
 	<script type="text/javascript" src="js/list.js"></script>
 	<script type="text/javascript" src="js/bus.js"></script>
+	<script type="text/javascript" src="js/busFavorites.js"></script>
 	<script type="text/javascript" src="js/moreoption.js"></script>
 	<script type="text/javascript" src="js/subway.js"></script>
 	<script type="text/javascript" src="js/route.js"></script>
