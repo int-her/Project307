@@ -150,7 +150,7 @@ BUS.prototype._createArrivalTimeList = function(data, arsId) {
 			busFavorites.activeStationName = title.innerHTML;
 		}
 		lv.innerHTML += "<li class='li-has-multiline' id='" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue +
-		"' onclick = 'bus.busId(" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + ");'" +
+		"' onclick = 'bus.busId(&quot;" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + "&quot;);'" +
 		"><div>" + x[i].getElementsByTagName("rtNm")[0].childNodes[0].nodeValue + 
 		"</div><div class='ui-li-sub-text li-text-sub'>" + 
 		x[i].getElementsByTagName("arrmsg1")[0].childNodes[0].nodeValue +
