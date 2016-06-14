@@ -339,6 +339,7 @@ _btn_station_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	char station_number[16], bus_number[32], adirection[64];
 
 	station_cur_index++;
+	bus_cur_index = 0;
 	read_file(station_cur_index, bus_cur_index, station_number, bus_number, adirection, station_name);
 	if (!strcmp(station_number, "over_count"))
 	{
