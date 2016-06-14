@@ -376,7 +376,7 @@ _button_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 	    if (app_control_set_app_id(app_control, "Jlkedqbso8.TPO") == APP_CONTROL_ERROR_NONE)
 	    {
 	    	app_control_set_operation(app_control, APP_CONTROL_OPERATION_VIEW);
-	    	app_control_set_uri(app_control, "http://yourdomain/TPO");
+	    	app_control_set_uri(app_control, "http://project.pe.kr/TPO");
 	    	app_control_error_e err = app_control_send_launch_request(app_control, NULL, NULL);
 	    	if (err == APP_CONTROL_ERROR_INVALID_PARAMETER) {
 	    		create_popup(wid->win, "INVALID PARAMETER");
