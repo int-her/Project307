@@ -38,3 +38,6 @@
 370	531	0	tpo_bus	553e49c181e75cab
 2	268	0	src/main.o	b26760a2196f1fff
 269	378	0	tpo_bus	497a4f2a19cba77f
+480	5979	0	res/edje/widget.edj	61db21ae16839e99
+269	15758	0	src/main.o	f2c83b6199c4b801
+15760	22018	0	tpo_bus	52629632bff9754a

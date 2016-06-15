@@ -27663,6 +27663,10 @@ ns.version = '0.11.8';
 				}
 			}
 
+			function accelerHandler(e) {
+				
+			}
+			
 			function rotaryDetentHandler(e) {
 				var snapListviewWidget = this._snapListviewWidget,
 					selectedIndex = snapListviewWidget.getSelectedIndex(),
