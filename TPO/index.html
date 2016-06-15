@@ -24,7 +24,7 @@
 			<ul class="ui-listview">
 				<li><a href="#bus-main">버스</a></li>
 				<li><a href="#subway-main">지하철</a></li>
-				<li onclick="route.findway()">길 찾기 안내</li>
+				<li><a href="#routeFind">길 찾기 안내</a></li>
 				<!--<li>환경 설정</li> -->
 			</ul>
 		</div>
@@ -1174,6 +1174,40 @@
 		</div>
 	</div>
 			
+	<!-- Route Page : Set Destination and Find Route -->
+	<div id="routeFind" class="ui-page">
+        <div class="ui-header">
+            <h3 class="ui-title">목적지</h3>
+        </div>
+        <div class="ui-content">
+            <ul class="ui-listview marquee-list">
+                <li onclick="route.showDestination();">
+                    <div class="ui-marquee ui-marquee-gradient" id="destination">
+                    </div>
+                </li>
+            </ul>
+            <footer class="ui-footer ui-bottom-button ui-fixed">
+                <button type="button" onclick="route.findway()" class="ui-btn">경로 탐색</button>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Route Page : Destination -->
+    <div id="routeDestination" class="ui-page">
+        <div class="ui-header">
+            <h3 class="ui-title">목적지 설정</h3>
+        </div>
+        <div class="ui-content">
+            <ul class="ui-listview marquee-list" id="lvDestination">
+                <li class='li-place' id="낙성대역 2호선">
+                    <div class="ui-marquee ui-marquee-gradient" id="낙성대역 2호선"><a id="낙성대역 2호선">낙성대역 2호선</a></div>
+                </li>
+                <li class='li-place' id="서울대입구역 2호선">
+                    <div class="ui-marquee ui-marquee-gradient" id="서울대입구역 2호선"><a id="서울대입구역 2호선">서울대입구역 2호선</a></div>
+                </li>                
+            </ul>
+        </div>
+    </div>
 			
 	<!-- Route Page : Show Route -->
 	<div id="showRoute" class="ui-page">

@@ -5,3 +5,8 @@ TPO/.sign/signature1.xml
 TPO/TPO.wgt
 TPO/.sign/.manifest.tmp
 TPO/.rds_delta
+TPO_BUS/Debug/.ninja_deps
+TPO_BUS/Debug/.ninja_deps
+TPO_BUS/Debug/build.ninja
+TPO_BUS/Debug/compile_commands.json
+TPO_BUS/Debug/.ninja_log

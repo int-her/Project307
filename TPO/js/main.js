@@ -34,6 +34,8 @@ function init() {
 	var marqueeSurrounding = new MARQUEELIST(),
 		marqueeStation = new MARQUEELIST(),
 		marqueeFavorite = new MARQUEELIST(),
+		marqueeDestination = new MARQUEELIST(),
+		marqueeRoute = new MARQUEELIST(),
 		marqueeWidget,
 		moreoption = new MOREOPTION(),
 		moreoptionFavorite = new MOREOPTION();
@@ -168,6 +170,25 @@ function init() {
 	document.getElementById('showFavoriteStation').addEventListener('pagebeforehide', function() {
 		marqueeFavorite.pageBeforeHideHandler();
 	});
+	document.getElementById('routeFind').addEventListener('pagebeforeshow', function() {
+		marqueeRoute.pageBeforeShowHandler('routeFind');
+		
+		if (route.destination === "") {
+			document.getElementById('destination').innerHTML = "설정";
+		} else {
+			document.getElementById('destination').innerHTML = route.destination;
+		}
+	});
+	document.getElementById('routeFind').addEventListener('pagebeforehide', function() {
+		marqueeRoute.pageBeforeHideHandler();
+	});
+	document.getElementById('routeDestination').addEventListener('pagebeforeshow', function() {
+		marqueeDestination.pageBeforeShowHandler('routeDestination');
+	});
+	document.getElementById('routeDestination').addEventListener('pagebeforehide', function() {
+		marqueeDestination.pageBeforeHideHandler();
+	});
+	
 	
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', function() {
@@ -224,6 +245,27 @@ function init() {
 	document.getElementById('viewMap').addEventListener('pagebeforhide', function() {
 		window.removeEventListener('rotarydetent', zoom.rotaryEventHandler);
 	}); */
+	
+	function clickToSetDestination(e) {
+		route.setDestination(e);
+	}
+	
+	document.getElementById('routeDestination').addEventListener('pagebeforeshow', function() {
+		var lv = document.getElementById('lvDestination'),
+		elems = lv.getElementsByTagName("li");
+	
+		for (var i = 0; i < elems.length; ++i) {
+			elems[i].addEventListener("click", clickToSetDestination);
+		}
+	});
+	document.getElementById('routeDestination').addEventListener('pagebeforehide', function() {
+		var lv = document.getElementById('lvDestination'),
+		elems = lv.getElementsByTagName("li");
+	
+		for (var i = 0; i < elems.length; ++i) {
+			elems[i].removeEventListener("click", clickToSetDestination);
+		}	
+	});
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
 }

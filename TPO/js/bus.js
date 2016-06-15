@@ -288,7 +288,7 @@ function createStationList(data) {
 /**
  * GPS 받아오기에 성공했을 시 1km 반경 내의 주변 정류소를 API를 통하여 읽어오고 리스트를 만든다.
  */
-function succeedtoGetGPS(position) {
+function showSurroundingStation(position) {
 
 	/**
 	 *  좌표 기반 근접 정류소 목록 조회(getStationByPos)
@@ -334,35 +334,8 @@ function succeedtoGetGPS(position) {
 }
 
 /**
- * 
- */
-function failtoGetGPS(error) {
-	switch (error.code) {
-	case error.PERMISSION_DENIED:
-		toastPopup.openCheckPopup("GPS 권한을 허용해주세요.", true);
-		break;
-	case error.POSITION_UNAVAILABLE:
-		toastPopup.openCheckPopup("연결된 디바이스의 GPS를 켜주세요.", true);
-		break;
-	case error.TIMEOUT:
-		toastPopup.openPopup("GPS 요청 시간이 초과되었습니다.", true);
-		break;
-	case error.UNKNOWN_ERROR:
-		toastPopup.openPopup("알 수없는 오류가 발생했습니다.", true);
-		break;
-	}
-}
-
-/**
  * GPS를 이용하여 1km 반경 내의 주변 정류소를 조회한다.
  */
 BUS.prototype.showSurroundingStationsByGps = function () {
-	if (navigator.geolocation) {
-		tau.changePage("#processing");
-		navigator.geolocation.getCurrentPosition(succeedtoGetGPS, failtoGetGPS, {
-			maximumAge : 10000, timeout : 20000
-		});
-	} else {
-		toastPopup.openPopup("GPS를 지원하지 않는 기기입니다.");
-	}
+	loadGPS(showSurroundingStation);
 };
