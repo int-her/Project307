@@ -22,6 +22,8 @@ function keyEventHandler(event) {
 			window.history.go(-1);
 		} else if (pageid === "busArrivalTime_MoreOptions") {
 			tau.closePopup(popup);
+		} else if (pageid === "showRoutes") {
+			window.history.go(-2);
 		} else if (pageid === "showFavoriteStation_MoreOptions") {
 			tau.closePopup(popup);
 		} else {
@@ -173,10 +175,10 @@ function init() {
 	document.getElementById('routeFind').addEventListener('pagebeforeshow', function() {
 		marqueeRoute.pageBeforeShowHandler('routeFind');
 		
-		if (route.destination === "") {
+		if (route.destination.name === "") {
 			document.getElementById('destination').innerHTML = "설정";
 		} else {
-			document.getElementById('destination').innerHTML = route.destination;
+			document.getElementById('destination').innerHTML = route.destination.name;
 		}
 	});
 	document.getElementById('routeFind').addEventListener('pagebeforehide', function() {
@@ -265,6 +267,21 @@ function init() {
 		for (var i = 0; i < elems.length; ++i) {
 			elems[i].removeEventListener("click", clickToSetDestination);
 		}	
+	});
+	
+	// Tab section changer 초기화
+	var sectionChanger;
+	document.getElementById("showRoutes").addEventListener("pagebeforeshow", function() {
+		// make SectionChanger object
+		sectionChanger = tau.widget.SectionChanger(document.getElementById("tabsectionchanger"), {
+			circular: true,
+			orientation: "horizontal",
+			scrollbar: "tab"
+		});
+	});
+	document.getElementById("showRoutes").addEventListener("pagehide", function() {
+		// release object
+		sectionChanger.destroy();
 	});
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);
