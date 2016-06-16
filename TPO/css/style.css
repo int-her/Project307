@@ -36,6 +36,11 @@
 	background: url(./icon/list_number_arrow.png) no-repeat 50% 100%;
 }
 
+.ui-content section {
+    overflow: hidden;
+    overflow-y: auto;
+}
+
 /*----------------------- Listview -----------------------*/
 .ui-listview.expand-list li.li-has-multiline .li-expand {
 	-webkit-transform: translate(0, 16px);

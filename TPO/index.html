@@ -1209,19 +1209,20 @@
         </div>
     </div>
 			
-	<!-- Route Page : Show Route -->
-	<div id="showRoute" class="ui-page">
+	<!-- Route Page : Show Routes -->
+	<div id="showRoutes" class="ui-page">
 		<div class="ui-header">
 			<h3 class="ui-title">길 안내</h3>
 		</div>
-		<div id="route_content" class="ui-content">
-			<li id="routeNavigation">
-					
-			</li>
-			<footer class="ui-footer ui-bottom-button ui-fixed">
-				<button type="button" onclick="route.findway()" class="ui-btn">새로운 경로 탐색</button>
-			</footer>
-		</div>
+		<div id="tabsectionchanger" class="ui-content">
+            <!-- section changer has only one child. -->
+            <div id="sections">
+                
+            </div>
+        </div>
+		<footer class="ui-footer ui-bottom-button ui-fixed">
+			<button type="button" class="ui-btn">안내 시작</button>
+		</footer>
 	</div>	
 	
 	<script type="text/javascript" src="js/marqueeList.js"></script>
