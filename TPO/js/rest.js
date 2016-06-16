@@ -67,7 +67,7 @@ Window.prototype.rest = new REST();
  * @returns {void}
  */
 
-REST.prototype.get = function(url, header, data, fSuccess, fError) {
+REST.prototype.get = function(url, header, data, fSuccess, fError, sync) {
     if(!(url)) {
         return;
     }
@@ -84,7 +84,11 @@ REST.prototype.get = function(url, header, data, fSuccess, fError) {
         url += "?" + reqData;
     }
         
-    xhr.open("GET", url);
+    if (typeof sync !== "undefined" && sync === true) {
+    	xhr.open("GET", url, false);
+    } else { 
+    	xhr.open("GET", url);
+    }
     
     if(header) {
         for(var p in header) {
@@ -94,20 +98,47 @@ REST.prototype.get = function(url, header, data, fSuccess, fError) {
         }
     }
     
-    xhr.onreadystatechange = function (event) {
-        if(xhr.readyState == 4) {
-            var type = xhr.getResponseHeader("Content-type");
-            var data = "";
+    if (typeof sync === "undefined" || sync === false) {
+    	xhr.onreadystatechange = function (event) {
+            if(xhr.readyState === 4) {
+                var type = xhr.getResponseHeader("Content-type"),
+                	data = "";
+
+                if(type.indexOf('application/json') === 0) {
+                    data = JSON.parse(xhr.responseText);
+                } else if(type.indexOf('application/xml') === 0) {
+                    data = xhr.responseXML;
+                } else {
+                    data = xhr.responseText;
+                }
+                
+                if(xhr.status === 200) {
+                    fSuccess(data, xhr);
+                } else {
+                    if(fError) {
+                        fError(data, xhr);
+                    }
+                }
+            }
+        };
+    }
+   
+    xhr.send();
+    
+    if (typeof sync !== "undefined" && sync === true) {
+    	if(xhr.readyState === 4) {
+            var type = xhr.getResponseHeader("Content-type"),
+            	data = "";
             
-            if(type.indexOf('application/json') == 0) {
+            if(type.indexOf('application/json') === 0) {
                 data = JSON.parse(xhr.responseText);
-            } else if(type.indexOf('application/xml') == 0) {
+            } else if(type.indexOf('application/xml') === 0) {
                 data = xhr.responseXML;
             } else {
                 data = xhr.responseText;
             }
             
-            if(xhr.status == 200) {
+            if(xhr.status === 200) {
                 fSuccess(data, xhr);
             } else {
                 if(fError) {
@@ -115,10 +146,7 @@ REST.prototype.get = function(url, header, data, fSuccess, fError) {
                 }
             }
         }
-    };
-    
-   
-    xhr.send();
+    }
 };
 
 /**@brief
