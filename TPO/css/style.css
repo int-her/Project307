@@ -1,3 +1,15 @@
+.bus-number {
+	color: #0091ff;
+	font-size: 2rem;
+	margin-bottom: 4px;
+}
+
+.bus-time {
+    font-size: 2.3rem;
+    margin-bottom: 4px;
+    color: #ffffff;
+}
+
 .input-number {
 	top: 0px;
 	left: 70px;

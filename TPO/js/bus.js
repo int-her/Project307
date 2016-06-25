@@ -11,6 +11,176 @@ BUS.prototype = new Object();
  */
 Window.prototype.bus = new BUS();
 
+BUS.prototype.getCurrentSection = function(vehicleId) {
+	var sect = 0;
+	
+	rest.get('http://ws.bus.go.kr/api/rest/buspos/getBusPosByVehId',
+			null,
+			{
+		"ServiceKey" : "DELETED",
+		"vehId" : vehicleId
+			}, 
+			function(data, xhr) {
+				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue,
+					item = data.getElementsByTagName("itemList");
+				
+				if (msg === "0"){
+					sect = parseInt(item[0].getElementsByTagName("stOrd")[0].childNodes[0].nodeValue);
+				} else {
+					sect = 0;
+				}
+			}, function(data, xhr) {
+				sect = 0;
+			}, true);
+	
+	return sect;
+}
+
+BUS.prototype.getStationNameBySection = function(routeId, sect) {
+	var name = "";
+	
+	rest.get('http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute',
+			null,
+			{
+		"ServiceKey" : "DELETED",
+		"busRouteId" : routeId
+			}, 
+			function(data, xhr) {
+				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue,
+					item = data.getElementsByTagName("itemList");
+				
+				if (msg === "0"){
+					name = item[sect - 1].getElementsByTagName("stationNm")[0].childNodes[0].nodeValue;
+				} else {
+					name = "";
+				}
+			}, function(data, xhr) {
+				name = "";
+			}, true);
+	
+	return name;
+};
+
+BUS.prototype.getVehicleId = function(routeId, startSection) {
+	var id;
+	
+	rest.get('http://ws.bus.go.kr/api/rest/buspos/getBusPosByRouteSt',
+			null,
+			{
+		"ServiceKey" : "DELETED",
+		"busRouteId" : routeId,
+		"startOrd" : startSection,
+		"endOrd" : "999"
+			}, 
+			function(data, xhr) {
+				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue,
+					item = data.getElementsByTagName("itemList");
+				
+				if (msg === "0"){
+					id = item[0].getElementsByTagName("vehId")[0].childNodes[0].nodeValue;
+				} else {
+					id = -1;
+				}
+			}, function(data, xhr) {
+				id = -1;
+			}, true);
+	
+	return id;
+};
+
+BUS.prototype.getBusInformation = function(arsId, busNumber) {
+	var time = 0,
+		count,
+		result;
+	
+	count = 0;
+	result = [];
+	rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid',
+			null,
+			{
+		"ServiceKey" : "DELETED",
+		"arsId" : arsId
+			}, 
+			function(data, xhr) {
+				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue,
+					item = data.getElementsByTagName("itemList");
+				
+				if (msg === "0"){
+					for (var i = 0; i < item.length; ++i) {
+						var num = item[i].getElementsByTagName('rtNm')[0].childNodes[0].nodeValue;
+						if (num === busNumber) {
+							var arrmsg = item[i].getElementsByTagName('arrmsg1')[0].childNodes[0].nodeValue;
+							if (arrmsg === "첫 번째 버스 운행종료") {
+								time = -2;
+							} else if (arrmsg === "첫 번째 버스 출발대기") {
+								time = -1;
+							} else {
+								time = parseInt(item[i].getElementsByTagName('traTime1')[0].childNodes[0].nodeValue);
+							}
+							result[count++] = {
+									adirection : item[i].getElementsByTagName('adirection')[0].childNodes[0].nodeValue,
+									time: time,
+									sect: parseInt(item[i].getElementsByTagName('staOrd')[0].childNodes[0].nodeValue),
+									routeId : item[i].getElementsByTagName('busRouteId')[0].childNodes[0].nodeValue
+							}
+						}
+					}				
+				} 
+			}, function(data, xhr) {
+				
+			}, true);
+	
+	return result.slice(0);
+}
+
+BUS.prototype.getStationIdByName = function(stationName, x, y) {
+	function getDistanceFromLatLonInKm(lat1,lng1,lat2,lng2) {
+	    function deg2rad(deg) {
+	        return deg * (Math.PI/180);
+	    }
+
+	    var R = 6371; // Radius of the earth in km
+	    var dLat = deg2rad(lat2-lat1);  // deg2rad below
+	    var dLon = deg2rad(lng2-lng1);
+	    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+	    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	    var d = R * c; // Distance in km
+	    return d;
+	}
+	
+	var stationId = 1,
+		minDistance = 999999999,
+		itemX,
+		itemY,
+		distance;
+	
+	rest.get('http://ws.bus.go.kr/api/rest/stationinfo/getStationByName',
+			null,
+			{
+		"ServiceKey" : "DELETED",
+		"stSrch" : stationName
+			}, 
+			function(data, xhr) {
+				var msg = data.getElementsByTagName("headerCd")[0].childNodes[0].nodeValue,
+					item = data.getElementsByTagName("itemList");				
+				if (msg === "0"){
+					for (var i = 0; i < item.length; ++i) {
+						itemX = item[i].getElementsByTagName("tmX")[0].childNodes[0].nodeValue;
+						itemY = item[i].getElementsByTagName("tmY")[0].childNodes[0].nodeValue;
+						distance = getDistanceFromLatLonInKm(y, x, itemY, itemX);
+						if (distance < minDistance) {
+							minDistance = distance;
+							stationId = item[i].getElementsByTagName("arsId")[0].childNodes[0].nodeValue;
+						}
+					}
+				}
+			}, function(data, xhr) {
+				
+			}, true);
+	
+	return stationId;
+}
+
 
 /**
  * 숫자의 앞에 0을 채워넣어준다.
