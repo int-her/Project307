@@ -22,7 +22,7 @@ function keyEventHandler(event) {
 			window.history.go(-1);
 		} else if (pageid === "busArrivalTime_MoreOptions") {
 			tau.closePopup(popup);
-		} else if (pageid === "showRoutes") {
+		} else if (pageid === "showRoutes" || pageid === "navigateRouteByBus" || pageid === "moveRouteByBus") {
 			window.history.go(-2);
 		} else if (pageid === "showFavoriteStation_MoreOptions") {
 			tau.closePopup(popup);
@@ -79,9 +79,7 @@ function init() {
 	});
 	
 	document.getElementById('busFavorites').addEventListener('pagebeforeshow', function() {
-		var title = document.getElementById('activeStationName');
-		
-		marqueeWidget = new tau.widget.Marquee(title, 
+		marqueeWidget = new tau.widget.Marquee(document.getElementById('activeStationName'), 
 				{
 			marqueeStyle: "endToEnd",
 			delay: "3000",
@@ -90,9 +88,7 @@ function init() {
 		marqueeWidget.start();	
 	});
 	document.getElementById('busArrivalTime').addEventListener('pagebeforeshow', function() {
-		var title = document.getElementById('stationName');
-		
-		marqueeWidget = new tau.widget.Marquee(title, 
+		marqueeWidget = new tau.widget.Marquee(document.getElementById('stationName'), 
 				{
 			marqueeStyle: "endToEnd",
 			delay: "3000",
@@ -191,6 +187,17 @@ function init() {
 		marqueeDestination.pageBeforeHideHandler();
 	});
 	
+	// Marquee widget
+	document.getElementById('navigateRouteByBus').addEventListener('pagebeforeshow', function() {
+		marqueeWidget = new tau.widget.Marquee(document.getElementById('routeBusStation'), 
+				{
+			marqueeStyle: "endToEnd",
+			delay: "3000",
+			iteration: "infinite"
+				});
+		marqueeWidget.start();	
+	});
+	
 	
 	// 주변 정류장 클릭
 	document.getElementById('searchSurrounding').addEventListener('click', function() {
@@ -282,6 +289,73 @@ function init() {
 	document.getElementById("showRoutes").addEventListener("pagehide", function() {
 		// release object
 		sectionChanger.destroy();
+	});
+	
+	// 길 안내 시작
+	document.getElementById('btnNavigate').addEventListener('click', function(){
+		route.currentPathIndex = 0;
+		route.navigateRoute(sectionChanger.getActiveSectionIndex());
+	});
+	
+	// 새로 고침
+	document.getElementById('btnReload').addEventListener('click', function(){
+		var startArsId,
+		endArsId,
+		path = route.route[route.activeRouteIndex].paths[route.currentPathIndex],
+		temp;
+
+		startArsId = bus.getStationIdByName(path.start_name, path.start_x, path.start_y);
+		temp = bus.getBusInformation(startArsId, path.number);
+		if (temp.length === 2) {
+			var temp2;
+			endArsId = bus.getStationIdByName(path.end_name, path.end_x, path.end_y);
+			temp2 = bus.getBusInformation(endArsId, path.number);
+			if (temp2.length === 2) {
+				if (temp[0].time < temp[1].time) {
+					route.activeInfo = temp[0];
+				} else {
+					route.activeInfo = temp[1];
+				}
+			} else {
+				if (temp2[0].adirection === temp[0].adirection) {
+					route.activeInfo = temp[0];
+				} else if (temp2[0].adirection === temp[1].adirection) {
+					route.activeInfo = temp[1];
+				}
+			}
+		}
+		else {
+			route.activeInfo = temp[0];
+		}		
+		document.getElementById('routeBusStation').innerHTML = path.start_name + "(" + startArsId + ")";
+		document.getElementById('routeBusNumber').innerHTML = path.number;
+		if (route.activeInfo.time === -2) {
+			document.getElementById('routeBusInformation').innerHTML = "운행 종료";
+		} else if (route.activeInfo.time === -1) {
+			document.getElementById('routeBusInformation').innerHTML = "차고지 대기";
+		} else if (route.activeInfo.time < 60) {
+			document.getElementById('routeBusInformation').innerHTML = "곧 도착";
+		} else {
+			document.getElementById('routeBusInformation').innerHTML = parseInt(route.activeInfo.time / 60) + "분 " + (route.activeInfo.time % 60) + "초";
+		}
+	});
+
+	document.getElementById('btnRiding').addEventListener('click', function() {
+		tau.changePage("#processing");
+		route.rideOnBus(route.activeRouteIndex);
+		tau.changePage("#moveRouteByBus");
+	});
+	
+	document.getElementById('btnStationReload').addEventListener('click', function() {
+		var dist = route.rideOnBus(route.activeRouteIndex);
+		if (dist < 0) {
+			route.currentPathIndex++;
+			if (route.route[route.activeRouteIndex].paths.length <= route.currentPathIndex) {
+				toastPopup.openCheckPopup("버스 안내를 마치고 도보 안내를 시작합니다.");
+			} else {
+				
+			}
+		}
 	});
 	
 	window.addEventListener('tizenhwkey', keyEventHandler);

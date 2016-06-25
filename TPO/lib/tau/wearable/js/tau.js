@@ -14920,6 +14920,7 @@ ns.version = '0.11.8';
 
 			function SectionChanger() {
 				this.options = {};
+				this.callbacks = {};
 			}
 
 			function calculateCustomLayout(direction, elements, lastIndex) {
@@ -14936,6 +14937,28 @@ ns.version = '0.11.8';
 				result -= direction === Scroller.Orientation.HORIZONTAL ? elements[index].offsetWidth / 2 : elements[index].offsetHeight / 2;
 				return result;
 			}
+			function rotaryDetentHandler(e) {
+				var offset = e.detail.direction === "CW" ? 1 : -1,
+					newIndex = this._calculateIndex(this.activeIndex + offset);
+
+				if (!this.enabled || !this.dragging) {
+					return;
+				}
+
+				// bouncing effect
+				if (this.bouncingEffect) {
+					this.bouncingEffect.dragEnd();
+				}
+
+				if (this.activeIndex !== newIndex) {
+					this.activeIndex = newIndex;
+					this._notifyChanagedSection(newIndex);
+				}
+
+				this.setActiveSection(newIndex, this.options.animateDuration, false);
+				this.dragging = false;
+			}
+			
 			utilsObject.inherit(SectionChanger, Scroller, {
 				_build: function (element) {
 
@@ -15179,8 +15202,10 @@ ns.version = '0.11.8';
 
 					this._super();
 				},
-
+				
 				_bindEvents: function () {
+					var rotaryDetentCallback;
+					
 					this._super();
 
 					ns.event.enableGesture(
@@ -15195,6 +15220,10 @@ ns.version = '0.11.8';
 
 					utilsEvents.on(this.scroller,
 							"swipe transitionEnd webkitTransitionEnd mozTransitionEnd msTransitionEnd oTransitionEnd", this);
+					
+					rotaryDetentCallback = rotaryDetentHandler.bind(this);
+					this.callbacks.rotarydetent = rotaryDetentCallback;
+					window.addEventListener("rotarydetent", rotaryDetentCallback);
 				},
 
 				_unbindEvents: function () {
@@ -15205,6 +15234,9 @@ ns.version = '0.11.8';
 						utilsEvents.off(this.scroller,
 							"swipe transitionEnd webkitTransitionEnd mozTransitionEnd msTransitionEnd oTransitionEnd", this);
 					}
+					
+					window.removeEventListener("rotarydetent", this.callbacks.rotarydetent);
+					this.callbacks.rotarydetent = null;
 				},
 
 				/**
