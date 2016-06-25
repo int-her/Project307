@@ -291,6 +291,26 @@ function init() {
 		sectionChanger.destroy();
 	});
 	
+	// GPS 계속 읽어오기
+	var watchId;
+	document.getElementById("moveRouteByStep").addEventListener("pagebeforeshow", function() {
+		document.getElementById('destinationName').innerHTML = route.destination.name;
+		if (navigator.geolocation) {
+			watchId = navigator.geolocation.watchPosition(function(position) {
+				route.updateDistance(position);
+			}, function(error) {
+				route.failToUpdate(error);
+			});
+		} else {
+			document.getElementById('stepDistance').innerHTML = "GPS 지원 불가능 기기";
+		}
+	});
+	document.getElementById("moveRouteByStep").addEventListener("pagehide", function() {
+		if (navigator.geolocation) {
+			navigator.geolocation.clearWatch(watchId);
+		} 
+	});
+	
 	// 길 안내 시작
 	document.getElementById('btnNavigate').addEventListener('click', function(){
 		route.currentPathIndex = 0;
@@ -341,7 +361,6 @@ function init() {
 	});
 
 	document.getElementById('btnRiding').addEventListener('click', function() {
-		tau.changePage("#processing");
 		route.rideOnBus(route.activeRouteIndex);
 		tau.changePage("#moveRouteByBus");
 	});
@@ -351,7 +370,8 @@ function init() {
 		if (dist < 0) {
 			route.currentPathIndex++;
 			if (route.route[route.activeRouteIndex].paths.length <= route.currentPathIndex) {
-				toastPopup.openCheckPopup("버스 안내를 마치고 도보 안내를 시작합니다.");
+				tau.changePage("#moveRouteByStep");
+				toastPopup.openCheckPopup("버스 안내를 마치고 도보 거리 안내를 시작합니다.");
 			} else {
 				
 			}

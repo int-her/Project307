@@ -19,6 +19,39 @@ ROUTE.prototype = new Object();
 
 Window.prototype.route = new ROUTE();
 
+ROUTE.prototype.failToUpdate = function(error) {
+	var text;
+	
+	switch (error.code) {
+	case error.PERMISSION_DENIED:
+		text = "GPS 권한을 허용해주세요.";
+		break;
+	case error.POSITION_UNAVAILABLE:
+		text = "연결된 디바이스의 GPS를 켜주세요.";
+		break;
+	case error.TIMEOUT:
+		text = "GPS 요청 시간이 초과되었습니다.";
+		break;
+	case error.UNKNOWN_ERROR:
+		text = "알 수없는 오류가 발생했습니다.";
+		break;
+	}
+	document.getElementById('stepDistance').innerHTML = text;
+	document.getElementById('stepTime').innerHTML = "";	
+};
+
+ROUTE.prototype.updateDistance = function(position) {	
+	var distKm = getDistanceFromLatLonInKm(this.destination.y, this.destination.x, position.coords.latitude, position.coords.longitude),
+		distM = parseInt(distKm * 1000);
+	
+	document.getElementById('stepDistance').innerHTML = distM + "m";
+	document.getElementById('stepTime').innerHTML = "약 " + parseInt(distM / 50) + "분"; //분속 50m	
+	
+	if (distM < 10) {
+		toastPopup.openCheckPopup("목적지 안내를 완료하였습니다.", true, 5);
+	}
+};
+
 ROUTE.prototype.rideOnBus = function(index) {
 	var id,
 		endArsId,
@@ -49,7 +82,6 @@ ROUTE.prototype.startToNavigateBus = function(index) {
 		path = this.route[index].paths[this.currentPathIndex],
 		temp;
 	
-	tau.changePage("#processing");
 	startArsId = bus.getStationIdByName(path.start_name, path.start_x, path.start_y);
 	temp = bus.getBusInformation(startArsId, path.number);
 	if (temp.length === 2) {
