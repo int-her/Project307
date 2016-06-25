@@ -443,13 +443,13 @@ view_favorite_create(widget_instance_data_s *wid, int w, int h)
 
 	wid->btn_number = elm_button_add(wid->layout_register);
 	elm_object_style_set(wid->btn_number, "focus");
-	evas_object_resize(wid->btn_number, w / 2, h / 6);
-	evas_object_move(wid->btn_number, w / 2 - w / 4, h / 3);
+	evas_object_resize(wid->btn_number, w, h / 6);
+	evas_object_move(wid->btn_number, 0, h / 3);
 	evas_object_smart_callback_add(wid->btn_number, "clicked", _btn_bus_clicked_cb, wid);
 
 	wid->label_number = elm_label_add(wid->layout_register);
-	evas_object_resize(wid->label_number, w / 2, h / 5);
-	evas_object_move(wid->label_number, w / 2 - w / 4,  h / 3);
+	evas_object_resize(wid->label_number, w, h / 5);
+	evas_object_move(wid->label_number, 0,  h / 3);
 	evas_object_pass_events_set(wid->label_number, EINA_TRUE);
 
 	wid->label_minite = elm_label_add(wid->layout_register);

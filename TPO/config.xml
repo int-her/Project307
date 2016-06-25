@@ -10,6 +10,7 @@
     <feature name="http://tizen.org/feature/network.internet"/>
     <feature name="http://tizen.org/feature/network.wifi"/>
     <feature name="http://tizen.org/feature/network.telephony"/>
+    <feature name="http://tizen.org/feature/sensor.accelerometer"/>
     <icon src="icon1.png" height="117" width="117"/>
     <name>대중교통 알리미</name>
     <tizen:privilege name="http://tizen.org/privilege/application.launch"/>

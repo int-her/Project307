@@ -46,9 +46,11 @@
 	
 	<!-- Bus Number Search Page -->
 	<div class="ui-page" id="inputBusID">
-		<div class="ui-content">
-			<input type="number" autofocus placeholder="버스 번호 입력" class="input-number" id="txtBusID">
-		</div>
+	    <header class="ui-header">
+            <input type="number" autofocus placeholder="버스 번호 입력" class="input-number" id="txtBusID">
+        </header>
+        <div class="ui-content">
+        </div>
 	</div>
 	
 	<!-- Bus Number Station List Page -->
@@ -81,9 +83,11 @@
 	
 	<!--  Input Bus Station ID Page -->
 	<div class="ui-page" id="inputStationID">
-		<div class="ui-content">
-			<input type="number" autofocus placeholder="정류장 ID 입력" class="input-number" id="txtStationID">
-		</div>
+	    <header class="ui-header">
+            <input type="number" autofocus placeholder="정류장 ID 입력" class="input-number" id="txtStationID">
+        </header>
+        <div class="ui-content">
+        </div>
 	</div>
 	
 	<!-- Processing Page -->
@@ -129,7 +133,7 @@
 	<!-- Register or Modify Bus Favorites Page -->
 	<div class="ui-page" id="busFavorites">
 		<header class="ui-header">
-			<h2 class="ui-title" id="activeStationName"></h2>
+			<h2 class="ui-title ui-marquee ui-marquee-gradient" id="activeStationName"></h2>
 		</header>
 		<div class="ui-content">
 			<ul class="ui-listview" id="lvBusFavorites">
@@ -1212,7 +1216,7 @@
 	<!-- Route Page : Show Routes -->
 	<div id="showRoutes" class="ui-page">
 		<div class="ui-header">
-			<h3 class="ui-title">길 안내</h3>
+			<h3 class="ui-title">경로 선택</h3>
 		</div>
 		<div id="tabsectionchanger" class="ui-content">
             <!-- section changer has only one child. -->
@@ -1221,9 +1225,57 @@
             </div>
         </div>
 		<footer class="ui-footer ui-bottom-button ui-fixed">
-			<button type="button" class="ui-btn">안내 시작</button>
+			<button type="button" class="ui-btn" id='btnNavigate'>안내 시작</button>
 		</footer>
 	</div>	
+	
+	<!-- Route Page : Navigate Route by Bus -->
+    <div id="navigateRouteByBus" class="ui-page">
+        <div class="ui-header">
+            <h3 class="ui-title ui-marquee ui-marquee-gradient" id="routeBusStation"></h3>
+        </div>
+        <div class="ui-content">
+            <div id="routeBusNumber" class="bus-number">
+            </div>
+            <div id="routeBusInformation" class="bus-time">
+            </div>
+            <button id="btnReload">새로고침</button>
+        </div>
+        <footer class="ui-footer ui-bottom-button ui-fixed">
+            <button type="button" class="ui-btn" id="btnRiding">승차 완료</button>
+        </footer>
+    </div>  
+	
+	<!-- Route Page : Move Route by Bus -->
+    <div id="moveRouteByBus" class="ui-page">
+        <div class="ui-header">
+            <h3 class="ui-title ui-marquee ui-marquee-gradient" id="stationDistance"></h3>
+        </div>
+        <div class="ui-content">
+            <div class="bus-number">이번 정류장</div>
+            <div id="currentStation" class="bus-time">
+            </div>
+            <div class="bus-number">목적지</div>
+            <div id="destinationStation" class="bus-time">
+            </div>
+        </div>
+        <footer class="ui-footer ui-bottom-button ui-fixed">
+            <button type="button" class="ui-btn" id="btnStationReload">새로 고침</button>
+        </footer>
+    </div>  
+	
+	<!-- Route Page : Move Route by Step -->
+    <div id="moveRouteByStep" class="ui-page">
+        <div class="ui-header">
+            <h3 class="ui-title ui-marquee ui-marquee-gradient" id=""></h3>
+        </div>
+        <div class="ui-content">
+            
+        </div>
+        <footer class="ui-footer ui-bottom-button ui-fixed">
+            <button type="button" class="ui-btn" id="">새로 고침</button>
+        </footer>
+    </div>  
 	
 	<script type="text/javascript" src="js/marqueeList.js"></script>
 	<script type="text/javascript" src="js/toastPopup.js"></script>
