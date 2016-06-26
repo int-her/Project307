@@ -47,3 +47,6 @@
 16	1477	0	tpo_bus	52629632bff9754a
 9	6077	0	tpo_bus	52629632bff9754a
 8	700	0	tpo_bus	52629632bff9754a
+1	800	0	res/edje/widget.edj	d7ab77fb1253173d
+7	1039	0	src/main.o	3f75178a737c33cb
+1039	1243	0	tpo_bus	9c1dc0a299ffafe9
